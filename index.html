@@ -1,3 +1,4 @@
+HTML
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -58,12 +59,6 @@
         .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
         .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
-        .fund-history-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-        .fund-item { background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 10px 12px; font-size: 0.85rem; }
-        .fund-item .time { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 2px; }
-        .fund-item .amount { color: var(--primary-hover); font-weight: bold; }
-        .fund-item .user { color: var(--accent); }
-        .fund-item .note { color: var(--silver); margin-top: 2px; }
 
         /* Bảng điều khiển Admin */
         .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
@@ -99,6 +94,10 @@
         .btn-delete-history { display: none; background: transparent; color: var(--text-muted); border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
         .btn-delete-history:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
     </style>
+
+    <!-- Thư viện Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -118,7 +117,6 @@
             <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick (Thủ Quỹ)</div>
             
             <div class="qr-container">
-                <!-- Thay link-anh-qr.jpg bằng file ảnh QR đã up lên GitHub -->
                 <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
             </div>
 
@@ -250,6 +248,23 @@
 </div>
 
 <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
+        authDomain: "pickleball-hoanggia.firebaseapp.com",
+        databaseURL: "https://pickleball-hoanggia-default-rtdb.firebaseio.com",
+        projectId: "pickleball-hoanggia",
+        storageBucket: "pickleball-hoanggia.firebasestorage.app",
+        messagingSenderId: "92435922703",
+        appId: "1:92435922703:web:b06c12f95bcf0fcc24c87a",
+        measurementId: "G-ZNZNP48B0H"
+    };
+
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const dbRef = database.ref('pickleballProDB');
+
     const ADMIN_PASSWORD = "123456";
     let isAdminActive = false;
 
@@ -271,7 +286,24 @@
         ]
     };
 
-    let db = JSON.parse(localStorage.getItem('pickleballProDB')) || defaultData;
+    let db = defaultData;
+
+    // Lắng nghe dữ liệu Realtime từ Firebase
+    dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            db = {
+                singles: data.singles || [],
+                singlesHistory: data.singlesHistory || [],
+                doubles: data.doubles || [],
+                doublesHistory: data.doublesHistory || []
+            };
+        } else {
+            // Nếu dữ liệu trên database trống, tạo dữ liệu mẫu
+            saveData();
+        }
+        initApp();
+    });
 
     function toggleAdminMode() {
         if (!isAdminActive) {
@@ -295,7 +327,7 @@
     }
 
     function saveData() {
-        localStorage.setItem('pickleballProDB', JSON.stringify(db));
+        dbRef.set(db);
     }
 
     function initApp() {
@@ -380,7 +412,6 @@
         db[mode].push({ name, points, win: 0, loss: 0 });
         nameInput.value = '';
         saveData();
-        initApp();
     }
 
     function deleteEntry(mode) {
@@ -392,7 +423,6 @@
         if(confirm(`Xóa "${targetName}" khỏi danh sách?`)) {
             db[mode].splice(idx, 1);
             saveData();
-            initApp();
         }
     }
 
@@ -408,7 +438,6 @@
             if (isNaN(parsedPoints) || parsedPoints < 0) return alert("Điểm số không hợp lệ!");
             item.points = parsedPoints;
             saveData();
-            initApp();
         }
     }
 
@@ -417,7 +446,6 @@
         if(confirm("Bạn có chắc chắn muốn xóa trận đấu này khỏi nhật ký?")) {
             db[mode + 'History'].splice(index, 1);
             saveData();
-            initApp();
         }
     }
 
@@ -457,10 +485,7 @@
 
         noteInput.value = '';
         saveData();
-        initApp();
     }
-
-    window.onload = initApp;
 </script>
 
 </body>
