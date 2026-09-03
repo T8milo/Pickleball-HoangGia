@@ -58,6 +58,7 @@ HTML
         .match-versus { display: flex; align-items: center; justify-content: space-between; font-weight: 700; text-align: center; margin: 0.5rem 0; font-size: 0.95rem; }
         .team-box { flex: 1; word-break: break-word; }
         .vs-tag { color: var(--danger); font-style: italic; font-size: 0.85rem; padding: 0 8px; }
+        .handicap-tag { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px dashed var(--gold); border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; text-align: center; font-weight: 600; }
         .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
 
         /* Bố cục song song 2 thể loại */
@@ -81,7 +82,8 @@ HTML
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; margin-bottom: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
         .form-group input, .form-group select { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
-        
+        .form-group select { cursor: pointer; }
+
         .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
         .btn:hover { background: var(--primary-hover); }
         .btn-danger { background: var(--danger); }
@@ -216,9 +218,13 @@ HTML
                     </div>
                 </div>
                 <div>
+                    <div class="form-group">
+                        <label>Mục chấp điểm / Kèo chấp</label>
+                        <input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh...">
+                    </div>
                     <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
                     <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
-                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Tự do, Bán kết..."></div>
+                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B..."></div>
                     <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
                 </div>
             </div>
@@ -330,7 +336,7 @@ HTML
             { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
         ],
         upcomingMatches: [
-            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-12T18:00", court: "Sân số 02", category: "Đánh Đôi" }
+            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-12T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
         ]
     };
 
@@ -413,6 +419,8 @@ HTML
             const deleteBtnHtml = isAdminActive ? 
                 `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này"><i class="fa-solid fa-trash-can"></i></button>` : '';
 
+            const handicapHtml = m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : '';
+
             grid.innerHTML += `
                 <div class="match-card">
                     <div class="match-badge">Sắp diễn ra</div>
@@ -422,6 +430,7 @@ HTML
                         <div class="vs-tag">VS</div>
                         <div class="team-box" style="color:var(--accent);">${m.team2}</div>
                     </div>
+                    ${handicapHtml}
                     <div class="match-info">
                         <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
                         <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
@@ -439,8 +448,8 @@ HTML
         const select2 = document.getElementById('upcomingTeam2');
 
         if (items.length === 0) {
-            select1.innerHTML = '<option value="">-- Chưa có dữ liệu danh sách --</option>';
-            select2.innerHTML = '<option value="">-- Chưa có dữ liệu danh sách --</option>';
+            select1.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
+            select2.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
             return;
         }
 
@@ -461,20 +470,22 @@ HTML
         const time = document.getElementById('upcomingTime').value;
         const court = document.getElementById('upcomingCourt').value.trim();
         const categoryInput = document.getElementById('upcomingCategory').value.trim();
+        const handicap = document.getElementById('upcomingHandicap').value.trim();
 
-        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV!");
-        if (team1 === team2) return alert("2 Bên thi đấu không thể giống nhau!");
+        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV trong danh sách!");
+        if (team1 === team2) return alert("2 Bên thi đấu không thể trùng nhau!");
         if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
 
         const defaultCategory = matchType === 'singles' ? 'Đánh Đơn' : 'Đánh Đôi';
         const category = categoryInput ? `${defaultCategory} - ${categoryInput}` : defaultCategory;
 
         if (!db.upcomingMatches) db.upcomingMatches = [];
-        db.upcomingMatches.push({ team1, team2, time, court, category });
+        db.upcomingMatches.push({ team1, team2, time, court, category, handicap });
 
         document.getElementById('upcomingTime').value = '';
         document.getElementById('upcomingCourt').value = '';
         document.getElementById('upcomingCategory').value = '';
+        document.getElementById('upcomingHandicap').value = '';
 
         saveData();
     }
