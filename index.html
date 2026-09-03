@@ -41,6 +41,25 @@ HTML
         /* Bố cục chính bao gồm phần Quỹ Pick */
         .main-layout { display: flex; flex-direction: column; gap: 2rem; }
 
+        /* Style cho phần Quỹ Libre */
+        .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
+        .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
+        .qr-container { text-align: center; margin-bottom: 1rem; }
+        .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
+        .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
+
+        /* Style cho Trận Đấu Sắp Diễn Ra */
+        .upcoming-section { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
+        .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
+        .match-badge { position: absolute; top: 12px; right: 12px; background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .match-time { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+        .match-versus { display: flex; align-items: center; justify-content: space-between; font-weight: 700; text-align: center; margin: 0.5rem 0; font-size: 0.95rem; }
+        .team-box { flex: 1; word-break: break-word; }
+        .vs-tag { color: var(--danger); font-style: italic; font-size: 0.85rem; padding: 0 8px; }
+        .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
+
         /* Bố cục song song 2 thể loại */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
@@ -51,14 +70,6 @@ HTML
 
         .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1.5rem; }
         .card-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-
-        /* Style cho phần Quỹ Libre */
-        .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto 2rem auto; }
-        .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
-        .qr-container { text-align: center; margin-bottom: 1rem; }
-        .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
-        .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
 
         /* Bảng điều khiển Admin */
         .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
@@ -126,6 +137,14 @@ HTML
             </div>
         </div>
 
+        <!-- Khối Trận Đấu Sắp Diễn Ra -->
+        <div class="upcoming-section">
+            <div class="card-title" style="font-size: 1.25rem; color: var(--primary-hover); margin-bottom: 0;">
+                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP DIỄN RA
+            </div>
+            <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
+        </div>
+
         <div class="main-grid">
             <!-- Cột Đánh Đơn -->
             <div>
@@ -177,6 +196,23 @@ HTML
     <div class="admin-section" id="adminSectionArea">
         <h2 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;"><i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN</h2>
         
+        <!-- Admin Lên Lịch Trận Đấu -->
+        <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
+            <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
+            <div class="admin-card-grid">
+                <div>
+                    <div class="form-group"><label>Tên VĐV / Cặp Đôi 1</label><input type="text" id="upcomingTeam1" placeholder="Ví dụ: Hoàng Nam / Tuấn Anh"></div>
+                    <div class="form-group"><label>Tên VĐV / Cặp Đôi 2</label><input type="text" id="upcomingTeam2" placeholder="Ví dụ: Đức Minh / Việt Hoàng"></div>
+                    <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
+                </div>
+                <div>
+                    <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
+                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B"></div>
+                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 1.8rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
+                </div>
+            </div>
+        </div>
+
         <div class="admin-grid">
             <!-- Admin Đánh Đơn -->
             <div class="card" style="border-color: rgba(34, 197, 94, 0.4);">
@@ -283,6 +319,9 @@ HTML
         ],
         doublesHistory: [
             { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
+        ],
+        upcomingMatches: [
+            { team1: "Hoàng Nam / Tuấn Anh", team2: "Đức Minh / Việt Hoàng", time: "2026-09-12T18:00", court: "Sân số 02", category: "Đôi nam Hạng B" }
         ]
     };
 
@@ -296,10 +335,10 @@ HTML
                 singles: data.singles || [],
                 singlesHistory: data.singlesHistory || [],
                 doubles: data.doubles || [],
-                doublesHistory: data.doublesHistory || []
+                doublesHistory: data.doublesHistory || [],
+                upcomingMatches: data.upcomingMatches || []
             };
         } else {
-            // Nếu dữ liệu trên database trống, tạo dữ liệu mẫu
             saveData();
         }
         initApp();
@@ -331,6 +370,7 @@ HTML
     }
 
     function initApp() {
+        renderUpcomingMatches();
         renderRankings('singles', 'singlesBody', 'singlesHistoryList');
         renderRankings('doubles', 'doublesBody', 'doublesHistoryList');
         if (isAdminActive) {
@@ -338,6 +378,78 @@ HTML
             loadDropdowns('doubles');
             loadManageDropdown('singles');
             loadManageDropdown('doubles');
+        }
+    }
+
+    function renderUpcomingMatches() {
+        const grid = document.getElementById('upcomingMatchesGrid');
+        const matches = db.upcomingMatches || [];
+        grid.innerHTML = matches.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có trận đấu nào được lên lịch</div>' : '';
+
+        matches.forEach((m, idx) => {
+            let formattedTime = m.time;
+            if (m.time) {
+                const dateObj = new Date(m.time);
+                if (!isNaN(dateObj)) {
+                    const hours = String(dateObj.getHours()).padStart(2, '0');
+                    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const year = dateObj.getFullYear();
+                    formattedTime = `${hours}:${minutes} - ${day}/${month}/${year}`;
+                }
+            }
+
+            const deleteBtnHtml = isAdminActive ? 
+                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này"><i class="fa-solid fa-trash-can"></i></button>` : '';
+
+            grid.innerHTML += `
+                <div class="match-card">
+                    <div class="match-badge">Sắp diễn ra</div>
+                    <div class="match-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
+                    <div class="match-versus">
+                        <div class="team-box" style="color:var(--primary-hover);">${m.team1}</div>
+                        <div class="vs-tag">VS</div>
+                        <div class="team-box" style="color:var(--accent);">${m.team2}</div>
+                    </div>
+                    <div class="match-info">
+                        <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
+                        <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
+                    </div>
+                    ${deleteBtnHtml}
+                </div>
+            `;
+        });
+    }
+
+    function addUpcomingMatch() {
+        if (!isAdminActive) return;
+        const team1 = document.getElementById('upcomingTeam1').value.trim();
+        const team2 = document.getElementById('upcomingTeam2').value.trim();
+        const time = document.getElementById('upcomingTime').value;
+        const court = document.getElementById('upcomingCourt').value.trim();
+        const category = document.getElementById('upcomingCategory').value.trim();
+
+        if (!team1 || !team2) return alert("Vui lòng nhập tên cả 2 Đội / VĐV!");
+        if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
+
+        if (!db.upcomingMatches) db.upcomingMatches = [];
+        db.upcomingMatches.push({ team1, team2, time, court, category });
+        
+        document.getElementById('upcomingTeam1').value = '';
+        document.getElementById('upcomingTeam2').value = '';
+        document.getElementById('upcomingTime').value = '';
+        document.getElementById('upcomingCourt').value = '';
+        document.getElementById('upcomingCategory').value = '';
+
+        saveData();
+    }
+
+    function deleteUpcomingMatch(index) {
+        if (!isAdminActive) return;
+        if (confirm("Xóa trận đấu này khỏi lịch thi đấu sắp tới?")) {
+            db.upcomingMatches.splice(index, 1);
+            saveData();
         }
     }
 
