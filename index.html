@@ -30,7 +30,6 @@ HTML
         header h1 { font-size: 2.5rem; color: var(--primary-hover); text-transform: uppercase; letter-spacing: 2px; }
         header p { color: var(--text-muted); }
 
-        /* Nút Admin ẩn */
         .admin-toggle {
             position: absolute; top: 10px; right: 10px; background: #334155; color: var(--text-muted);
             border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
@@ -38,10 +37,8 @@ HTML
         }
         .admin-toggle.active { background: var(--primary); color: white; }
 
-        /* Bố cục chính */
         .main-layout { display: flex; flex-direction: column; gap: 2rem; }
 
-        /* Style cho phần Quỹ Libre */
         .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
         .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
         .qr-container { text-align: center; margin-bottom: 1rem; }
@@ -49,11 +46,21 @@ HTML
         .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
 
-        /* Style cho Trận Đấu Sắp Diễn Ra */
         .upcoming-section { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
         .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
-        .match-badge { position: absolute; top: 12px; right: 12px; background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; border: 1px solid rgba(34, 197, 94, 0.3); }
+        
+        /* Trạng thái trận đấu */
+        .match-badge { position: absolute; top: 12px; right: 12px; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+        .badge-upcoming { background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-live { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); animation: pulse-red 1.5s infinite; }
+        
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
         .match-time { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
         .match-versus { display: flex; align-items: center; justify-content: space-between; font-weight: 700; text-align: center; margin: 0.5rem 0; font-size: 0.95rem; }
         .team-box { flex: 1; word-break: break-word; }
@@ -61,7 +68,6 @@ HTML
         .handicap-tag { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px dashed var(--gold); border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; text-align: center; font-weight: 600; }
         .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
 
-        /* Bố cục song song 2 thể loại */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
 
@@ -72,7 +78,6 @@ HTML
         .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1.5rem; }
         .card-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
 
-        /* Bảng điều khiển Admin */
         .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 1024px) { .admin-grid { grid-template-columns: 1fr; } }
@@ -108,7 +113,6 @@ HTML
         .btn-delete-history:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
     </style>
 
-    <!-- Thư viện Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
@@ -125,7 +129,6 @@ HTML
     </header>
 
     <div class="main-layout">
-        <!-- Khối Quỹ Pick (Thủ Quỹ) -->
         <div class="fund-card">
             <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick (Thủ Quỹ)</div>
             <div class="qr-container">
@@ -137,53 +140,42 @@ HTML
             </div>
         </div>
 
-        <!-- Khối Trận Đấu Sắp Diễn Ra -->
         <div class="upcoming-section">
             <div class="card-title" style="font-size: 1.25rem; color: var(--primary-hover); margin-bottom: 0;">
-                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP DIỄN RA
+                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP / ĐANG DIỄN RA
             </div>
             <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
         </div>
 
         <div class="main-grid">
-            <!-- Cột Đánh Đơn -->
             <div>
                 <div class="game-title-header singles-title"><i class="fa-solid fa-user"></i> Hạng Mục ĐÁNH ĐƠN (1v1)</div>
-                
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Vận Động Viên</div>
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr><th style="width: 50px;">Hạng</th><th>VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr>
-                            </thead>
+                            <thead><tr><th style="width: 50px;">Hạng</th><th>VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
                             <tbody id="singlesBody"></tbody>
                         </table>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đơn</div>
                     <div class="history-list" id="singlesHistoryList"></div>
                 </div>
             </div>
 
-            <!-- Cột Đánh Đôi -->
             <div>
                 <div class="game-title-header doubles-title"><i class="fa-solid fa-users"></i> Hạng Mục ĐÁNH ĐÔI (2v2)</div>
-                
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Đôi Nam/Nữ/Nam Nữ</div>
                     <div class="table-responsive">
                         <table>
-                            <thead>
-                                <tr><th style="width: 50px;">Hạng</th><th>Cặp VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr>
-                            </thead>
+                            <thead><tr><th style="width: 50px;">Hạng</th><th>Cặp VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
                             <tbody id="doublesBody"></tbody>
                         </table>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đôi</div>
                     <div class="history-list" id="doublesHistoryList"></div>
@@ -192,11 +184,10 @@ HTML
         </div>
     </div>
 
-    <!-- Admin Section -->
+    <!-- Admin Panel -->
     <div class="admin-section" id="adminSectionArea">
         <h2 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;"><i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN</h2>
         
-        <!-- Admin Lên Lịch Trận Đấu -->
         <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
             <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
             <div class="admin-card-grid">
@@ -208,20 +199,11 @@ HTML
                             <option value="doubles">Đánh Đôi (2v2)</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Chọn VĐV / Cặp Đôi 1</label>
-                        <select id="upcomingTeam1"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Chọn VĐV / Cặp Đôi 2</label>
-                        <select id="upcomingTeam2"></select>
-                    </div>
+                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 1</label><select id="upcomingTeam1"></select></div>
+                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 2</label><select id="upcomingTeam2"></select></div>
                 </div>
                 <div>
-                    <div class="form-group">
-                        <label>Mục chấp điểm / Kèo chấp</label>
-                        <input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh...">
-                    </div>
+                    <div class="form-group"><label>Mục chấp điểm / Kèo chấp</label><input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh..."></div>
                     <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
                     <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
                     <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B..."></div>
@@ -231,16 +213,12 @@ HTML
         </div>
 
         <div class="admin-grid">
-            <!-- Admin Đánh Đơn -->
             <div class="card" style="border-color: rgba(34, 197, 94, 0.4);">
                 <div class="card-title singles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)</div>
                 <div class="admin-card-grid">
                     <div>
                         <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesAddName" placeholder="Nhập tên VĐV..."></div>
-                        <div class="form-group">
-                            <label>Điểm Elo khởi đầu</label>
-                            <input type="number" id="singlesAddPoints" value="1200">
-                        </div>
+                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="singlesAddPoints" value="1200"></div>
                         <button class="btn" onclick="addNewEntry('singles')"><i class="fa-solid fa-user-plus"></i> Thêm VĐV</button>
                     </div>
                     <div>
@@ -250,12 +228,8 @@ HTML
                         <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
                     </div>
                 </div>
-
                 <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group">
-                        <label>Sửa/Xóa VĐV Đơn</label>
-                        <select id="singlesManageTarget"></select>
-                    </div>
+                    <div class="form-group"><label>Sửa/Xóa VĐV Đơn</label><select id="singlesManageTarget"></select></div>
                     <div class="btn-group">
                         <button class="btn btn-danger" onclick="deleteEntry('singles')"><i class="fa-solid fa-trash"></i> Xóa</button>
                         <button class="btn" style="background:#4b5563;" onclick="editPoints('singles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
@@ -263,16 +237,12 @@ HTML
                 </div>
             </div>
 
-            <!-- Admin Đánh Đôi -->
             <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
                 <div class="card-title doubles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
                 <div class="admin-card-grid">
                     <div>
                         <div class="form-group"><label>Tên Cặp Đôi Mới</label><input type="text" id="doublesAddName" placeholder="Ví dụ: Tuấn & Hoàng..."></div>
-                        <div class="form-group">
-                            <label>Điểm Elo khởi đầu</label>
-                            <input type="number" id="doublesAddPoints" value="1200">
-                        </div>
+                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="doublesAddPoints" value="1200"></div>
                         <button class="btn" style="background:var(--doubles-color);" onclick="addNewEntry('doubles')"><i class="fa-solid fa-users-plus"></i> Thêm Cặp Đôi</button>
                     </div>
                     <div>
@@ -282,12 +252,8 @@ HTML
                         <button class="btn" style="background:#2563eb;" onclick="recordMatch('doubles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
                     </div>
                 </div>
-
                 <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group">
-                        <label>Sửa/Xóa Cặp Đôi</label>
-                        <select id="doublesManageTarget"></select>
-                    </div>
+                    <div class="form-group"><label>Sửa/Xóa Cặp Đôi</label><select id="doublesManageTarget"></select></div>
                     <div class="btn-group">
                         <button class="btn btn-danger" onclick="deleteEntry('doubles')"><i class="fa-solid fa-trash"></i> Xóa</button>
                         <button class="btn" style="background:#4b5563;" onclick="editPoints('doubles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
@@ -299,7 +265,6 @@ HTML
 </div>
 
 <script>
-    // Configuration Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
         authDomain: "pickleball-hoanggia.firebaseapp.com",
@@ -311,7 +276,6 @@ HTML
         measurementId: "G-ZNZNP48B0H"
     };
 
-    // Khởi tạo Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const dbRef = database.ref('pickleballProDB');
@@ -336,13 +300,12 @@ HTML
             { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
         ],
         upcomingMatches: [
-            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-12T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
+            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-03T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
         ]
     };
 
     let db = defaultData;
 
-    // Lắng nghe dữ liệu Realtime
     dbRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -397,24 +360,38 @@ HTML
         }
     }
 
+    // So sánh thời gian thực để cập nhật trạng thái
     function renderUpcomingMatches() {
         const grid = document.getElementById('upcomingMatchesGrid');
         const matches = db.upcomingMatches || [];
         grid.innerHTML = matches.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có trận đấu nào được lên lịch</div>' : '';
 
+        const now = new Date();
+
         matches.forEach((m, idx) => {
             let formattedTime = m.time;
+            let isLive = false;
+
             if (m.time) {
-                const dateObj = new Date(m.time);
-                if (!isNaN(dateObj)) {
-                    const hours = String(dateObj.getHours()).padStart(2, '0');
-                    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
-                    const day = String(dateObj.getDate()).padStart(2, '0');
-                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                    const year = dateObj.getFullYear();
+                const matchDate = new Date(m.time);
+                if (!isNaN(matchDate)) {
+                    const hours = String(matchDate.getHours()).padStart(2, '0');
+                    const minutes = String(matchDate.getMinutes()).padStart(2, '0');
+                    const day = String(matchDate.getDate()).padStart(2, '0');
+                    const month = String(matchDate.getMonth() + 1).padStart(2, '0');
+                    const year = matchDate.getFullYear();
                     formattedTime = `${hours}:${minutes} - ${day}/${month}/${year}`;
+
+                    // Nếu thời gian hiện tại >= thời gian thi đấu thì đổi sang "Đang diễn ra"
+                    if (now >= matchDate) {
+                        isLive = true;
+                    }
                 }
             }
+
+            const badgeHtml = isLive ? 
+                `<div class="match-badge badge-live"><i class="fa-solid fa-circle-dot"></i> Đang diễn ra</div>` : 
+                `<div class="match-badge badge-upcoming"><i class="fa-regular fa-clock"></i> Sắp diễn ra</div>`;
 
             const deleteBtnHtml = isAdminActive ? 
                 `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này"><i class="fa-solid fa-trash-can"></i></button>` : '';
@@ -423,7 +400,7 @@ HTML
 
             grid.innerHTML += `
                 <div class="match-card">
-                    <div class="match-badge">Sắp diễn ra</div>
+                    ${badgeHtml}
                     <div class="match-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
                     <div class="match-versus">
                         <div class="team-box" style="color:var(--primary-hover);">${m.team1}</div>
@@ -440,6 +417,11 @@ HTML
             `;
         });
     }
+
+    // Tự động kiểm tra thời gian 10 giây/lần để chuyển mốc trạng thái
+    setInterval(() => {
+        renderUpcomingMatches();
+    }, 10000);
 
     function updateUpcomingDropdowns() {
         const type = document.getElementById('upcomingType').value;
