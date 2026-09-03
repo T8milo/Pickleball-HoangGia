@@ -38,7 +38,7 @@ HTML
         }
         .admin-toggle.active { background: var(--primary); color: white; }
 
-        /* Bố cục chính bao gồm phần Quỹ Pick */
+        /* Bố cục chính */
         .main-layout { display: flex; flex-direction: column; gap: 2rem; }
 
         /* Style cho phần Quỹ Libre */
@@ -126,11 +126,9 @@ HTML
         <!-- Khối Quỹ Pick (Thủ Quỹ) -->
         <div class="fund-card">
             <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick (Thủ Quỹ)</div>
-            
             <div class="qr-container">
                 <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
             </div>
-
             <div class="balance-box">
                 <span>Số dư quỹ hiện tại</span>
                 <span class="balance-amount">0đ</span>
@@ -201,14 +199,27 @@ HTML
             <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
             <div class="admin-card-grid">
                 <div>
-                    <div class="form-group"><label>Tên VĐV / Cặp Đôi 1</label><input type="text" id="upcomingTeam1" placeholder="Ví dụ: Hoàng Nam / Tuấn Anh"></div>
-                    <div class="form-group"><label>Tên VĐV / Cặp Đôi 2</label><input type="text" id="upcomingTeam2" placeholder="Ví dụ: Đức Minh / Việt Hoàng"></div>
-                    <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
+                    <div class="form-group">
+                        <label>Hình thức thi đấu</label>
+                        <select id="upcomingType" onchange="updateUpcomingDropdowns()">
+                            <option value="singles">Đánh Đơn (1v1)</option>
+                            <option value="doubles">Đánh Đôi (2v2)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Chọn VĐV / Cặp Đôi 1</label>
+                        <select id="upcomingTeam1"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Chọn VĐV / Cặp Đôi 2</label>
+                        <select id="upcomingTeam2"></select>
+                    </div>
                 </div>
                 <div>
+                    <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
                     <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
-                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B"></div>
-                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 1.8rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
+                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Tự do, Bán kết..."></div>
+                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
                 </div>
             </div>
         </div>
@@ -217,7 +228,6 @@ HTML
             <!-- Admin Đánh Đơn -->
             <div class="card" style="border-color: rgba(34, 197, 94, 0.4);">
                 <div class="card-title singles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)</div>
-                
                 <div class="admin-card-grid">
                     <div>
                         <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesAddName" placeholder="Nhập tên VĐV..."></div>
@@ -250,7 +260,6 @@ HTML
             <!-- Admin Đánh Đôi -->
             <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
                 <div class="card-title doubles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
-                
                 <div class="admin-card-grid">
                     <div>
                         <div class="form-group"><label>Tên Cặp Đôi Mới</label><input type="text" id="doublesAddName" placeholder="Ví dụ: Tuấn & Hoàng..."></div>
@@ -321,13 +330,13 @@ HTML
             { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
         ],
         upcomingMatches: [
-            { team1: "Hoàng Nam / Tuấn Anh", team2: "Đức Minh / Việt Hoàng", time: "2026-09-12T18:00", court: "Sân số 02", category: "Đôi nam Hạng B" }
+            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-12T18:00", court: "Sân số 02", category: "Đánh Đôi" }
         ]
     };
 
     let db = defaultData;
 
-    // Lắng nghe dữ liệu Realtime từ Firebase
+    // Lắng nghe dữ liệu Realtime
     dbRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -378,6 +387,7 @@ HTML
             loadDropdowns('doubles');
             loadManageDropdown('singles');
             loadManageDropdown('doubles');
+            updateUpcomingDropdowns();
         }
     }
 
@@ -422,22 +432,46 @@ HTML
         });
     }
 
+    function updateUpcomingDropdowns() {
+        const type = document.getElementById('upcomingType').value;
+        const items = db[type] || [];
+        const select1 = document.getElementById('upcomingTeam1');
+        const select2 = document.getElementById('upcomingTeam2');
+
+        if (items.length === 0) {
+            select1.innerHTML = '<option value="">-- Chưa có dữ liệu danh sách --</option>';
+            select2.innerHTML = '<option value="">-- Chưa có dữ liệu danh sách --</option>';
+            return;
+        }
+
+        const optionsHtml = items.map(i => `<option value="${i.name}">${i.name} (${i.points} Elo)</option>`).join('');
+        select1.innerHTML = optionsHtml;
+        select2.innerHTML = optionsHtml;
+
+        if (items.length > 1) {
+            select2.selectedIndex = 1;
+        }
+    }
+
     function addUpcomingMatch() {
         if (!isAdminActive) return;
-        const team1 = document.getElementById('upcomingTeam1').value.trim();
-        const team2 = document.getElementById('upcomingTeam2').value.trim();
+        const matchType = document.getElementById('upcomingType').value;
+        const team1 = document.getElementById('upcomingTeam1').value;
+        const team2 = document.getElementById('upcomingTeam2').value;
         const time = document.getElementById('upcomingTime').value;
         const court = document.getElementById('upcomingCourt').value.trim();
-        const category = document.getElementById('upcomingCategory').value.trim();
+        const categoryInput = document.getElementById('upcomingCategory').value.trim();
 
-        if (!team1 || !team2) return alert("Vui lòng nhập tên cả 2 Đội / VĐV!");
+        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV!");
+        if (team1 === team2) return alert("2 Bên thi đấu không thể giống nhau!");
         if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
+
+        const defaultCategory = matchType === 'singles' ? 'Đánh Đơn' : 'Đánh Đôi';
+        const category = categoryInput ? `${defaultCategory} - ${categoryInput}` : defaultCategory;
 
         if (!db.upcomingMatches) db.upcomingMatches = [];
         db.upcomingMatches.push({ team1, team2, time, court, category });
-        
-        document.getElementById('upcomingTeam1').value = '';
-        document.getElementById('upcomingTeam2').value = '';
+
         document.getElementById('upcomingTime').value = '';
         document.getElementById('upcomingCourt').value = '';
         document.getElementById('upcomingCategory').value = '';
@@ -459,7 +493,6 @@ HTML
 
         list.sort((a,b) => b.points - a.points);
 
-        // Render Table
         const body = document.getElementById(tableBodyId);
         body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu VĐV</td></tr>' : '';
         
@@ -473,7 +506,6 @@ HTML
             </tr>`;
         });
 
-        // Render Lịch Sử
         const historyContainer = document.getElementById(historyListId);
         historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem; font-size:0.85rem;">Chưa có trận đấu nào</div>' : '';
         
@@ -575,7 +607,6 @@ HTML
         const winner = list.find(i => i.name === winnerName);
         const loser = list.find(i => i.name === loserName);
 
-        // Tính Elo
         const Ra = winner.points;
         const Rb = loser.points;
         const Ea = 1 / (1 + Math.pow(10, (Rb - Ra) / 400)); 
