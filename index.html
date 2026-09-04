@@ -133,13 +133,13 @@ HTML
 
     <div class="main-layout">
         <div class="fund-card">
-            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick (Thủ Quỹ)</div>
+            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
             <div class="qr-container">
                 <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
             </div>
             <div class="balance-box">
                 <span>Số dư quỹ hiện tại</span>
-                <span class="balance-amount">0đ</span>
+                <span class="balance-amount" id="fundBalance">Đang tải...</span>
             </div>
         </div>
 
@@ -268,6 +268,32 @@ HTML
 </div>
 
 <script>
+    // Hàm đồng bộ dữ liệu từ ô F1 trong Google Sheets
+    function fetchSheetBalance() {
+        const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
+        const gid = "1114506581";
+        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=F1`;
+
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                const json = JSON.parse(data.substring(47, data.length - 2));
+                let val = json.table.rows[0].c[0].v;
+                if (typeof val === 'number') {
+                    val = val.toLocaleString('vi-VN');
+                }
+                document.getElementById('fundBalance').innerText = val + 'đ';
+            })
+            .catch(err => {
+                console.error("Lỗi khi tải dữ liệu từ Google Sheets:", err);
+                document.getElementById('fundBalance').innerText = "0đ";
+            });
+    }
+
+    // Tự động tải số dư từ Sheets
+    fetchSheetBalance();
+    setInterval(fetchSheetBalance, 30000); // Tự động làm mới mỗi 30 giây
+
     const firebaseConfig = {
         apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
         authDomain: "pickleball-hoanggia.firebaseapp.com",
@@ -436,7 +462,6 @@ HTML
         const match = db.upcomingMatches[index];
         if (!match) return;
 
-        // Xác định hạng mục (Đơn hay Đôi) dựa trên thuộc tính category
         const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
 
         const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
@@ -453,7 +478,6 @@ HTML
         let winnerObj = db[mode].find(i => i.name === winnerName);
         let loserObj = db[mode].find(i => i.name === loserName);
 
-        // Trường hợp tên không khớp bảng Elo, tự động tạo mới VĐV
         if (!winnerObj) {
             winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
             db[mode].push(winnerObj);
@@ -463,7 +487,6 @@ HTML
             db[mode].push(loserObj);
         }
 
-        // Tính Elo
         const K = 32;
         const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
         const pointChange = Math.round(K * (1 - expectedWinner));
@@ -483,7 +506,6 @@ HTML
             note: noteText
         });
 
-        // Xóa trận đấu khỏi danh sách sắp diễn ra
         db.upcomingMatches.splice(index, 1);
 
         saveData();
