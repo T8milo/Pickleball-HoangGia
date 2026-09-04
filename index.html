@@ -1,927 +1,1142 @@
-HTML
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pickleball HoangGia - Quản Lý Xếp Hạng</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Pickleball Club - Bảng Xếp Hạng & Lịch Thi Đấu</title>
+    
+    <!-- Phông chữ thể thao hiện đại: Inter & Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase App & Database (V9 Compatibility Mode) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --primary: #15803d;
-            --primary-hover: #22c55e;
-            --text: #f8fafc;
+            --primary: #00e676;
+            --primary-hover: #00c853;
+            --accent: #ffea00;
+            --bg-dark: #0b0f19;
+            --card-bg: rgba(22, 31, 49, 0.75);
+            --card-bg-light: rgba(255, 255, 255, 0.04);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --gold: #f59e0b;
-            --silver: #cbd5e1;
-            --bronze: #b45309;
-            --danger: #ef4444;
-            --accent: #38bdf8;
-            --doubles-color: #a855f7;
+            --danger: #ff5252;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text); padding: 2rem 1rem; min-height: 100vh; }
-        .container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; }
-        
-        header { text-align: center; margin-bottom: 2rem; padding-right: 40px; }
-        header h1 { font-size: 2.5rem; color: var(--primary-hover); text-transform: uppercase; letter-spacing: 2px; }
-        header p { color: var(--text-muted); }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
 
-        /* HERO BANNER STYLES */
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        /* Banner Hero Section Tối ưu WebP */
         .hero-banner {
             position: relative;
             width: 100%;
-            height: 380px;
-            border-radius: 16px;
+            height: 320px;
             overflow: hidden;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-slides {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out, transform 6s ease-out;
-            background-size: cover;
-            background-position: center;
-            transform: scale(1);
-        }
-
-        .hero-slide.active {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.85) 85%, #0f172a 100%);
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 2.5rem;
-            z-index: 2;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .hero-banner img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.45;
+            filter: contrast(110%) brightness(90%);
         }
 
         .hero-content {
-            max-width: 700px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--primary-hover);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.8rem;
-            backdrop-filter: blur(4px);
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 1rem;
         }
 
         .hero-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 0.8rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,230,118,0.3);
         }
 
-        .hero-title span {
-            color: var(--primary-hover);
-        }
-
-        .hero-desc {
+        .hero-subtitle {
+            font-size: 1.05rem;
             color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
+            margin-top: 0.4rem;
+            font-weight: 500;
         }
 
-        .hero-actions {
+        /* Admin Header Bar */
+        .admin-bar {
+            max-width: 1200px;
+            margin: 1rem auto 0;
+            padding: 0 1.5rem;
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
-        .btn-hero {
-            padding: 10px 20px;
-            border-radius: 8px;
+        .btn-admin-login {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-admin-login:hover {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+        }
+
+        /* Layout Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.75rem 1.5rem;
             font-weight: 700;
             font-size: 0.95rem;
-            text-decoration: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: #000;
+            background: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Card System (Glassmorphism) */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .card-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .card-header i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* Grid System */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        select.form-control option {
+            background: #161f31;
+            color: #fff;
+        }
+
+        .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
             cursor: pointer;
             transition: all 0.2s;
-            border: none;
         }
 
-        .btn-hero-primary {
+        .btn-primary {
             background: var(--primary);
-            color: white;
+            color: #000;
         }
 
-        .btn-hero-primary:hover {
+        .btn-primary:hover {
             background: var(--primary-hover);
-            transform: translateY(-2px);
         }
 
-        .btn-hero-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
         }
 
-        .btn-hero-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .btn-danger:hover {
+            opacity: 0.9;
         }
 
-        .hero-dots {
-            position: absolute;
-            bottom: 20px;
-            right: 25px;
-            display: flex;
-            gap: 8px;
-            z-index: 3;
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
         }
 
-        .hero-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: 0.3s;
+        /* Table Design */
+        .table-container {
+            overflow-x: auto;
         }
 
-        .hero-dot.active {
-            background: var(--primary-hover);
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 0.85rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 28px;
-            border-radius: 10px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.1);
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .top-1 { background: var(--gold); color: #000; }
+        .top-2 { background: var(--silver); color: #000; }
+        .top-3 { background: var(--bronze); color: #000; }
+
+        /* Match Cards */
+        .match-card {
+            background: var(--card-bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            position: relative;
+            margin-bottom: 1rem;
         }
 
+        .match-time {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .match-versus {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0.8rem 0;
+            font-weight: 700;
+        }
+
+        .team-box {
+            flex: 1;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .vs-tag {
+            margin: 0 0.5rem;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .handicap-tag {
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-top: 0.4rem;
+            text-align: center;
+        }
+
+        .match-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.8rem;
+            padding-top: 0.6rem;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .btn-delete-history {
+            background: transparent;
+            color: var(--danger);
+            border: none;
+            cursor: pointer;
+            padding: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Optimization */
         @media (max-width: 768px) {
-            .hero-banner { height: 320px; }
-            .hero-overlay { padding: 1.5rem; }
-            .hero-title { font-size: 1.75rem; }
-            .hero-desc { font-size: 0.85rem; margin-bottom: 1rem; }
-            .hero-dots { bottom: 15px; right: 15px; }
+            .hero-title { font-size: 1.8rem; }
+            .hero-banner { height: 220px; }
+            .container { padding: 0 1rem; }
+            .grid-2 { grid-template-columns: 1fr; }
         }
 
-        .admin-toggle {
-            position: absolute; top: 10px; right: 10px; background: #334155; color: var(--text-muted);
-            border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;
-        }
-        .admin-toggle.active { background: var(--primary); color: white; }
-
-        .main-layout { display: flex; flex-direction: column; gap: 2rem; }
-
-        .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
-        .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
-        .qr-container { text-align: center; margin-bottom: 1rem; }
-        .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
-        .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
-
-        .upcoming-section { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
-        .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
-        
-        .match-badge { position: absolute; top: 12px; right: 12px; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-        .badge-upcoming { background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .badge-live { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); animation: pulse-red 1.5s infinite; }
-        
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        /* Gallery Image System (Lazy loading optimization) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        .match-time { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
-        .match-versus { display: flex; align-items: center; justify-content: space-between; font-weight: 700; text-align: center; margin: 0.5rem 0; font-size: 0.95rem; }
-        .team-box { flex: 1; word-break: break-word; }
-        .vs-tag { color: var(--danger); font-style: italic; font-size: 0.85rem; padding: 0 8px; }
-        .handicap-tag { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px dashed var(--gold); border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; text-align: center; font-weight: 600; }
-        .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
-
-        .card-actions { display: flex; gap: 8px; justify-content: center; align-items: center; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 4px; }
-        .btn-finish-match { background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-        .btn-finish-match:hover { background: var(--primary-hover); }
-
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
-
-        .game-title-header { font-size: 1.6rem; color: #fff; font-weight: 700; text-transform: uppercase; border-bottom: 3px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .singles-title { color: var(--primary-hover); }
-        .doubles-title { color: var(--doubles-color); }
-
-        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1.5rem; }
-        .card-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-
-        .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        @media (max-width: 1024px) { .admin-grid { grid-template-columns: 1fr; } }
-        .admin-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media (max-width: 640px) { .admin-card-grid { grid-template-columns: 1fr; } }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
-        .form-group select { cursor: pointer; }
-
-        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #b91c1c; }
-        .btn-group { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 0.6rem 0.8rem; background: #0f172a; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
-        td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #334155; vertical-align: middle; font-size: 0.95rem; }
-
-        .rank-badge { font-weight: bold; width: 25px; text-align: center; display: inline-block; }
-        .top-1 { color: var(--gold); } .top-2 { color: var(--silver); } .top-3 { color: var(--bronze); }
-        
-        .history-list { max-height: 300px; overflow-y: auto; padding-right: 5px; }
-        .history-item { 
-            font-size: 0.85rem; background: #0f172a; padding: 0.5rem 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; 
-            border-left: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center;
+        .gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
         }
-        .history-content { flex: 1; padding-right: 10px; }
-        .btn-delete-history { display: none; background: transparent; color: var(--text-muted); border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
-        .btn-delete-history:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+        .gallery-img:hover {
+            transform: scale(1.02);
+        }
     </style>
-
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-<div class="container">
-    <button class="admin-toggle" id="adminToggleBtn" onclick="toggleAdminMode()" title="Chế độ Quản trị viên">
-        <i class="fa-solid fa-key"></i>
-    </button>
-
-    <!-- HERO BANNER -->
-    <div class="hero-banner">
-        <div class="hero-slides">
-            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1600&auto=format&fit=crop');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=1600&auto=format&fit=crop');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=1600&auto=format&fit=crop');"></div>
+    <!-- Header Banner với ảnh WebP sắc nét -->
+    <header class="hero-banner">
+        <img src="https://images.unsplash.com/photo-1599586120429-48281b6a0ece?auto=format&fit=crop&w=1600&q=80&fm=webp" 
+             alt="Pickleball Court Banner" 
+             width="1600" 
+             height="320" 
+             fetchpriority="high">
+        <div class="hero-content">
+            <h1 class="hero-title">Pickleball Club</h1>
+            <p class="hero-subtitle">Bảng Xếp Hạng Elo & Lịch Thi Đấu Tự Động</p>
         </div>
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fa-solid fa-fire"></i> Giải Đấu Thường Niên
-                </div>
-                <h2 class="hero-title">Đỉnh Cao Đam Mê <span>Pickleball Hoàng Gia</span></h2>
-                <p class="hero-desc">Hệ thống tính điểm Elo chuẩn quốc tế, cập nhật bảng xếp hạng Đơn/Đôi và nhật ký thi đấu liên tục theo thời gian thực.</p>
-                <div class="hero-actions">
-                    <button class="btn-hero btn-hero-primary" onclick="document.querySelector('.upcoming-section').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-calendar-check"></i> Xem Trận Sắp Đấu
-                    </button>
-                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.main-grid').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng Elo
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="hero-dots">
-            <div class="hero-dot active" onclick="setHeroSlide(0)"></div>
-            <div class="hero-dot" onclick="setHeroSlide(1)"></div>
-            <div class="hero-dot" onclick="setHeroSlide(2)"></div>
-        </div>
-    </div>
-
-    <header>
-        <h1><i class="fa-solid fa-table-tennis-paddle-ball"></i> Pickleball HoangGia League</h1>
-        <p id="subHeader">Hệ thống xếp hạng Elo & Lịch sử thi đấu Pickleball chính thức CLB HoangGia</p>
     </header>
 
-    <div class="main-layout">
-        <div class="fund-card">
-            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
-            <div class="qr-container">
-                <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
-            </div>
-            <div class="balance-box">
-                <span>Số dư quỹ hiện tại</span>
-                <span class="balance-amount" id="fundBalance">Đang tải...</span>
-            </div>
-        </div>
-
-        <div class="upcoming-section">
-            <div class="card-title" style="font-size: 1.25rem; color: var(--primary-hover); margin-bottom: 0;">
-                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP / ĐANG DIỄN RA
-            </div>
-            <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
-        </div>
-
-        <div class="main-grid">
-            <div>
-                <div class="game-title-header singles-title"><i class="fa-solid fa-user"></i> Hạng Mục ĐÁNH ĐƠN (1v1)</div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Vận Động Viên</div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th style="width: 50px;">Hạng</th><th>VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
-                            <tbody id="singlesBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đơn</div>
-                    <div class="history-list" id="singlesHistoryList"></div>
-                </div>
-            </div>
-
-            <div>
-                <div class="game-title-header doubles-title"><i class="fa-solid fa-users"></i> Hạng Mục ĐÁNH ĐÔI (2v2)</div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Đôi Nam/Nữ/Nam Nữ</div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th style="width: 50px;">Hạng</th><th>Cặp VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
-                            <tbody id="doublesBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đôi</div>
-                    <div class="history-list" id="doublesHistoryList"></div>
-                </div>
-            </div>
-        </div>
+    <!-- Admin Top Bar -->
+    <div class="admin-bar">
+        <button class="btn-admin-login" id="adminBtn" onclick="toggleAdmin()">
+            <i class="fa-solid fa-user-lock"></i> <span id="adminBtnText">Đăng Nhập Admin</span>
+        </button>
     </div>
 
-    <!-- Admin Panel -->
-    <div class="admin-section" id="adminSectionArea">
-        <h2 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;"><i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN</h2>
-        
-        <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
-            <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
-            <div class="admin-card-grid">
-                <div>
-                    <div class="form-group">
-                        <label>Hình thức thi đấu</label>
-                        <select id="upcomingType" onchange="updateUpcomingDropdowns()">
-                            <option value="singles">Đánh Đơn (1v1)</option>
-                            <option value="doubles">Đánh Đôi (2v2)</option>
-                        </select>
+    <!-- Container Chính -->
+    <main class="container">
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab('singles')"><i class="fa-solid fa-user"></i> Đơn (Singles)</button>
+            <button class="tab-btn" onclick="switchTab('doubles')"><i class="fa-solid fa-users"></i> Đôi (Doubles)</button>
+            <button class="tab-btn" onclick="switchTab('upcoming')"><i class="fa-solid fa-calendar-days"></i> Lịch Thi Đấu</button>
+        </nav>
+
+        <!-- TAB 1: BẢNG ĐƠN -->
+        <div id="singlesTab" class="tab-content active">
+            <div class="grid-2">
+                <!-- Bảng Xếp Hạng Đơn -->
+                <section class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-trophy"></i>
+                        <h2>Bảng Xếp Hạng Đơn</h2>
                     </div>
-                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 1</label><select id="upcomingTeam1"></select></div>
-                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 2</label><select id="upcomingTeam2"></select></div>
-                </div>
-                <div>
-                    <div class="form-group"><label>Mục chấp điểm / Kèo chấp</label><input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh..."></div>
-                    <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
-                    <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
-                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B..."></div>
-                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>VĐV</th>
+                                    <th>Thắng/Thua</th>
+                                    <th style="text-align: right;">Elo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="singlesRankBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Nhật Ký Thi Đấu Đơn -->
+                <section class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <h2>Nhật Ký Trận Đơn</h2>
+                    </div>
+                    <div id="singlesHistory"></div>
+                </section>
+            </div>
+
+            <!-- Bảng Điều Khiển Admin Đơn -->
+            <div class="admin-only" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <h2>Quản Lý Trận Đấu & Điểm Số (Đơn)</h2>
+                    </div>
+                    <div class="grid-2">
+                        <!-- Ghi Kết Quả Trận -->
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 0.8rem; color: var(--primary);">Ghi Kết Quả Trận Đấu</h3>
+                            <div class="form-group">
+                                <label>VĐV Thắng</label>
+                                <select id="singlesMatchWinner" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>VĐV Thua</label>
+                                <select id="singlesMatchLoser" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tỉ số / Ghi chú</label>
+                                <input type="text" id="singlesMatchNote" class="form-control" placeholder="VD: 11-8, 11-9">
+                            </div>
+                            <button class="btn btn-primary" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu Kết Quả Elo</button>
+                        </div>
+
+                        <!-- Thêm / Sửa / Xóa VĐV -->
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 0.8rem; color: var(--primary);">Thêm VĐV Mới</h3>
+                            <div class="form-group">
+                                <input type="text" id="singlesAddName" class="form-control" placeholder="Tên VĐV...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="singlesAddPoints" class="form-control" value="1200" placeholder="Điểm Elo ban đầu">
+                            </div>
+                            <button class="btn btn-primary" onclick="addNewEntry('singles')"><i class="fa-solid fa-plus"></i> Thêm VĐV</button>
+
+                            <hr style="border-color: var(--border-color); margin: 1.2rem 0;">
+
+                            <h3 style="font-size: 1rem; margin-bottom: 0.8rem; color: var(--danger);">Chỉnh Sửa / Xóa VĐV</h3>
+                            <div class="form-group">
+                                <select id="singlesManageTarget" class="form-control"></select>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-primary" onclick="editPoints('singles')"><i class="fa-solid fa-pen"></i> Sửa Điểm</button>
+                                <button class="btn btn-danger" onclick="deleteEntry('singles')"><i class="fa-solid fa-trash"></i> Xóa VĐV</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="admin-grid">
-            <div class="card" style="border-color: rgba(34, 197, 94, 0.4);">
-                <div class="card-title singles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)</div>
-                <div class="admin-card-grid">
-                    <div>
-                        <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesAddName" placeholder="Nhập tên VĐV..."></div>
-                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="singlesAddPoints" value="1200"></div>
-                        <button class="btn" onclick="addNewEntry('singles')"><i class="fa-solid fa-user-plus"></i> Thêm VĐV</button>
+        <!-- TAB 2: BẢNG ĐÔI -->
+        <div id="doublesTab" class="tab-content">
+            <div class="grid-2">
+                <!-- Bảng Xếp Hạng Đôi -->
+                <section class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-trophy"></i>
+                        <h2>Bảng Xếp Hạng Đôi</h2>
                     </div>
-                    <div>
-                        <div class="form-group"><label>VĐV Thắng</label><select id="singlesMatchWinner"></select></div>
-                        <div class="form-group"><label>VĐV Thua</label><select id="singlesMatchLoser"></select></div>
-                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="singlesMatchNote" placeholder="Ví dụ: Tỉ số 11-9, 11-7..."></div>
-                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Cặp Đôi</th>
+                                    <th>Thắng/Thua</th>
+                                    <th style="text-align: right;">Elo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doublesRankBody"></tbody>
+                        </table>
                     </div>
-                </div>
-                <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group"><label>Sửa/Xóa VĐV Đơn</label><select id="singlesManageTarget"></select></div>
-                    <div class="btn-group">
-                        <button class="btn btn-danger" onclick="deleteEntry('singles')"><i class="fa-solid fa-trash"></i> Xóa</button>
-                        <button class="btn" style="background:#4b5563;" onclick="editPoints('singles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
+                </section>
+
+                <!-- Nhật Ký Trận Đôi -->
+                <section class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <h2>Nhật Ký Trận Đôi</h2>
                     </div>
-                </div>
+                    <div id="doublesHistory"></div>
+                </section>
             </div>
 
-            <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
-                <div class="card-title doubles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
-                <div class="admin-card-grid">
-                    <div>
-                        <div class="form-group"><label>Tên Cặp Đôi Mới</label><input type="text" id="doublesAddName" placeholder="Ví dụ: Tuấn & Hoàng..."></div>
-                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="doublesAddPoints" value="1200"></div>
-                        <button class="btn" style="background:var(--doubles-color);" onclick="addNewEntry('doubles')"><i class="fa-solid fa-users-plus"></i> Thêm Cặp Đôi</button>
+            <!-- Admin Bảng Đôi -->
+            <div class="admin-only" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <h2>Quản Lý Trận Đấu & Điểm Số (Đôi)</h2>
                     </div>
-                    <div>
-                        <div class="form-group"><label>Đôi Thắng</label><select id="doublesMatchWinner"></select></div>
-                        <div class="form-group"><label>Đôi Thua</label><select id="doublesMatchLoser"></select></div>
-                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: Tỉ số 11-8, 8-11, 11-5..."></div>
-                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('doubles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
-                    </div>
-                </div>
-                <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group"><label>Sửa/Xóa Cặp Đôi</label><select id="doublesManageTarget"></select></div>
-                    <div class="btn-group">
-                        <button class="btn btn-danger" onclick="deleteEntry('doubles')"><i class="fa-solid fa-trash"></i> Xóa</button>
-                        <button class="btn" style="background:#4b5563;" onclick="editPoints('doubles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 0.8rem; color: var(--primary);">Ghi Kết Quả Trận Đôi</h3>
+                            <div class="form-group">
+                                <label>Đôi Thắng</label>
+                                <select id="doublesMatchWinner" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Đôi Thua</label>
+                                <select id="doublesMatchLoser" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tỉ số / Ghi chú</label>
+                                <input type="text" id="doublesMatchNote" class="form-control" placeholder="VD: 11-5, 11-7">
+                            </div>
+                            <button class="btn btn-primary" onclick="recordMatch('doubles')"><i class="fa-solid fa-check"></i> Lưu Kết Quả Elo</button>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 1rem; margin-bottom: 0.8rem; color: var(--primary);">Thêm Cặp Đôi Mới</h3>
+                            <div class="form-group">
+                                <input type="text" id="doublesAddName" class="form-control" placeholder="Tên Cặp Đôi (VD: Tuấn / Nam)...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="doublesAddPoints" class="form-control" value="1200">
+                            </div>
+                            <button class="btn btn-primary" onclick="addNewEntry('doubles')"><i class="fa-solid fa-plus"></i> Thêm Đôi</button>
+
+                            <hr style="border-color: var(--border-color); margin: 1.2rem 0;">
+
+                            <h3 style="font-size: 1rem; margin-bottom: 0.8rem; color: var(--danger);">Chỉnh Sửa / Xóa Đôi</h3>
+                            <div class="form-group">
+                                <select id="doublesManageTarget" class="form-control"></select>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-primary" onclick="editPoints('doubles')"><i class="fa-solid fa-pen"></i> Sửa Điểm</button>
+                                <button class="btn btn-danger" onclick="deleteEntry('doubles')"><i class="fa-solid fa-trash"></i> Xóa Đôi</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<script>
-    // Hero Banner Slideshow Logic
-    let currentHeroSlide = 0;
-    const heroSlides = document.querySelectorAll('.hero-slide');
-    const heroDots = document.querySelectorAll('.hero-dot');
-    const totalHeroSlides = heroSlides.length;
+        <!-- TAB 3: LỊCH THI ĐẤU -->
+        <div id="upcomingTab" class="tab-content">
+            <section class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <h2>Lịch Thi Đấu Sắp Tới</h2>
+                </div>
+                <div id="upcomingGrid" class="grid-2"></div>
+            </section>
 
-    function setHeroSlide(index) {
-        if (!heroSlides.length) return;
-        heroSlides[currentHeroSlide].classList.remove('active');
-        heroDots[currentHeroSlide].classList.remove('active');
-        
-        currentHeroSlide = index;
-        
-        heroSlides[currentHeroSlide].classList.add('active');
-        heroDots[currentHeroSlide].classList.add('active');
-    }
+            <!-- Admin Lên Lịch -->
+            <div class="admin-only" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-plus-circle"></i>
+                        <h2>Thêm Lịch Thi Đấu Mới</h2>
+                    </div>
+                    <div class="grid-2">
+                        <div>
+                            <div class="form-group">
+                                <label>Loại Trận</label>
+                                <select id="upcomingType" class="form-control" onchange="updateUpcomingDropdowns()">
+                                    <option value="singles">Đơn (Singles)</option>
+                                    <option value="doubles">Đôi (Doubles)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Đội / VĐV 1</label>
+                                <select id="upcomingTeam1" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Đội / VĐV 2</label>
+                                <select id="upcomingTeam2" class="form-control"></select>
+                            </div>
+                        </div>
 
-    function nextHeroSlide() {
-        if (!heroSlides.length) return;
-        let nextIndex = (currentHeroSlide + 1) % totalHeroSlides;
-        setHeroSlide(nextIndex);
-    }
+                        <div>
+                            <div class="form-group">
+                                <label>Thời Gian Thi Đấu</label>
+                                <input type="text" id="upcomingTime" class="form-control" placeholder="VD: 18:30 - Hôm nay">
+                            </div>
+                            <div class="form-group">
+                                <label>Kèo Khấp / Chấp Points (Nếu có)</label>
+                                <input type="text" id="upcomingHandicap" class="form-control" placeholder="VD: Chấp 2 điểm">
+                            </div>
+                            <div class="form-group">
+                                <label>Sân Thi Đấu</label>
+                                <input type="text" id="upcomingCourt" class="form-control" placeholder="VD: Sân 2 - Pickleball Hub">
+                            </div>
+                            <div class="form-group">
+                                <label>Hạng Mục</label>
+                                <input type="text" id="upcomingCategory" class="form-control" placeholder="VD: Vòng Bảng / Giao Hữu">
+                            </div>
+                            <button class="btn btn-primary" onclick="addUpcomingMatch()"><i class="fa-solid fa-calendar-plus"></i> Tạo Lịch Thi Đấu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    setInterval(nextHeroSlide, 5000);
+        <!-- Section Ảnh Câu Lạc Bộ với Tối Ưu Lazy Loading -->
+        <section class="card" style="margin-top: 2rem;">
+            <div class="card-header">
+                <i class="fa-solid fa-camera"></i>
+                <h2>Khoảnh Khắc Sân Cầu</h2>
+            </div>
+            <div class="gallery-grid">
+                <img class="gallery-img" 
+                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3C/svg%3E" 
+                     data-src="https://images.unsplash.com/photo-1626248801379-51a0748a5f96?auto=format&fit=crop&w=800&q=75&fm=webp" 
+                     loading="lazy" 
+                     alt="Pickleball Match Action 1" 
+                     width="400" 
+                     height="300">
+                <img class="gallery-img" 
+                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3C/svg%3E" 
+                     data-src="https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=800&q=75&fm=webp" 
+                     loading="lazy" 
+                     alt="Pickleball Match Action 2" 
+                     width="400" 
+                     height="300">
+            </div>
+        </section>
+    </main>
 
-    // Hàm đồng bộ dữ liệu từ ô F1 trong Google Sheets
-    function fetchSheetBalance() {
-        const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
-        const gid = "1114506581";
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=F1`;
+    <script>
+        // --- 1. Cấu hình Firebase Database ---
+        const firebaseConfig = {
+            databaseURL: "https://pickleball-club-default-rtdb.firebaseio.com" // Đổi URL Realtime Database của bạn tại đây
+        };
 
-        fetch(url)
-            .then(res => res.text())
-            .then(data => {
-                const json = JSON.parse(data.substring(47, data.length - 2));
-                let val = json.table.rows[0].c[0].v;
-                if (typeof val === 'number') {
-                    val = val.toLocaleString('vi-VN');
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        // Database mặc định
+        let db = {
+            singles: [],
+            doubles: [],
+            singlesHistory: [],
+            doublesHistory: [],
+            upcomingMatches: []
+        };
+
+        let isAdminActive = false;
+
+        // --- 2. Xử lý Chuyển Tab & Admin ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            event.currentTarget.classList.add('active');
+            document.getElementById(`${tabName}Tab`).classList.add('active');
+        }
+
+        function toggleAdmin() {
+            if (!isAdminActive) {
+                const password = prompt("Nhập mật khẩu Admin quản trị:");
+                if (password === "123456") { // Mật khẩu quản trị mặc định
+                    isAdminActive = true;
+                    document.getElementById("adminBtnText").innerText = "Đăng Xuất Admin";
+                    document.querySelectorAll(".admin-only").forEach(el => el.style.display = "block");
+                    renderAll();
+                    alert("Đăng nhập Admin thành công!");
+                } else if (password !== null) {
+                    alert("Mật khẩu không đúng!");
                 }
-                document.getElementById('fundBalance').innerText = val + 'đ';
-            })
-            .catch(err => {
-                console.error("Lỗi khi tải dữ liệu từ Google Sheets:", err);
-                document.getElementById('fundBalance').innerText = "0đ";
-            });
-    }
-
-    fetchSheetBalance();
-    setInterval(fetchSheetBalance, 30000);
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
-        authDomain: "pickleball-hoanggia.firebaseapp.com",
-        databaseURL: "https://pickleball-hoanggia-default-rtdb.firebaseio.com",
-        projectId: "pickleball-hoanggia",
-        storageBucket: "pickleball-hoanggia.firebasestorage.app",
-        messagingSenderId: "92435922703",
-        appId: "1:92435922703:web:b06c12f95bcf0fcc24c87a",
-        measurementId: "G-ZNZNP48B0H"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const dbRef = database.ref('pickleballProDB');
-
-    const ADMIN_PASSWORD = "123456";
-    let isAdminActive = false;
-
-    const defaultData = {
-        singles: [
-            { name: "Minh Tuấn", points: 1300, win: 12, loss: 3 },
-            { name: "Hoàng Nam", points: 1240, win: 8, loss: 4 },
-            { name: "Quốc Anh", points: 1180, win: 5, loss: 6 }
-        ],
-        singlesHistory: [
-            { winner: "Minh Tuấn", loser: "Hoàng Nam", note: "Chung kết Đơn Nam (Tỉ số: 11-8, 11-9) (+16 pts)" }
-        ],
-        doubles: [
-            { name: "Tuấn & Nam", points: 1280, win: 7, loss: 2 },
-            { name: "Đức & Anh", points: 1210, win: 4, loss: 4 }
-        ],
-        doublesHistory: [
-            { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
-        ],
-        upcomingMatches: [
-            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-03T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
-        ]
-    };
-
-    let db = defaultData;
-
-    dbRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            db = {
-                singles: data.singles || [],
-                singlesHistory: data.singlesHistory || [],
-                doubles: data.doubles || [],
-                doublesHistory: data.doublesHistory || [],
-                upcomingMatches: data.upcomingMatches || []
-            };
-        } else {
-            saveData();
-        }
-        initApp();
-    });
-
-    function toggleAdminMode() {
-        if (!isAdminActive) {
-            const pwd = prompt("Nhập mật khẩu Admin để quản lý:");
-            if (pwd === ADMIN_PASSWORD) {
-                isAdminActive = true;
-                document.getElementById('adminToggleBtn').classList.add('active');
-                document.getElementById('adminSectionArea').style.display = 'block';
-                document.getElementById('subHeader').innerText = "Chế độ Quản trị viên - Toàn quyền quản lý dữ liệu Pickleball";
-                initApp();
             } else {
-                alert("Mật khẩu không đúng!");
+                isAdminActive = false;
+                document.getElementById("adminBtnText").innerText = "Đăng Nhập Admin";
+                document.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
+                renderAll();
             }
-        } else {
-            isAdminActive = false;
-            document.getElementById('adminToggleBtn').classList.remove('active');
-            document.getElementById('adminSectionArea').style.display = 'none';
-            document.getElementById('subHeader').innerText = "Hệ thống xếp hạng Elo & Lịch sử thi đấu Pickleball chính thức CLB HoangGia";
-            initApp();
         }
-    }
 
-    function saveData() {
-        dbRef.set(db);
-    }
+        // --- 3. Đồng bộ dữ liệu Firebase ---
+        function loadData() {
+            database.ref('pickleball_db').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    db = {
+                        singles: data.singles || [],
+                        doubles: data.doubles || [],
+                        singlesHistory: data.singlesHistory || [],
+                        doublesHistory: data.doublesHistory || [],
+                        upcomingMatches: data.upcomingMatches || []
+                    };
+                }
+                renderAll();
+            });
+        }
 
-    function initApp() {
-        renderUpcomingMatches();
-        renderRankings('singles', 'singlesBody', 'singlesHistoryList');
-        renderRankings('doubles', 'doublesBody', 'doublesHistoryList');
-        if (isAdminActive) {
+        function saveData() {
+            database.ref('pickleball_db').set(db);
+        }
+
+        // --- 4. Render Dữ Liệu Lên Giao Diện ---
+        function renderAll() {
+            renderRankings('singles', 'singlesRankBody', 'singlesHistory');
+            renderRankings('doubles', 'doublesRankBody', 'doublesHistory');
+            renderUpcomingMatches();
+
             loadDropdowns('singles');
             loadDropdowns('doubles');
             loadManageDropdown('singles');
             loadManageDropdown('doubles');
             updateUpcomingDropdowns();
         }
-    }
 
-    function renderUpcomingMatches() {
-        const grid = document.getElementById('upcomingMatchesGrid');
-        const matches = db.upcomingMatches || [];
-        grid.innerHTML = matches.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có trận đấu nào được lên lịch</div>' : '';
+        function renderRankings(type, bodyId, historyId) {
+            const body = document.getElementById(bodyId);
+            const historyList = document.getElementById(historyId);
+            const list = [...(db[type] || [])].sort((a, b) => b.points - a.points);
+            const history = db[type + 'History'] || [];
 
-        const now = new Date();
+            body.innerHTML = '';
+            list.forEach((item, idx) => {
+                let rankClass = '';
+                if (idx === 0) rankClass = 'top-1';
+                else if (idx === 1) rankClass = 'top-2';
+                else if (idx === 2) rankClass = 'top-3';
 
-        matches.forEach((m, idx) => {
-            let formattedTime = m.time;
-            let isLive = false;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="rank-badge ${rankClass}">${idx + 1}</span></td>
+                    <td><strong>${item.name}</strong></td>
+                    <td><span style="color:var(--primary)">${item.win || 0}T</span> - <span style="color:var(--danger)">${item.loss || 0}B</span></td>
+                    <td style="text-align: right; font-weight: bold; color: var(--gold);">${item.points}</td>
+                `;
+                body.appendChild(tr);
+            });
 
-            if (m.time) {
-                const matchDate = new Date(m.time);
-                if (!isNaN(matchDate)) {
-                    const hours = String(matchDate.getHours()).padStart(2, '0');
-                    const minutes = String(matchDate.getMinutes()).padStart(2, '0');
-                    const day = String(matchDate.getDate()).padStart(2, '0');
-                    const month = String(matchDate.getMonth() + 1).padStart(2, '0');
-                    const year = matchDate.getFullYear();
-                    formattedTime = `${hours}:${minutes} - ${day}/${month}/${year}`;
-
-                    if (now >= matchDate) {
-                        isLive = true;
-                    }
-                }
-            }
-
-            const badgeHtml = isLive ? 
-                `<div class="match-badge badge-live"><i class="fa-solid fa-circle-dot"></i> Đang diễn ra</div>` : 
-                `<div class="match-badge badge-upcoming"><i class="fa-regular fa-clock"></i> Sắp diễn ra</div>`;
-
-            const adminControlsHtml = isAdminActive ? `
-                <div class="card-actions">
-                    <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
-                        <i class="fa-solid fa-flag-checkered"></i> Kết thúc & Lưu Elo
-                    </button>
-                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
-            ` : '';
-
-            const handicapHtml = m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : '';
-
-            grid.innerHTML += `
-                <div class="match-card">
-                    ${badgeHtml}
-                    <div class="match-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
-                    <div class="match-versus">
-                        <div class="team-box" style="color:var(--primary-hover);">${m.team1}</div>
-                        <div class="vs-tag">VS</div>
-                        <div class="team-box" style="color:var(--accent);">${m.team2}</div>
+            historyList.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); padding: 0.5rem;">Chưa có nhật ký trận đấu.</div>' : '';
+            history.slice().reverse().forEach((h, idx) => {
+                const actualIdx = history.length - 1 - idx;
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div style="flex:1;">
+                        <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
+                        <br><small style="color:var(--text-muted);">${h.note || ''}</small>
                     </div>
-                    ${handicapHtml}
+                    ${isAdminActive ? `
+                        <button class="btn-delete-history" onclick="deleteHistoryItem('${type}', ${actualIdx})" title="Xóa lịch sử">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    ` : ''}
+                `;
+                historyList.appendChild(div);
+            });
+        }
+
+        function renderUpcomingMatches() {
+            const grid = document.getElementById('upcomingGrid');
+            const matches = db.upcomingMatches || [];
+
+            grid.innerHTML = matches.length === 0 ? '<div style="color:var(--text-muted);">Chưa có lịch thi đấu sắp tới.</div>' : '';
+
+            matches.forEach((m, idx) => {
+                const adminControlsHtml = isAdminActive ? `
+                    <div style="margin-top: 0.8rem; display:flex; gap:0.5rem; justify-content: flex-end;">
+                        <button class="btn btn-primary btn-sm" onclick="finishUpcomingMatch(${idx})"><i class="fa-solid fa-flag-checkered"></i> Kết Thúc</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUpcomingMatch(${idx})"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    </div>
+                ` : '';
+
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.innerHTML = `
+                    <div class="match-time"><i class="fa-solid fa-clock"></i> ${m.time || 'Thời gian chưa xác định'}</div>
+                    <div class="match-versus">
+                        <div class="team-box">${m.team1}</div>
+                        <div class="vs-tag">VS</div>
+                        <div class="team-box">${m.team2}</div>
+                    </div>
+                    ${m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : ''}
                     <div class="match-info">
                         <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
-                        <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
+                        <span><i class="fa-solid fa-tag"></i> ${m.category || 'Tự do'}</span>
                     </div>
                     ${adminControlsHtml}
-                </div>
-            `;
-        });
-    }
-
-    setInterval(() => {
-        renderUpcomingMatches();
-    }, 10000);
-
-    function finishUpcomingMatch(index) {
-        if (!isAdminActive) return;
-        const match = db.upcomingMatches[index];
-        if (!match) return;
-
-        const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
-        const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
-
-        if (choice !== "1" && choice !== "2") {
-            return alert("Thao tác hủy hoặc lựa chọn không hợp lệ!");
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        const winnerName = choice === "1" ? match.team1 : match.team2;
-        const loserName = choice === "1" ? match.team2 : match.team1;
+        // --- 5. Thuật toán Elo & Xử lý Nghiệp vụ ---
+        function calculateElo(winnerElo, loserElo, kFactor = 32) {
+            const expectedWinner = 1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
+            const expectedLoser = 1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
 
-        const rawNote = prompt("Nhập tỷ số hoặc ghi chú trận đấu (Ví dụ: Tỉ số 11-9, 11-8):", "");
+            const newWinnerElo = Math.round(winnerElo + kFactor * (1 - expectedWinner));
+            const newLoserElo = Math.round(loserElo + kFactor * (0 - expectedLoser));
 
-        let winnerObj = db[mode].find(i => i.name === winnerName);
-        let loserObj = db[mode].find(i => i.name === loserName);
-
-        if (!winnerObj) {
-            winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
-            db[mode].push(winnerObj);
-        }
-        if (!loserObj) {
-            loserObj = { name: loserName, points: 1200, win: 0, loss: 0 };
-            db[mode].push(loserObj);
-        }
-
-        const K = 32;
-        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const pointChange = Math.round(K * (1 - expectedWinner));
-
-        winnerObj.points += pointChange;
-        loserObj.points = Math.max(0, loserObj.points - pointChange);
-
-        winnerObj.win = (winnerObj.win || 0) + 1;
-        loserObj.loss = (loserObj.loss || 0) + 1;
-
-        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
-
-        if (!db[mode + 'History']) db[mode + 'History'] = [];
-        db[mode + 'History'].push({
-            winner: winnerName,
-            loser: loserName,
-            note: noteText
-        });
-
-        db.upcomingMatches.splice(index, 1);
-        saveData();
-        alert(`Đã hoàn tất kết thúc trận đấu!\n${winnerName} (+${pointChange} Elo)`);
-    }
-
-    function updateUpcomingDropdowns() {
-        const type = document.getElementById('upcomingType').value;
-        const items = db[type] || [];
-        const select1 = document.getElementById('upcomingTeam1');
-        const select2 = document.getElementById('upcomingTeam2');
-
-        if (items.length === 0) {
-            select1.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
-            select2.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
-            return;
+            return {
+                winnerGain: newWinnerElo - winnerElo,
+                loserLoss: loserElo - newLoserElo,
+                newWinnerElo,
+                newLoserElo
+            };
         }
 
-        const optionsHtml = items.map(i => `<option value="${i.name}">${i.name} (${i.points} Elo)</option>`).join('');
-        select1.innerHTML = optionsHtml;
-        select2.innerHTML = optionsHtml;
+        function recordMatch(type) {
+            const winnerSelect = document.getElementById(`${type}MatchWinner`);
+            const loserSelect = document.getElementById(`${type}MatchLoser`);
+            const noteInput = document.getElementById(`${type}MatchNote`);
 
-        if (items.length > 1) {
-            select2.selectedIndex = 1;
+            const winnerName = winnerSelect.value;
+            const loserName = loserSelect.value;
+            const note = noteInput.value.trim();
+
+            if (!winnerName || !loserName) {
+                alert("Vui lòng chọn đầy đủ Thắng và Thua!");
+                return;
+            }
+            if (winnerName === loserName) {
+                alert("Đối thủ Thắng và Thua không thể giống nhau!");
+                return;
+            }
+
+            const winner = db[type].find(i => i.name === winnerName);
+            const loser = db[type].find(i => i.name === loserName);
+
+            if (!winner || !loser) return;
+
+            const eloResult = calculateElo(winner.points, loser.points);
+
+            winner.points = eloResult.newWinnerElo;
+            winner.win = (winner.win || 0) + 1;
+
+            loser.points = eloResult.newLoserElo;
+            loser.loss = (loser.loss || 0) + 1;
+
+            const eloInfo = `(+${eloResult.winnerGain} / -${eloResult.loserLoss} Elo)`;
+            const finalNote = note ? `${note} ${eloInfo}` : eloInfo;
+
+            db[`${type}History`].push({
+                winner: winnerName,
+                loser: loserName,
+                note: finalNote,
+                timestamp: new Date().toISOString()
+            });
+
+            saveData();
+            noteInput.value = '';
+            alert(`Đã cập nhật Elo! ${winnerName} (+${eloResult.winnerGain}), ${loserName} (-${eloResult.loserLoss}).`);
         }
-    }
 
-    function addUpcomingMatch() {
-        if (!isAdminActive) return;
-        const matchType = document.getElementById('upcomingType').value;
-        const team1 = document.getElementById('upcomingTeam1').value;
-        const team2 = document.getElementById('upcomingTeam2').value;
-        const time = document.getElementById('upcomingTime').value;
-        const court = document.getElementById('upcomingCourt').value.trim();
-        const categoryInput = document.getElementById('upcomingCategory').value.trim();
-        const handicap = document.getElementById('upcomingHandicap').value.trim();
+        function addNewEntry(type) {
+            const nameInput = document.getElementById(`${type}AddName`);
+            const pointsInput = document.getElementById(`${type}AddPoints`);
+            const name = nameInput.value.trim();
+            const points = parseInt(pointsInput.value) || 1200;
 
-        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV trong danh sách!");
-        if (team1 === team2) return alert("2 Bên thi đấu không thể trùng nhau!");
-        if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
+            if (!name) {
+                alert("Vui lòng nhập tên!");
+                return;
+            }
 
-        const defaultCategory = matchType === 'singles' ? 'Đánh Đơn' : 'Đánh Đôi';
-        const category = categoryInput ? `${defaultCategory} - ${categoryInput}` : defaultCategory;
+            if (db[type].some(i => i.name.toLowerCase() === name.toLowerCase())) {
+                alert("Tên này đã tồn tại!");
+                return;
+            }
 
-        if (!db.upcomingMatches) db.upcomingMatches = [];
-        db.upcomingMatches.push({ team1, team2, time, court, category, handicap });
+            db[type].push({ name, points, win: 0, loss: 0 });
+            saveData();
+            nameInput.value = '';
+            pointsInput.value = 1200;
+        }
 
-        document.getElementById('upcomingTime').value = '';
-        document.getElementById('upcomingCourt').value = '';
-        document.getElementById('upcomingCategory').value = '';
-        document.getElementById('upcomingHandicap').value = '';
+        function editPoints(type) {
+            const targetSelect = document.getElementById(`${type}ManageTarget`);
+            const name = targetSelect.value;
+            if (!name) return;
 
-        saveData();
-    }
+            const item = db[type].find(i => i.name === name);
+            if (!item) return;
 
-    function deleteUpcomingMatch(index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa trận đấu này khỏi lịch thi đấu sắp tới?")) {
+            const newElo = prompt(`Nhập điểm Elo mới cho "${name}":`, item.points);
+            if (newElo !== null && !isNaN(newElo) && newElo !== '') {
+                item.points = parseInt(newElo);
+                saveData();
+            }
+        }
+
+        function deleteEntry(type) {
+            const targetSelect = document.getElementById(`${type}ManageTarget`);
+            const name = targetSelect.value;
+            if (!name) return;
+
+            if (confirm(`Bạn có chắc chắn muốn xóa "${name}"?`)) {
+                db[type] = db[type].filter(i => i.name !== name);
+                saveData();
+            }
+        }
+
+        function deleteHistoryItem(type, index) {
+            if (confirm("Xóa dòng nhật ký này?")) {
+                db[`${type}History`].splice(index, 1);
+                saveData();
+            }
+        }
+
+        function addUpcomingMatch() {
+            const type = document.getElementById('upcomingType').value;
+            const team1 = document.getElementById('upcomingTeam1').value;
+            const team2 = document.getElementById('upcomingTeam2').value;
+            const handicap = document.getElementById('upcomingHandicap').value.trim();
+            const time = document.getElementById('upcomingTime').value;
+            const court = document.getElementById('upcomingCourt').value.trim();
+            const category = document.getElementById('upcomingCategory').value.trim();
+
+            if (!team1 || !team2 || team1 === team2) {
+                alert("Chọn 2 đội thi đấu khác nhau!");
+                return;
+            }
+
+            if (!db.upcomingMatches) db.upcomingMatches = [];
+            db.upcomingMatches.push({ type, team1, team2, handicap, time, court, category });
+
+            saveData();
+            document.getElementById('upcomingHandicap').value = '';
+            document.getElementById('upcomingTime').value = '';
+            alert("Đã thêm lịch thi đấu!");
+        }
+
+        function deleteUpcomingMatch(index) {
+            if (confirm("Xóa trận đấu này khỏi danh sách?")) {
+                db.upcomingMatches.splice(index, 1);
+                saveData();
+            }
+        }
+
+        function finishUpcomingMatch(index) {
+            const match = db.upcomingMatches[index];
+            if (!match) return;
+
+            const type = match.type || 'singles';
+            const winnerName = prompt(`Nhập chính xác tên Đội THẮNG ("${match.team1}" hoặc "${match.team2}"):`, match.team1);
+
+            if (!winnerName) return;
+
+            let loserName = (winnerName.trim() === match.team1) ? match.team2 : (winnerName.trim() === match.team2 ? match.team1 : '');
+            if (!loserName) {
+                alert("Tên không đúng với đội nào trong trận!");
+                return;
+            }
+
+            const scoreNote = prompt("Tỉ số trận đấu (Ví dụ: 11-9):", "Tỉ số 11-9");
+
+            const winner = db[type].find(i => i.name === winnerName);
+            const loser = db[type].find(i => i.name === loserName);
+
+            if (winner && loser) {
+                const eloResult = calculateElo(winner.points, loser.points);
+                winner.points = eloResult.newWinnerElo;
+                winner.win = (winner.win || 0) + 1;
+                loser.points = eloResult.newLoserElo;
+                loser.loss = (loser.loss || 0) + 1;
+
+                const eloInfo = `(+${eloResult.winnerGain} / -${eloResult.loserLoss} Elo)`;
+                const finalNote = scoreNote ? `${scoreNote} ${eloInfo}` : eloInfo;
+
+                db[`${type}History`].push({
+                    winner: winnerName,
+                    loser: loserName,
+                    note: `[Trận Lên Lịch] ${finalNote}`,
+                    timestamp: new Date().toISOString()
+                });
+            }
+
             db.upcomingMatches.splice(index, 1);
             saveData();
+            alert("Đã hoàn tất trận đấu!");
         }
-    }
 
-    function renderRankings(mode, tableBodyId, historyListId) {
-        const list = db[mode] || [];
-        const history = db[mode + 'History'] || [];
+        // --- 6. Helper Dropdown ---
+        function loadDropdowns(type) {
+            const winnerSelect = document.getElementById(`${type}MatchWinner`);
+            const loserSelect = document.getElementById(`${type}MatchLoser`);
+            if (!winnerSelect || !loserSelect) return;
 
-        list.sort((a,b) => b.points - a.points);
+            const list = db[type] || [];
+            const optionsHtml = list.map(i => `<option value="${i.name}">${i.name} (${i.points} pts)</option>`).join('');
 
-        const body = document.getElementById(tableBodyId);
-        body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu VĐV</td></tr>' : '';
-        
-        list.forEach((item, idx) => {
-            const nameColor = mode === 'doubles' ? 'color:var(--accent);' : 'font-weight:600;';
-            body.innerHTML += `<tr>
-                <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx<3 ? '<i class="fa-solid fa-medal"></i>' : idx+1}</span></td>
-                <td style="${nameColor}">${item.name}</td>
-                <td>${item.win || 0}-${item.loss || 0}</td>
-                <td style="color:var(--primary-hover); font-weight:700; text-align: right;">${item.points} Elo</td>
-            </tr>`;
+            winnerSelect.innerHTML = optionsHtml;
+            loserSelect.innerHTML = optionsHtml;
+        }
+
+        function loadManageDropdown(type) {
+            const select = document.getElementById(`${type}ManageTarget`);
+            if (!select) return;
+
+            const list = db[type] || [];
+            select.innerHTML = list.map(i => `<option value="${i.name}">${i.name} - ${i.points} Elo</option>`).join('');
+        }
+
+        function updateUpcomingDropdowns() {
+            const typeSelect = document.getElementById('upcomingType');
+            const team1Select = document.getElementById('upcomingTeam1');
+            const team2Select = document.getElementById('upcomingTeam2');
+            if (!typeSelect || !team1Select || !team2Select) return;
+
+            const selectedType = typeSelect.value;
+            const list = db[selectedType] || [];
+            const optionsHtml = list.map(i => `<option value="${i.name}">${i.name}</option>`).join('');
+
+            team1Select.innerHTML = optionsHtml;
+            team2Select.innerHTML = optionsHtml;
+        }
+
+        // --- 7. Lazy Loading & Khoi Tao ---
+        document.addEventListener("DOMContentLoaded", function() {
+            loadData();
+
+            // Lazy Loading Image Observer
+            const lazyImages = document.querySelectorAll("img[loading='lazy']");
+            if ("IntersectionObserver" in window) {
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const image = entry.target;
+                            image.src = image.dataset.src;
+                            imageObserver.unobserve(image);
+                        }
+                    });
+                });
+                lazyImages.forEach(img => imageObserver.observe(img));
+            } else {
+                lazyImages.forEach(img => img.src = img.dataset.src);
+            }
         });
-
-        const historyContainer = document.getElementById(historyListId);
-        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem; font-size:0.85rem;">Chưa có trận đấu nào</div>' : '';
-        
-        for (let i = history.length - 1; i >= 0; i--) {
-            const h = history[i];
-            const deleteBtnHtml = isAdminActive ? 
-                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${mode}', ${i})" title="Xóa lịch sử này"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
-            historyContainer.innerHTML += `
-                <div class="history-item">
-                    <div class="history-content">
-                        <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
-                        <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note || ''}</div>
-                    </div>
-                    ${deleteBtnHtml}
-                </div>
-            `;
-        }
-    }
-
-    function loadDropdowns(mode) {
-        const list = db[mode] || [];
-        const winnerSelect = document.getElementById(mode + 'MatchWinner');
-        const loserSelect = document.getElementById(mode + 'MatchLoser');
-        if (!winnerSelect || !loserSelect) return;
-
-        const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
-        winnerSelect.innerHTML = options;
-        loserSelect.innerHTML = options;
-        if (list.length > 1) loserSelect.selectedIndex = 1;
-    }
-
-    function loadManageDropdown(mode) {
-        const list = db[mode] || [];
-        const targetSelect = document.getElementById(mode + 'ManageTarget');
-        if (!targetSelect) return;
-        targetSelect.innerHTML = list.map(item => `<option value="${item.name}">${item.name} (${item.points} Elo)</option>`).join('');
-    }
-
-    function addNewEntry(mode) {
-        if (!isAdminActive) return;
-        const nameInput = document.getElementById(mode + 'AddName');
-        const pointsInput = document.getElementById(mode + 'AddPoints');
-        const name = nameInput.value.trim();
-        const points = parseInt(pointsInput.value) || 1200;
-
-        if (!name) return alert("Vui lòng nhập tên!");
-        if (db[mode].some(i => i.name === name)) return alert("Tên này đã tồn tại!");
-
-        db[mode].push({ name, points, win: 0, loss: 0 });
-        nameInput.value = '';
-        saveData();
-    }
-
-    function recordMatch(mode) {
-        if (!isAdminActive) return;
-        const winner = document.getElementById(mode + 'MatchWinner').value;
-        const loser = document.getElementById(mode + 'MatchLoser').value;
-        const note = document.getElementById(mode + 'MatchNote').value.trim();
-
-        if (winner === loser) return alert("VĐV thắng và thua không thể là cùng 1 người!");
-
-        let winnerObj = db[mode].find(i => i.name === winner);
-        let loserObj = db[mode].find(i => i.name === loser);
-
-        const K = 32;
-        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const pointChange = Math.round(K * (1 - expectedWinner));
-
-        winnerObj.points += pointChange;
-        loserObj.points = Math.max(0, loserObj.points - pointChange);
-        winnerObj.win = (winnerObj.win || 0) + 1;
-        loserObj.loss = (loserObj.loss || 0) + 1;
-
-        if (!db[mode + 'History']) db[mode + 'History'] = [];
-        db[mode + 'History'].push({
-            winner, loser, note: note ? `${note} (+${pointChange} pts)` : `(+${pointChange} pts)`
-        });
-
-        document.getElementById(mode + 'MatchNote').value = '';
-        saveData();
-    }
-
-    function deleteEntry(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        if (confirm(`Bạn có chắc muốn xóa [${target}]?`)) {
-            db[mode] = db[mode].filter(i => i.name !== target);
-            saveData();
-        }
-    }
-
-    function editPoints(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        const obj = db[mode].find(i => i.name === target);
-        if (!obj) return;
-
-        const newPoints = prompt(`Nhập điểm Elo mới cho [${target}]:`, obj.points);
-        if (newPoints !== null && !isNaN(newPoints)) {
-            obj.points = parseInt(newPoints);
-            saveData();
-        }
-    }
-
-    function deleteHistory(mode, index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa lịch sử trận đấu này?")) {
-            db[mode + 'History'].splice(index, 1);
-            saveData();
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
