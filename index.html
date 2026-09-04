@@ -30,175 +30,6 @@ HTML
         header h1 { font-size: 2.5rem; color: var(--primary-hover); text-transform: uppercase; letter-spacing: 2px; }
         header p { color: var(--text-muted); }
 
-        /* HERO BANNER STYLES */
-        .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-slides {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out, transform 6s ease-out;
-            background-size: cover;
-            background-position: center;
-            transform: scale(1);
-        }
-
-        .hero-slide.active {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.85) 85%, #0f172a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 2.5rem;
-            z-index: 2;
-        }
-
-        .hero-content {
-            max-width: 700px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--primary-hover);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.8rem;
-            backdrop-filter: blur(4px);
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 0.8rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-title span {
-            color: var(--primary-hover);
-        }
-
-        .hero-desc {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .btn-hero {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .btn-hero-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-hero-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-hero-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-hero-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .hero-dots {
-            position: absolute;
-            bottom: 20px;
-            right: 25px;
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-
-        .hero-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .hero-dot.active {
-            background: var(--primary-hover);
-            width: 28px;
-            border-radius: 10px;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .hero-banner { height: 320px; }
-            .hero-overlay { padding: 1.5rem; }
-            .hero-title { font-size: 1.75rem; }
-            .hero-desc { font-size: 0.85rem; margin-bottom: 1rem; }
-            .hero-dots { bottom: 15px; right: 15px; }
-        }
-
         .admin-toggle {
             position: absolute; top: 10px; right: 10px; background: #334155; color: var(--text-muted);
             border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
@@ -295,37 +126,6 @@ HTML
         <i class="fa-solid fa-key"></i>
     </button>
 
-    <!-- HERO BANNER -->
-    <div class="hero-banner">
-        <div class="hero-slides">
-            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1600&auto=format&fit=crop');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=1600&auto=format&fit=crop');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=1600&auto=format&fit=crop');"></div>
-        </div>
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fa-solid fa-fire"></i> Giải Đấu Thường Niên
-                </div>
-                <h2 class="hero-title">Đỉnh Cao Đam Mê <span>Pickleball Hoàng Gia</span></h2>
-                <p class="hero-desc">Hệ thống tính điểm Elo chuẩn quốc tế, cập nhật bảng xếp hạng Đơn/Đôi và nhật ký thi đấu liên tục theo thời gian thực.</p>
-                <div class="hero-actions">
-                    <button class="btn-hero btn-hero-primary" onclick="document.querySelector('.upcoming-section').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-calendar-check"></i> Xem Trận Sắp Đấu
-                    </button>
-                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.main-grid').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng Elo
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="hero-dots">
-            <div class="hero-dot active" onclick="setHeroSlide(0)"></div>
-            <div class="hero-dot" onclick="setHeroSlide(1)"></div>
-            <div class="hero-dot" onclick="setHeroSlide(2)"></div>
-        </div>
-    </div>
-
     <header>
         <h1><i class="fa-solid fa-table-tennis-paddle-ball"></i> Pickleball HoangGia League</h1>
         <p id="subHeader">Hệ thống xếp hạng Elo & Lịch sử thi đấu Pickleball chính thức CLB HoangGia</p>
@@ -333,13 +133,13 @@ HTML
 
     <div class="main-layout">
         <div class="fund-card">
-            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
+            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick (Thủ Quỹ)</div>
             <div class="qr-container">
                 <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
             </div>
             <div class="balance-box">
                 <span>Số dư quỹ hiện tại</span>
-                <span class="balance-amount" id="fundBalance">Đang tải...</span>
+                <span class="balance-amount">0đ</span>
             </div>
         </div>
 
@@ -468,56 +268,6 @@ HTML
 </div>
 
 <script>
-    // Hero Banner Slideshow Logic
-    let currentHeroSlide = 0;
-    const heroSlides = document.querySelectorAll('.hero-slide');
-    const heroDots = document.querySelectorAll('.hero-dot');
-    const totalHeroSlides = heroSlides.length;
-
-    function setHeroSlide(index) {
-        if (!heroSlides.length) return;
-        heroSlides[currentHeroSlide].classList.remove('active');
-        heroDots[currentHeroSlide].classList.remove('active');
-        
-        currentHeroSlide = index;
-        
-        heroSlides[currentHeroSlide].classList.add('active');
-        heroDots[currentHeroSlide].classList.add('active');
-    }
-
-    function nextHeroSlide() {
-        if (!heroSlides.length) return;
-        let nextIndex = (currentHeroSlide + 1) % totalHeroSlides;
-        setHeroSlide(nextIndex);
-    }
-
-    setInterval(nextHeroSlide, 5000);
-
-    // Hàm đồng bộ dữ liệu từ ô F1 trong Google Sheets
-    function fetchSheetBalance() {
-        const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
-        const gid = "1114506581";
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=F1`;
-
-        fetch(url)
-            .then(res => res.text())
-            .then(data => {
-                const json = JSON.parse(data.substring(47, data.length - 2));
-                let val = json.table.rows[0].c[0].v;
-                if (typeof val === 'number') {
-                    val = val.toLocaleString('vi-VN');
-                }
-                document.getElementById('fundBalance').innerText = val + 'đ';
-            })
-            .catch(err => {
-                console.error("Lỗi khi tải dữ liệu từ Google Sheets:", err);
-                document.getElementById('fundBalance').innerText = "0đ";
-            });
-    }
-
-    fetchSheetBalance();
-    setInterval(fetchSheetBalance, 30000);
-
     const firebaseConfig = {
         apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
         authDomain: "pickleball-hoanggia.firebaseapp.com",
@@ -686,7 +436,9 @@ HTML
         const match = db.upcomingMatches[index];
         if (!match) return;
 
+        // Xác định hạng mục (Đơn hay Đôi) dựa trên thuộc tính category
         const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
+
         const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
 
         if (choice !== "1" && choice !== "2") {
@@ -701,6 +453,7 @@ HTML
         let winnerObj = db[mode].find(i => i.name === winnerName);
         let loserObj = db[mode].find(i => i.name === loserName);
 
+        // Trường hợp tên không khớp bảng Elo, tự động tạo mới VĐV
         if (!winnerObj) {
             winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
             db[mode].push(winnerObj);
@@ -710,6 +463,7 @@ HTML
             db[mode].push(loserObj);
         }
 
+        // Tính Elo
         const K = 32;
         const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
         const pointChange = Math.round(K * (1 - expectedWinner));
@@ -729,7 +483,9 @@ HTML
             note: noteText
         });
 
+        // Xóa trận đấu khỏi danh sách sắp diễn ra
         db.upcomingMatches.splice(index, 1);
+
         saveData();
         alert(`Đã hoàn tất kết thúc trận đấu!\n${winnerName} (+${pointChange} Elo)`);
     }
@@ -792,8 +548,8 @@ HTML
     }
 
     function renderRankings(mode, tableBodyId, historyListId) {
-        const list = db[mode] || [];
-        const history = db[mode + 'History'] || [];
+        const list = db[mode];
+        const history = db[mode + 'History'];
 
         list.sort((a,b) => b.points - a.points);
 
@@ -805,7 +561,7 @@ HTML
             body.innerHTML += `<tr>
                 <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx<3 ? '<i class="fa-solid fa-medal"></i>' : idx+1}</span></td>
                 <td style="${nameColor}">${item.name}</td>
-                <td>${item.win || 0}-${item.loss || 0}</td>
+                <td>${item.win}-${item.loss}</td>
                 <td style="color:var(--primary-hover); font-weight:700; text-align: right;">${item.points} Elo</td>
             </tr>`;
         });
@@ -815,65 +571,102 @@ HTML
         
         for (let i = history.length - 1; i >= 0; i--) {
             const h = history[i];
-            const deleteBtnHtml = isAdminActive ? 
-                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${mode}', ${i})" title="Xóa lịch sử này"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
+            const deleteBtnStyle = isAdminActive ? 'display: block;' : 'display: none;';
+            
             historyContainer.innerHTML += `
                 <div class="history-item">
                     <div class="history-content">
-                        <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
-                        <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note || ''}</div>
+                        <span style="color:var(--primary-hover); font-weight:bold;">${h.winner}</span> 
+                        <span style="color:var(--text-muted);">thắng</span> 
+                        <span style="color:var(--danger); font-weight:bold;">${h.loser}</span>
+                        <div style="margin-top: 2px; font-size:0.75rem; color:var(--silver);">${h.note || ''}</div>
                     </div>
-                    ${deleteBtnHtml}
+                    <button class="btn-delete-history" style="${deleteBtnStyle}" onclick="deleteHistoryItem('${mode}', ${i})" title="Xóa trận này">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
                 </div>
             `;
         }
     }
 
     function loadDropdowns(mode) {
-        const list = db[mode] || [];
-        const winnerSelect = document.getElementById(mode + 'MatchWinner');
-        const loserSelect = document.getElementById(mode + 'MatchLoser');
-        if (!winnerSelect || !loserSelect) return;
-
-        const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
-        winnerSelect.innerHTML = options;
-        loserSelect.innerHTML = options;
-        if (list.length > 1) loserSelect.selectedIndex = 1;
+        const items = db[mode];
+        const winnerSelect = document.getElementById(`${mode}MatchWinner`);
+        const loserSelect = document.getElementById(`${mode}MatchLoser`);
+        const optionsHtml = items.map(i => `<option value="${i.name}">${i.name} (${i.points} Elo)</option>`).join('');
+        winnerSelect.innerHTML = optionsHtml;
+        loserSelect.innerHTML = optionsHtml;
     }
 
     function loadManageDropdown(mode) {
-        const list = db[mode] || [];
-        const targetSelect = document.getElementById(mode + 'ManageTarget');
-        if (!targetSelect) return;
-        targetSelect.innerHTML = list.map(item => `<option value="${item.name}">${item.name} (${item.points} Elo)</option>`).join('');
+        const items = db[mode];
+        const manageSelect = document.getElementById(`${mode}ManageTarget`);
+        manageSelect.innerHTML = items.map((i, idx) => `<option value="${idx}">${i.name} (${i.points} Elo)</option>`).join('');
     }
 
     function addNewEntry(mode) {
         if (!isAdminActive) return;
-        const nameInput = document.getElementById(mode + 'AddName');
-        const pointsInput = document.getElementById(mode + 'AddPoints');
+        const nameInput = document.getElementById(`${mode}AddName`);
         const name = nameInput.value.trim();
-        const points = parseInt(pointsInput.value) || 1200;
+        const points = parseInt(document.getElementById(`${mode}AddPoints`).value) || 1200;
 
-        if (!name) return alert("Vui lòng nhập tên!");
-        if (db[mode].some(i => i.name === name)) return alert("Tên này đã tồn tại!");
+        if(!name) return alert("Vui lòng điền tên VĐV/Cặp đôi!");
+        if(db[mode].some(i => i.name.toLowerCase() === name.toLowerCase())) return alert("Tên đã tồn tại trong danh sách!");
 
         db[mode].push({ name, points, win: 0, loss: 0 });
         nameInput.value = '';
         saveData();
     }
 
+    function deleteEntry(mode) {
+        if (!isAdminActive) return;
+        const idx = document.getElementById(`${mode}ManageTarget`).value;
+        if (idx === "" || idx === null) return alert("Không có mục nào để xóa!");
+
+        const targetName = db[mode][idx].name;
+        if(confirm(`Xóa "${targetName}" khỏi danh sách?`)) {
+            db[mode].splice(idx, 1);
+            saveData();
+        }
+    }
+
+    function editPoints(mode) {
+        if (!isAdminActive) return;
+        const idx = document.getElementById(`${mode}ManageTarget`).value;
+        if (idx === "" || idx === null) return alert("Không có mục nào để sửa!");
+
+        const item = db[mode][idx];
+        const newPoints = prompt(`Nhập điểm Elo mới cho "${item.name}":`, item.points);
+        if (newPoints !== null) {
+            const parsedPoints = parseInt(newPoints);
+            if (isNaN(parsedPoints) || parsedPoints < 0) return alert("Điểm số không hợp lệ!");
+            item.points = parsedPoints;
+            saveData();
+        }
+    }
+
+    function deleteHistoryItem(mode, index) {
+        if (!isAdminActive) return;
+        if(confirm("Bạn có chắc chắn muốn xóa trận đấu này khỏi nhật ký?")) {
+            db[mode + 'History'].splice(index, 1);
+            saveData();
+        }
+    }
+
     function recordMatch(mode) {
         if (!isAdminActive) return;
-        const winner = document.getElementById(mode + 'MatchWinner').value;
-        const loser = document.getElementById(mode + 'MatchLoser').value;
-        const note = document.getElementById(mode + 'MatchNote').value.trim();
+        const winnerName = document.getElementById(`${mode}MatchWinner`).value;
+        const loserName = document.getElementById(`${mode}MatchLoser`).value;
+        const noteInput = document.getElementById(`${mode}MatchNote`);
+        const rawNote = noteInput.value.trim();
 
-        if (winner === loser) return alert("VĐV thắng và thua không thể là cùng 1 người!");
+        if (!winnerName || !loserName) return alert("Vui lòng chọn đầy đủ người thắng và người thua!");
+        if (winnerName === loserName) return alert("Người thắng và người thua không thể trùng nhau!");
 
-        let winnerObj = db[mode].find(i => i.name === winner);
-        let loserObj = db[mode].find(i => i.name === loser);
+        const winnerObj = db[mode].find(i => i.name === winnerName);
+        const loserObj = db[mode].find(i => i.name === loserName);
+
+        if (!winnerObj || !loserObj) return alert("Dữ liệu VĐV không hợp lệ!");
 
         const K = 32;
         const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
@@ -881,46 +674,21 @@ HTML
 
         winnerObj.points += pointChange;
         loserObj.points = Math.max(0, loserObj.points - pointChange);
+
         winnerObj.win = (winnerObj.win || 0) + 1;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
+        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
+
         if (!db[mode + 'History']) db[mode + 'History'] = [];
         db[mode + 'History'].push({
-            winner, loser, note: note ? `${note} (+${pointChange} pts)` : `(+${pointChange} pts)`
+            winner: winnerName,
+            loser: loserName,
+            note: noteText
         });
 
-        document.getElementById(mode + 'MatchNote').value = '';
+        noteInput.value = '';
         saveData();
-    }
-
-    function deleteEntry(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        if (confirm(`Bạn có chắc muốn xóa [${target}]?`)) {
-            db[mode] = db[mode].filter(i => i.name !== target);
-            saveData();
-        }
-    }
-
-    function editPoints(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        const obj = db[mode].find(i => i.name === target);
-        if (!obj) return;
-
-        const newPoints = prompt(`Nhập điểm Elo mới cho [${target}]:`, obj.points);
-        if (newPoints !== null && !isNaN(newPoints)) {
-            obj.points = parseInt(newPoints);
-            saveData();
-        }
-    }
-
-    function deleteHistory(mode, index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa lịch sử trận đấu này?")) {
-            db[mode + 'History'].splice(index, 1);
-            saveData();
-        }
     }
 </script>
 </body>
