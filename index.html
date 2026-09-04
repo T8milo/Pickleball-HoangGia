@@ -4,225 +4,70 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pickleball HoangGia - Quản Lý Xếp Hạng & Tin Tức</title>
+    <title>Pickleball HoangGia - Tin Tức Tự Động</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --primary: #15803d;
             --primary-hover: #22c55e;
             --text: #f8fafc;
             --text-muted: #94a3b8;
-            --gold: #f59e0b;
-            --silver: #cbd5e1;
-            --bronze: #b45309;
-            --danger: #ef4444;
             --accent: #38bdf8;
-            --doubles-color: #a855f7;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text); padding: 2rem 1rem; min-height: 100vh; }
-        .container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; }
-        
-        header { text-align: center; margin-bottom: 2rem; padding-right: 40px; }
-        header h1 { font-size: 2.5rem; color: var(--primary-hover); text-transform: uppercase; letter-spacing: 2px; }
-        header p { color: var(--text-muted); }
+        body { background-color: var(--bg-color); color: var(--text); padding: 2rem 1rem; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; }
 
-        /* HERO BANNER STYLES */
-        .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-slides {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out, transform 6s ease-out;
-            background-size: cover;
-            background-position: center;
-            transform: scale(1);
-        }
-
-        .hero-slide.active {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.85) 85%, #0f172a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 2.5rem;
-            z-index: 2;
-        }
-
-        .hero-content {
-            max-width: 700px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--primary-hover);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.8rem;
-            backdrop-filter: blur(4px);
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.2;
-            margin-bottom: 0.8rem;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-title span {
-            color: var(--primary-hover);
-        }
-
-        .hero-desc {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .btn-hero {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-        }
-
-        .btn-hero-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-hero-primary:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-hero-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-hero-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .hero-dots {
-            position: absolute;
-            bottom: 20px;
-            right: 25px;
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-
-        .hero-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .hero-dot.active {
-            background: var(--primary-hover);
-            width: 28px;
-            border-radius: 10px;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .hero-banner { height: 320px; }
-            .hero-overlay { padding: 1.5rem; }
-            .hero-title { font-size: 1.75rem; }
-            .hero-desc { font-size: 0.85rem; margin-bottom: 1rem; }
-            .hero-dots { bottom: 15px; right: 15px; }
-        }
-
-        .admin-toggle {
-            position: absolute; top: 10px; right: 10px; background: #334155; color: var(--text-muted);
-            border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;
-        }
-        .admin-toggle.active { background: var(--primary); color: white; }
-
-        .main-layout { display: flex; flex-direction: column; gap: 2rem; }
-
-        /* TIN TỨC / NEWS STYLES */
+        /* KHOANG TIN TỨC */
         .news-section {
             background: var(--card-bg);
             border-radius: 12px;
             padding: 1.5rem;
             border: 1px solid #334155;
+            margin-top: 1.5rem;
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .news-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-refresh {
+            background: transparent;
+            border: 1px solid #475569;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .btn-refresh:hover {
+            color: white;
+            border-color: var(--accent);
         }
 
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
-            margin-top: 1rem;
         }
 
+        /* THẺ BÀI VIẾT AUTO-LINK */
         .news-card {
             background: #0f172a;
             border-radius: 10px;
@@ -233,7 +78,6 @@ HTML
             transition: transform 0.3s ease, border-color 0.3s ease;
             text-decoration: none;
             color: inherit;
-            position: relative;
         }
 
         .news-card:hover {
@@ -265,8 +109,8 @@ HTML
             margin-bottom: 0.5rem;
         }
 
-        .news-title {
-            font-size: 1.05rem;
+        .article-title {
+            font-size: 1rem;
             font-weight: 700;
             color: #fff;
             margin-bottom: 0.5rem;
@@ -291,509 +135,128 @@ HTML
             padding-top: 0.6rem;
         }
 
-        .btn-delete-news {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(239, 68, 68, 0.8);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: none;
-            z-index: 5;
+        .loading-text {
+            color: var(--text-muted);
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
         }
-
-        .btn-delete-news:hover { background: var(--danger); }
-
-        .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
-        .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
-        .qr-container { text-align: center; margin-bottom: 1rem; }
-        .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
-        .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
-
-        .upcoming-section { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
-        .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
-        .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
-        
-        .match-badge { position: absolute; top: 12px; right: 12px; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-        .badge-upcoming { background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .badge-live { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); animation: pulse-red 1.5s infinite; }
-        
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .match-time { color: var(--accent); font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
-        .match-versus { display: flex; align-items: center; justify-content: space-between; font-weight: 700; text-align: center; margin: 0.5rem 0; font-size: 0.95rem; }
-        .team-box { flex: 1; word-break: break-word; }
-        .vs-tag { color: var(--danger); font-style: italic; font-size: 0.85rem; padding: 0 8px; }
-        .handicap-tag { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px dashed var(--gold); border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; text-align: center; font-weight: 600; }
-        .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
-
-        .card-actions { display: flex; gap: 8px; justify-content: center; align-items: center; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 4px; }
-        .btn-finish-match { background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-        .btn-finish-match:hover { background: var(--primary-hover); }
-
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
-
-        .game-title-header { font-size: 1.6rem; color: #fff; font-weight: 700; text-transform: uppercase; border-bottom: 3px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .singles-title { color: var(--primary-hover); }
-        .doubles-title { color: var(--doubles-color); }
-
-        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1.5rem; }
-        .card-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-
-        .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        @media (max-width: 1024px) { .admin-grid { grid-template-columns: 1fr; } }
-        .admin-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media (max-width: 640px) { .admin-card-grid { grid-template-columns: 1fr; } }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
-        .form-group select { cursor: pointer; }
-
-        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #b91c1c; }
-        .btn-group { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { padding: 0.6rem 0.8rem; background: #0f172a; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
-        td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #334155; vertical-align: middle; font-size: 0.95rem; }
-
-        .rank-badge { font-weight: bold; width: 25px; text-align: center; display: inline-block; }
-        .top-1 { color: var(--gold); } .top-2 { color: var(--silver); } .top-3 { color: var(--bronze); }
-        
-        .history-list { max-height: 300px; overflow-y: auto; padding-right: 5px; }
-        .history-item { 
-            font-size: 0.85rem; background: #0f172a; padding: 0.5rem 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; 
-            border-left: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center;
-        }
-        .history-content { flex: 1; padding-right: 10px; }
-        .btn-delete-history { display: none; background: transparent; color: var(--text-muted); border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; }
-        .btn-delete-history:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
     </style>
-
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
 <div class="container">
-    <button class="admin-toggle" id="adminToggleBtn" onclick="toggleAdminMode()" title="Chế độ Quản trị viên">
-        <i class="fa-solid fa-key"></i>
-    </button>
-
-    <!-- HERO BANNER -->
-    <div class="hero-banner">
-        <div class="hero-slides">
-            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1600&auto=format&fit=crop');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=1600&auto=format&fit=crop');"></div>
-            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=1600&auto=format&fit=crop');"></div>
-        </div>
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fa-solid fa-fire"></i> Giải Đấu Thường Niên
-                </div>
-                <h2 class="hero-title">Đỉnh Cao Đam Mê <span>Pickleball Hoàng Gia</span></h2>
-                <p class="hero-desc">Hệ thống tính điểm Elo chuẩn quốc tế, cập nhật bảng xếp hạng Đơn/Đôi, kiến thức Pickleball và nhật ký thi đấu liên tục.</p>
-                <div class="hero-actions">
-                    <button class="btn-hero btn-hero-primary" onclick="document.querySelector('.upcoming-section').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-calendar-check"></i> Xem Trận Sắp Đấu
-                    </button>
-                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.news-section').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-newspaper"></i> Tin Tức & Mẹo Hay
-                    </button>
-                </div>
+    <div class="news-section">
+        <div class="news-header">
+            <div class="news-title">
+                <i class="fa-solid fa-newspaper"></i> TIN TỨC & KINH NGHIỆM PICKLEBALL (TỰ ĐỘNG)
             </div>
+            <button class="btn-refresh" onclick="fetchAutoPickleballNews()">
+                <i class="fa-solid fa-rotate-right"></i> Cập nhật tin mới
+            </button>
         </div>
-        <div class="hero-dots">
-            <div class="hero-dot active" onclick="setHeroSlide(0)"></div>
-            <div class="hero-dot" onclick="setHeroSlide(1)"></div>
-            <div class="hero-dot" onclick="setHeroSlide(2)"></div>
-        </div>
-    </div>
-
-    <header>
-        <h1><i class="fa-solid fa-table-tennis-paddle-ball"></i> Pickleball HoangGia League</h1>
-        <p id="subHeader">Hệ thống xếp hạng Elo & Lịch sử thi đấu Pickleball chính thức CLB HoangGia</p>
-    </header>
-
-    <div class="main-layout">
-        <div class="fund-card">
-            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
-            <div class="qr-container">
-                <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
-            </div>
-            <div class="balance-box">
-                <span>Số dư quỹ hiện tại</span>
-                <span class="balance-amount" id="fundBalance">Đang tải...</span>
-            </div>
-        </div>
-
-        <!-- MỤC TIN TỨC PICKLEBALL -->
-        <div class="news-section">
-            <div class="card-title" style="font-size: 1.25rem; color: var(--accent); margin-bottom: 0;">
-                <i class="fa-solid fa-newspaper"></i> TIN TỨC & KINH NGHIỆM PICKLEBALL
-            </div>
-            <div class="news-grid" id="newsGrid"></div>
-        </div>
-
-        <div class="upcoming-section">
-            <div class="card-title" style="font-size: 1.25rem; color: var(--primary-hover); margin-bottom: 0;">
-                <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP / ĐANG DIỄN RA
-            </div>
-            <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
-        </div>
-
-        <div class="main-grid">
-            <div>
-                <div class="game-title-header singles-title"><i class="fa-solid fa-user"></i> Hạng Mục ĐÁNH ĐƠN (1v1)</div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Vận Động Viên</div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th style="width: 50px;">Hạng</th><th>VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
-                            <tbody id="singlesBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đơn</div>
-                    <div class="history-list" id="singlesHistoryList"></div>
-                </div>
-            </div>
-
-            <div>
-                <div class="game-title-header doubles-title"><i class="fa-solid fa-users"></i> Hạng Mục ĐÁNH ĐÔI (2v2)</div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Đôi Nam/Nữ/Nam Nữ</div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th style="width: 50px;">Hạng</th><th>Cặp VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
-                            <tbody id="doublesBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đôi</div>
-                    <div class="history-list" id="doublesHistoryList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div class="admin-section" id="adminSectionArea">
-        <h2 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;"><i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN</h2>
         
-        <!-- THÊM TIN TỨC TRONG ADMIN -->
-        <div class="card" style="border-color: rgba(245, 158, 11, 0.4);">
-            <div class="card-title" style="color: var(--gold);"><i class="fa-solid fa-pen-to-square"></i> Đăng Tin Tức / Mẹo Hay Mới</div>
-            <div class="admin-card-grid">
-                <div>
-                    <div class="form-group"><label>Tiêu đề bài viết</label><input type="text" id="newsTitleInput" placeholder="Ví dụ: Cách chọn vợt Pickleball cho người mới..."></div>
-                    <div class="form-group">
-                        <label>Chủ đề / Phân loại</label>
-                        <select id="newsTagInput">
-                            <option value="Cách Chơi">Cách Chơi & Hướng Dẫn</option>
-                            <option value="Xu Hướng">Xu Hướng Pickleball</option>
-                            <option value="Giải Đấu">Tin Giải Đấu</option>
-                            <option value="Thiết Bị">Thiết Bị & Dụng Cụ</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Link hình ảnh (URL)</label><input type="text" id="newsImgInput" placeholder="https://images.unsplash.com/..."></div>
-                </div>
-                <div>
-                    <div class="form-group"><label>Tóm tắt ngắn</label><input type="text" id="newsDescInput" placeholder="Mô tả ngắn gọn hiển thị trên thẻ bài viết..."></div>
-                    <div class="form-group"><label>Link bài viết chi tiết (URL liên kết)</label><input type="text" id="newsUrlInput" placeholder="https://..."></div>
-                    <button class="btn" style="background:var(--gold); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addNewsArticle()"><i class="fa-solid fa-paper-plane"></i> Đăng Bài Viết</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
-            <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
-            <div class="admin-card-grid">
-                <div>
-                    <div class="form-group">
-                        <label>Hình thức thi đấu</label>
-                        <select id="upcomingType" onchange="updateUpcomingDropdowns()">
-                            <option value="singles">Đánh Đơn (1v1)</option>
-                            <option value="doubles">Đánh Đôi (2v2)</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 1</label><select id="upcomingTeam1"></select></div>
-                    <div class="form-group"><label>Chọn VĐV / Cặp Đôi 2</label><select id="upcomingTeam2"></select></div>
-                </div>
-                <div>
-                    <div class="form-group"><label>Mục chấp điểm / Kèo chấp</label><input type="text" id="upcomingHandicap" placeholder="Ví dụ: Đội 1 chấp 2 điểm / Đồng banh..."></div>
-                    <div class="form-group"><label>Thời gian thi đấu</label><input type="datetime-local" id="upcomingTime"></div>
-                    <div class="form-group"><label>Sân thi đấu</label><input type="text" id="upcomingCourt" placeholder="Ví dụ: Sân số 02"></div>
-                    <div class="form-group"><label>Hạng mục / Ghi chú</label><input type="text" id="upcomingCategory" placeholder="Ví dụ: Đôi nam Hạng B..."></div>
-                    <button class="btn" style="background:var(--accent); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addUpcomingMatch()"><i class="fa-solid fa-plus"></i> Thêm Lịch Thi Đấu</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="admin-grid">
-            <div class="card" style="border-color: rgba(34, 197, 94, 0.4);">
-                <div class="card-title singles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)</div>
-                <div class="admin-card-grid">
-                    <div>
-                        <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesAddName" placeholder="Nhập tên VĐV..."></div>
-                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="singlesAddPoints" value="1200"></div>
-                        <button class="btn" onclick="addNewEntry('singles')"><i class="fa-solid fa-user-plus"></i> Thêm VĐV</button>
-                    </div>
-                    <div>
-                        <div class="form-group"><label>VĐV Thắng</label><select id="singlesMatchWinner"></select></div>
-                        <div class="form-group"><label>VĐV Thua</label><select id="singlesMatchLoser"></select></div>
-                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="singlesMatchNote" placeholder="Ví dụ: Tỉ số 11-9, 11-7..."></div>
-                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
-                    </div>
-                </div>
-                <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group"><label>Sửa/Xóa VĐV Đơn</label><select id="singlesManageTarget"></select></div>
-                    <div class="btn-group">
-                        <button class="btn btn-danger" onclick="deleteEntry('singles')"><i class="fa-solid fa-trash"></i> Xóa</button>
-                        <button class="btn" style="background:#4b5563;" onclick="editPoints('singles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" style="border-color: rgba(168, 85, 247, 0.4);">
-                <div class="card-title doubles-title"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
-                <div class="admin-card-grid">
-                    <div>
-                        <div class="form-group"><label>Tên Cặp Đôi Mới</label><input type="text" id="doublesAddName" placeholder="Ví dụ: Tuấn & Hoàng..."></div>
-                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="doublesAddPoints" value="1200"></div>
-                        <button class="btn" style="background:var(--doubles-color);" onclick="addNewEntry('doubles')"><i class="fa-solid fa-users-plus"></i> Thêm Cặp Đôi</button>
-                    </div>
-                    <div>
-                        <div class="form-group"><label>Đôi Thắng</label><select id="doublesMatchWinner"></select></div>
-                        <div class="form-group"><label>Đôi Thua</label><select id="doublesMatchLoser"></select></div>
-                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: Tỉ số 11-8, 8-11, 11-5..."></div>
-                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('doubles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
-                    </div>
-                </div>
-                <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #475569;">
-                    <div class="form-group"><label>Sửa/Xóa Cặp Đôi</label><select id="doublesManageTarget"></select></div>
-                    <div class="btn-group">
-                        <button class="btn btn-danger" onclick="deleteEntry('doubles')"><i class="fa-solid fa-trash"></i> Xóa</button>
-                        <button class="btn" style="background:#4b5563;" onclick="editPoints('doubles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
-                    </div>
-                </div>
+        <div class="news-grid" id="newsGrid">
+            <div class="loading-text">
+                <i class="fa-solid fa-spinner fa-spin"></i> Đang tự động lấy tin tức Pickleball mới nhất...
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Hero Banner Slideshow Logic
-    let currentHeroSlide = 0;
-    const heroSlides = document.querySelectorAll('.hero-slide');
-    const heroDots = document.querySelectorAll('.hero-dot');
-    const totalHeroSlides = heroSlides.length;
-
-    function setHeroSlide(index) {
-        if (!heroSlides.length) return;
-        heroSlides[currentHeroSlide].classList.remove('active');
-        heroDots[currentHeroSlide].classList.remove('active');
-        
-        currentHeroSlide = index;
-        
-        heroSlides[currentHeroSlide].classList.add('active');
-        heroDots[currentHeroSlide].classList.add('active');
-    }
-
-    function nextHeroSlide() {
-        if (!heroSlides.length) return;
-        let nextIndex = (currentHeroSlide + 1) % totalHeroSlides;
-        setHeroSlide(nextIndex);
-    }
-
-    setInterval(nextHeroSlide, 5000);
-
-    // Hàm đồng bộ dữ liệu số dư từ ô F1 trong Google Sheets
-    function fetchSheetBalance() {
-        const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
-        const gid = "1114506581";
-        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=F1`;
-
-        fetch(url)
-            .then(res => res.text())
-            .then(data => {
-                const json = JSON.parse(data.substring(47, data.length - 2));
-                let val = json.table.rows[0].c[0].v;
-                if (typeof val === 'number') {
-                    val = val.toLocaleString('vi-VN');
-                }
-                document.getElementById('fundBalance').innerText = val + 'đ';
-            })
-            .catch(err => {
-                console.error("Lỗi khi tải dữ liệu từ Google Sheets:", err);
-                document.getElementById('fundBalance').innerText = "0đ";
-            });
-    }
-
-    fetchSheetBalance();
-    setInterval(fetchSheetBalance, 30000);
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
-        authDomain: "pickleball-hoanggia.firebaseapp.com",
-        databaseURL: "https://pickleball-hoanggia-default-rtdb.firebaseio.com",
-        projectId: "pickleball-hoanggia",
-        storageBucket: "pickleball-hoanggia.firebasestorage.app",
-        messagingSenderId: "92435922703",
-        appId: "1:92435922703:web:b06c12f95bcf0fcc24c87a",
-        measurementId: "G-ZNZNP48B0H"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const dbRef = database.ref('pickleballProDB');
-
-    const ADMIN_PASSWORD = "123456";
-    let isAdminActive = false;
-
-    const defaultData = {
-        singles: [
-            { name: "Minh Tuấn", points: 1300, win: 12, loss: 3 },
-            { name: "Hoàng Nam", points: 1240, win: 8, loss: 4 },
-            { name: "Quốc Anh", points: 1180, win: 5, loss: 6 }
-        ],
-        singlesHistory: [
-            { winner: "Minh Tuấn", loser: "Hoàng Nam", note: "Chung kết Đơn Nam (Tỉ số: 11-8, 11-9) (+16 pts)" }
-        ],
-        doubles: [
-            { name: "Tuấn & Nam", points: 1280, win: 7, loss: 2 },
-            { name: "Đức & Anh", points: 1210, win: 4, loss: 4 }
-        ],
-        doublesHistory: [
-            { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
-        ],
-        upcomingMatches: [
-            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-03T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
-        ],
-        newsList: [
-            {
-                title: "Kỹ Thuật Dink Chi Lực Trong Pickleball Mới Nhất",
-                tag: "Cách Chơi",
-                desc: "Hướng dẫn chi tiết cú Dink bỏ nhỏ kiểm soát khu vực bếp Kitchen và gây áp lực lên đối thủ.",
-                img: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=800&auto=format&fit=crop",
-                url: "https://google.com",
-                date: "04/09/2026"
-            },
-            {
-                title: "Cập Nhật Luật Thi Đấu Pickleball Chuẩn Quốc Tế 2026",
-                tag: "Giải Đấu",
-                desc: "Những thay đổi quan trọng về quy định giao bóng, tính điểm và lỗi vùng Kitchen bạn cần lưu ý.",
-                img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop",
-                url: "https://google.com",
-                date: "02/09/2026"
-            },
-            {
-                title: "Xu Hướng Phát Triển Pickleball Tại Việt Nam",
-                tag: "Xu Hướng",
-                desc: "Lý do Pickleball trở thành bộ môn thể thao bùng nổ thu hút hàng ngàn người tham gia tập luyện.",
-                img: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=800&auto=format&fit=crop",
-                url: "https://google.com",
-                date: "01/09/2026"
-            }
-        ]
-    };
-
-    let db = defaultData;
-
-    dbRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            db = {
-                singles: data.singles || [],
-                singlesHistory: data.singlesHistory || [],
-                doubles: data.doubles || [],
-                doublesHistory: data.doublesHistory || [],
-                upcomingMatches: data.upcomingMatches || [],
-                newsList: data.newsList || []
-            };
-        } else {
-            saveData();
+    // Danh sách các bài viết dự phòng (Fallback Data) nếu nguồn mạng không phản hồi
+    const fallbackArticles = [
+        {
+            title: "Đội tuyển Việt Nam toàn thắng tại vòng bảng Pickleball World Cup 2026",
+            tag: "Giải Đấu",
+            desc: "Các tay vợt Việt Nam thi đấu xuất sắc giành chiến thắng áp đảo tại các nội dung đơn và đôi.",
+            img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop",
+            url: "https://dantri.com.vn/the-thao/doi-tuyen-viet-nam-toan-thang-tai-vong-bang-pickleball-world-cup-2026-20260903190141946.htm",
+            date: "Hôm nay"
+        },
+        {
+            title: "Hướng dẫn kỹ thuật đánh Pickleball cơ bản: Dink, Volley & Serve",
+            tag: "Cách Chơi",
+            desc: "Các bước làm quen với bộ môn Pickleball cho người mới bắt đầu giúp kiểm soát bóng hiệu quả.",
+            img: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=800&auto=format&fit=crop",
+            url: "https://kamito.vn/blogs/news/cach-hoc-pickleball-tu-a-z-cho-nguoi-moi",
+            date: "Hướng dẫn"
+        },
+        {
+            title: "Cập nhật thông tin, giải đấu & kết quả Pickleball Việt Nam",
+            tag: "Xu Hướng",
+            desc: "Tổng hợp các diễn biến mới nhất về phong trào và các giải đấu Pickleball trên toàn quốc.",
+            img: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=800&auto=format&fit=crop",
+            url: "https://thethaovanhoa.vn/the-thao/pickleball.htm",
+            date: "Mới nhất"
         }
-        initApp();
-    });
+    ];
 
-    function toggleAdminMode() {
-        if (!isAdminActive) {
-            const pwd = prompt("Nhập mật khẩu Admin để quản lý:");
-            if (pwd === ADMIN_PASSWORD) {
-                isAdminActive = true;
-                document.getElementById('adminToggleBtn').classList.add('active');
-                document.getElementById('adminSectionArea').style.display = 'block';
-                document.getElementById('subHeader').innerText = "Chế độ Quản trị viên - Toàn quyền quản lý dữ liệu Pickleball";
-                initApp();
-            } else {
-                alert("Mật khẩu không đúng!");
-            }
-        } else {
-            isAdminActive = false;
-            document.getElementById('adminToggleBtn').classList.remove('active');
-            document.getElementById('adminSectionArea').style.display = 'none';
-            document.getElementById('subHeader').innerText = "Hệ thống xếp hạng Elo & Lịch sử thi đấu Pickleball chính thức CLB HoangGia";
-            initApp();
-        }
-    }
-
-    function saveData() {
-        dbRef.set(db);
-    }
-
-    function initApp() {
-        renderNews();
-        renderUpcomingMatches();
-        renderRankings('singles', 'singlesBody', 'singlesHistoryList');
-        renderRankings('doubles', 'doublesBody', 'doublesHistoryList');
-        if (isAdminActive) {
-            loadDropdowns('singles');
-            loadDropdowns('doubles');
-            loadManageDropdown('singles');
-            loadManageDropdown('doubles');
-            updateUpcomingDropdowns();
-        }
-    }
-
-    // RENDER TIN TỨC
-    function renderNews() {
+    // Hàm tự động cào tin từ nguồn RSS Google News
+    async function fetchAutoPickleballNews() {
         const grid = document.getElementById('newsGrid');
-        const news = db.newsList || [];
-        grid.innerHTML = news.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có bài viết tin tức nào</div>' : '';
+        grid.innerHTML = '<div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu bài báo...</div>';
 
-        news.forEach((item, idx) => {
-            const deleteBtnHtml = isAdminActive ? 
-                `<button class="btn-delete-news" style="display:block;" onclick="deleteNewsArticle(event, ${idx})"><i class="fa-solid fa-trash"></i></button>` : '';
+        // RSS Feed từ Google News cho từ khóa Pickleball Việt Nam
+        const targetRssUrl = "https://news.google.com/rss/search?q=Pickleball+Vi%E1%BB%87t+Nam&hl=vi&gl=VN&ceid=VN:vi";
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(targetRssUrl)}`;
 
+        try {
+            const res = await fetch(apiUrl);
+            const data = await res.json();
+
+            if (data.status === 'ok' && data.items && data.items.length > 0) {
+                grid.innerHTML = '';
+                // Lấy 6 bài viết mới nhất
+                const articles = data.items.slice(0, 6);
+
+                articles.forEach(item => {
+                    // Tự trích xuất hình ảnh hoặc chọn ảnh mặc định chất lượng cao
+                    const imgUrl = item.thumbnail || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop';
+                    const cleanTitle = item.title.replace(/- [^-]+$/, ''); // Bỏ tên nguồn ở cuối tiêu đề
+                    const pubDate = new Date(item.pubDate).toLocaleDateString('vi-VN');
+
+                    grid.innerHTML += `
+                        <a href="${item.link}" target="_blank" class="news-card" rel="noopener noreferrer">
+                            <img src="${imgUrl}" class="news-img" alt="${cleanTitle}">
+                            <div class="news-body">
+                                <span class="news-tag">Tin Tự Động</span>
+                                <h3 class="article-title">${cleanTitle}</h3>
+                                <p class="news-desc">Bấm để chuyển tới bài viết gốc trên trang tin tức...</p>
+                                <div class="news-footer">
+                                    <span><i class="fa-regular fa-calendar"></i> ${pubDate}</span>
+                                    <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+            } else {
+                renderFallbackNews();
+            }
+        } catch (err) {
+            console.warn("Không thể tải RSS tự động, sử dụng dữ liệu tin chuẩn:", err);
+            renderFallbackNews();
+        }
+    }
+
+    // Hiển thị tin tức mặc định nếu không có kết nối mạng tới API
+    function renderFallbackNews() {
+        const grid = document.getElementById('newsGrid');
+        grid.innerHTML = '';
+        fallbackArticles.forEach(item => {
             grid.innerHTML += `
-                <a href="${item.url || '#'}" target="_blank" class="news-card">
-                    ${deleteBtnHtml}
-                    <img src="${item.img || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop'}" class="news-img" alt="${item.title}">
+                <a href="${item.url}" target="_blank" class="news-card" rel="noopener noreferrer">
+                    <img src="${item.img}" class="news-img" alt="${item.title}">
                     <div class="news-body">
-                        <span class="news-tag">${item.tag || 'Thần Tốc'}</span>
-                        <h3 class="news-title">${item.title}</h3>
+                        <span class="news-tag">${item.tag}</span>
+                        <h3 class="article-title">${item.title}</h3>
                         <p class="news-desc">${item.desc}</p>
                         <div class="news-footer">
-                            <span><i class="fa-regular fa-calendar"></i> ${item.date || 'Gần đây'}</span>
-                            <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-right"></i></span>
+                            <span><i class="fa-regular fa-calendar"></i> ${item.date}</span>
+                            <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
                         </div>
                     </div>
                 </a>
@@ -801,355 +264,9 @@ HTML
         });
     }
 
-    function addNewsArticle() {
-        if (!isAdminActive) return;
-        const title = document.getElementById('newsTitleInput').value.trim();
-        const tag = document.getElementById('newsTagInput').value;
-        const img = document.getElementById('newsImgInput').value.trim();
-        const desc = document.getElementById('newsDescInput').value.trim();
-        const url = document.getElementById('newsUrlInput').value.trim();
-
-        if (!title || !desc) return alert("Vui lòng điền tiêu đề và mô tả tóm tắt!");
-
-        const today = new Date();
-        const dateStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-
-        if (!db.newsList) db.newsList = [];
-        db.newsList.unshift({
-            title, tag, desc,
-            img: img || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop',
-            url: url || '#',
-            date: dateStr
-        });
-
-        document.getElementById('newsTitleInput').value = '';
-        document.getElementById('newsImgInput').value = '';
-        document.getElementById('newsDescInput').value = '';
-        document.getElementById('newsUrlInput').value = '';
-
-        saveData();
-        alert("Đăng bài viết tin tức thành công!");
-    }
-
-    function deleteNewsArticle(event, index) {
-        event.preventDefault();
-        event.stopPropagation();
-        if (!isAdminActive) return;
-        if (confirm("Bạn có chắc chắn muốn xóa bài viết tin tức này?")) {
-            db.newsList.splice(index, 1);
-            saveData();
-        }
-    }
-
-    function renderUpcomingMatches() {
-        const grid = document.getElementById('upcomingMatchesGrid');
-        const matches = db.upcomingMatches || [];
-        grid.innerHTML = matches.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có trận đấu nào được lên lịch</div>' : '';
-
-        const now = new Date();
-
-        matches.forEach((m, idx) => {
-            let formattedTime = m.time;
-            let isLive = false;
-
-            if (m.time) {
-                const matchDate = new Date(m.time);
-                if (!isNaN(matchDate)) {
-                    const hours = String(matchDate.getHours()).padStart(2, '0');
-                    const minutes = String(matchDate.getMinutes()).padStart(2, '0');
-                    const day = String(matchDate.getDate()).padStart(2, '0');
-                    const month = String(matchDate.getMonth() + 1).padStart(2, '0');
-                    const year = matchDate.getFullYear();
-                    formattedTime = `${hours}:${minutes} - ${day}/${month}/${year}`;
-
-                    if (now >= matchDate) {
-                        isLive = true;
-                    }
-                }
-            }
-
-            const badgeHtml = isLive ? 
-                `<div class="match-badge badge-live"><i class="fa-solid fa-circle-dot"></i> Đang diễn ra</div>` : 
-                `<div class="match-badge badge-upcoming"><i class="fa-regular fa-clock"></i> Sắp diễn ra</div>`;
-
-            const adminControlsHtml = isAdminActive ? `
-                <div class="card-actions">
-                    <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
-                        <i class="fa-solid fa-flag-checkered"></i> Kết thúc & Lưu Elo
-                    </button>
-                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
-                </div>
-            ` : '';
-
-            const handicapHtml = m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : '';
-
-            grid.innerHTML += `
-                <div class="match-card">
-                    ${badgeHtml}
-                    <div class="match-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
-                    <div class="match-versus">
-                        <div class="team-box" style="color:var(--primary-hover);">${m.team1}</div>
-                        <div class="vs-tag">VS</div>
-                        <div class="team-box" style="color:var(--accent);">${m.team2}</div>
-                    </div>
-                    ${handicapHtml}
-                    <div class="match-info">
-                        <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
-                        <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
-                    </div>
-                    ${adminControlsHtml}
-                </div>
-            `;
-        });
-    }
-
-    setInterval(() => {
-        renderUpcomingMatches();
-    }, 10000);
-
-    function finishUpcomingMatch(index) {
-        if (!isAdminActive) return;
-        const match = db.upcomingMatches[index];
-        if (!match) return;
-
-        const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
-        const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
-
-        if (choice !== "1" && choice !== "2") {
-            return alert("Thao tác hủy hoặc lựa chọn không hợp lệ!");
-        }
-
-        const winnerName = choice === "1" ? match.team1 : match.team2;
-        const loserName = choice === "1" ? match.team2 : match.team1;
-
-        const rawNote = prompt("Nhập tỷ số hoặc ghi chú trận đấu (Ví dụ: Tỉ số 11-9, 11-8):", "");
-
-        let winnerObj = db[mode].find(i => i.name === winnerName);
-        let loserObj = db[mode].find(i => i.name === loserName);
-
-        if (!winnerObj) {
-            winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
-            db[mode].push(winnerObj);
-        }
-        if (!loserObj) {
-            loserObj = { name: loserName, points: 1200, win: 0, loss: 0 };
-            db[mode].push(loserObj);
-        }
-
-        const K = 32;
-        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const pointChange = Math.round(K * (1 - expectedWinner));
-
-        winnerObj.points += pointChange;
-        loserObj.points = Math.max(0, loserObj.points - pointChange);
-
-        winnerObj.win = (winnerObj.win || 0) + 1;
-        loserObj.loss = (loserObj.loss || 0) + 1;
-
-        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
-
-        if (!db[mode + 'History']) db[mode + 'History'] = [];
-        db[mode + 'History'].push({
-            winner: winnerName,
-            loser: loserName,
-            note: noteText
-        });
-
-        db.upcomingMatches.splice(index, 1);
-        saveData();
-        alert(`Đã hoàn tất kết thúc trận đấu!\n${winnerName} (+${pointChange} Elo)`);
-    }
-
-    function updateUpcomingDropdowns() {
-        const type = document.getElementById('upcomingType').value;
-        const items = db[type] || [];
-        const select1 = document.getElementById('upcomingTeam1');
-        const select2 = document.getElementById('upcomingTeam2');
-
-        if (items.length === 0) {
-            select1.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
-            select2.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
-            return;
-        }
-
-        const optionsHtml = items.map(i => `<option value="${i.name}">${i.name} (${i.points} Elo)</option>`).join('');
-        select1.innerHTML = optionsHtml;
-        select2.innerHTML = optionsHtml;
-
-        if (items.length > 1) {
-            select2.selectedIndex = 1;
-        }
-    }
-
-    function addUpcomingMatch() {
-        if (!isAdminActive) return;
-        const matchType = document.getElementById('upcomingType').value;
-        const team1 = document.getElementById('upcomingTeam1').value;
-        const team2 = document.getElementById('upcomingTeam2').value;
-        const time = document.getElementById('upcomingTime').value;
-        const court = document.getElementById('upcomingCourt').value.trim();
-        const categoryInput = document.getElementById('upcomingCategory').value.trim();
-        const handicap = document.getElementById('upcomingHandicap').value.trim();
-
-        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV trong danh sách!");
-        if (team1 === team2) return alert("2 Bên thi đấu không thể trùng nhau!");
-        if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
-
-        const defaultCategory = matchType === 'singles' ? 'Đánh Đơn' : 'Đánh Đôi';
-        const category = categoryInput ? `${defaultCategory} - ${categoryInput}` : defaultCategory;
-
-        if (!db.upcomingMatches) db.upcomingMatches = [];
-        db.upcomingMatches.push({ team1, team2, time, court, category, handicap });
-
-        document.getElementById('upcomingTime').value = '';
-        document.getElementById('upcomingCourt').value = '';
-        document.getElementById('upcomingCategory').value = '';
-        document.getElementById('upcomingHandicap').value = '';
-
-        saveData();
-    }
-
-    function deleteUpcomingMatch(index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa trận đấu này khỏi lịch thi đấu sắp tới?")) {
-            db.upcomingMatches.splice(index, 1);
-            saveData();
-        }
-    }
-
-    function renderRankings(mode, tableBodyId, historyListId) {
-        const list = db[mode] || [];
-        const history = db[mode + 'History'] || [];
-
-        list.sort((a,b) => b.points - a.points);
-
-        const body = document.getElementById(tableBodyId);
-        body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu VĐV</td></tr>' : '';
-        
-        list.forEach((item, idx) => {
-            const nameColor = mode === 'doubles' ? 'color:var(--accent);' : 'font-weight:600;';
-            body.innerHTML += `<tr>
-                <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx<3 ? '<i class="fa-solid fa-medal"></i>' : idx+1}</span></td>
-                <td style="${nameColor}">${item.name}</td>
-                <td>${item.win || 0}-${item.loss || 0}</td>
-                <td style="color:var(--primary-hover); font-weight:700; text-align: right;">${item.points} Elo</td>
-            </tr>`;
-        });
-
-        const historyContainer = document.getElementById(historyListId);
-        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem; font-size:0.85rem;">Chưa có trận đấu nào</div>' : '';
-        
-        for (let i = history.length - 1; i >= 0; i--) {
-            const h = history[i];
-            const deleteBtnHtml = isAdminActive ? 
-                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${mode}', ${i})" title="Xóa lịch sử này"><i class="fa-solid fa-trash-can"></i></button>` : '';
-
-            historyContainer.innerHTML += `
-                <div class="history-item">
-                    <div class="history-content">
-                        <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
-                        <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note || ''}</div>
-                    </div>
-                    ${deleteBtnHtml}
-                </div>
-            `;
-        }
-    }
-
-    function loadDropdowns(mode) {
-        const list = db[mode] || [];
-        const winnerSelect = document.getElementById(mode + 'MatchWinner');
-        const loserSelect = document.getElementById(mode + 'MatchLoser');
-        if (!winnerSelect || !loserSelect) return;
-
-        const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
-        winnerSelect.innerHTML = options;
-        loserSelect.innerHTML = options;
-        if (list.length > 1) loserSelect.selectedIndex = 1;
-    }
-
-    function loadManageDropdown(mode) {
-        const list = db[mode] || [];
-        const targetSelect = document.getElementById(mode + 'ManageTarget');
-        if (!targetSelect) return;
-        targetSelect.innerHTML = list.map(item => `<option value="${item.name}">${item.name} (${item.points} Elo)</option>`).join('');
-    }
-
-    function addNewEntry(mode) {
-        if (!isAdminActive) return;
-        const nameInput = document.getElementById(mode + 'AddName');
-        const pointsInput = document.getElementById(mode + 'AddPoints');
-        const name = nameInput.value.trim();
-        const points = parseInt(pointsInput.value) || 1200;
-
-        if (!name) return alert("Vui lòng nhập tên!");
-        if (db[mode].some(i => i.name === name)) return alert("Tên này đã tồn tại!");
-
-        db[mode].push({ name, points, win: 0, loss: 0 });
-        nameInput.value = '';
-        saveData();
-    }
-
-    function recordMatch(mode) {
-        if (!isAdminActive) return;
-        const winner = document.getElementById(mode + 'MatchWinner').value;
-        const loser = document.getElementById(mode + 'MatchLoser').value;
-        const note = document.getElementById(mode + 'MatchNote').value.trim();
-
-        if (winner === loser) return alert("VĐV thắng và thua không thể là cùng 1 người!");
-
-        let winnerObj = db[mode].find(i => i.name === winner);
-        let loserObj = db[mode].find(i => i.name === loser);
-
-        const K = 32;
-        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const pointChange = Math.round(K * (1 - expectedWinner));
-
-        winnerObj.points += pointChange;
-        loserObj.points = Math.max(0, loserObj.points - pointChange);
-        winnerObj.win = (winnerObj.win || 0) + 1;
-        loserObj.loss = (loserObj.loss || 0) + 1;
-
-        if (!db[mode + 'History']) db[mode + 'History'] = [];
-        db[mode + 'History'].push({
-            winner, loser, note: note ? `${note} (+${pointChange} pts)` : `(+${pointChange} pts)`
-        });
-
-        document.getElementById(mode + 'MatchNote').value = '';
-        saveData();
-    }
-
-    function deleteEntry(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        if (confirm(`Bạn có chắc muốn xóa [${target}]?`)) {
-            db[mode] = db[mode].filter(i => i.name !== target);
-            saveData();
-        }
-    }
-
-    function editPoints(mode) {
-        if (!isAdminActive) return;
-        const target = document.getElementById(mode + 'ManageTarget').value;
-        const obj = db[mode].find(i => i.name === target);
-        if (!obj) return;
-
-        const newPoints = prompt(`Nhập điểm Elo mới cho [${target}]:`, obj.points);
-        if (newPoints !== null && !isNaN(newPoints)) {
-            obj.points = parseInt(newPoints);
-            saveData();
-        }
-    }
-
-    function deleteHistory(mode, index) {
-        if (!isAdminActive) return;
-        if (confirm("Xóa lịch sử trận đấu này?")) {
-            db[mode + 'History'].splice(index, 1);
-            saveData();
-        }
-    }
+    // Tự động chạy khi tải trang
+    fetchAutoPickleballNews();
 </script>
+
 </body>
 </html>
