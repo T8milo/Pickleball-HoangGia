@@ -215,114 +215,6 @@ HTML
         .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
 
-        /* KHỐI TIN TỨC STYLES */
-        .news-section {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid #334155;
-        }
-
-        .news-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-        }
-
-        .btn-refresh-news {
-            background: transparent;
-            border: 1px solid #475569;
-            color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-refresh-news:hover {
-            color: white;
-            border-color: var(--accent);
-            background: rgba(56, 189, 248, 0.1);
-        }
-
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.2rem;
-        }
-
-        .news-card {
-            background: #0f172a;
-            border-radius: 10px;
-            border: 1px solid #334155;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .news-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-        }
-
-        .news-img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-
-        .news-body {
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .news-tag {
-            align-self: flex-start;
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent);
-            margin-bottom: 0.6rem;
-        }
-
-        .news-article-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
-        }
-
-        .news-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
-        .news-footer {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px dashed #334155;
-            padding-top: 0.6rem;
-        }
-
         .upcoming-section { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
         .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
@@ -440,7 +332,6 @@ HTML
     </header>
 
     <div class="main-layout">
-        <!-- QUỸ PICK -->
         <div class="fund-card">
             <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
             <div class="qr-container">
@@ -452,24 +343,6 @@ HTML
             </div>
         </div>
 
-        <!-- KHỐI TIN TỨC & KINH NGHIỆM PICKLEBALL (MỚI BỔ SUNG) -->
-        <div class="news-section">
-            <div class="news-header">
-                <div class="card-title" style="margin-bottom:0; font-size: 1.25rem; color: var(--accent);">
-                    <i class="fa-solid fa-newspaper"></i> TIN TỨC & KINH NGHIỆM PICKLEBALL
-                </div>
-                <button class="btn-refresh-news" onclick="fetchAutoPickleballNews()">
-                    <i class="fa-solid fa-rotate-right"></i> Làm mới
-                </button>
-            </div>
-            <div class="news-grid" id="newsGrid">
-                <div style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:1.5rem;">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Đang tự động quét tin tức Pickleball mới nhất...
-                </div>
-            </div>
-        </div>
-
-        <!-- TRẬN ĐẤU SẮP DIỄN RA -->
         <div class="upcoming-section">
             <div class="card-title" style="font-size: 1.25rem; color: var(--primary-hover); margin-bottom: 0;">
                 <i class="fa-solid fa-calendar-days"></i> TRẬN ĐẤU SẮP / ĐANG DIỄN RA
@@ -477,7 +350,6 @@ HTML
             <div class="upcoming-grid" id="upcomingMatchesGrid"></div>
         </div>
 
-        <!-- BẢNG XẾP HẠNG MAIN GRID -->
         <div class="main-grid">
             <div>
                 <div class="game-title-header singles-title"><i class="fa-solid fa-user"></i> Hạng Mục ĐÁNH ĐƠN (1v1)</div>
@@ -620,96 +492,6 @@ HTML
     }
 
     setInterval(nextHeroSlide, 5000);
-
-    // TỰ ĐỘNG CÀO TIN TỨC PICKLEBALL
-    const fallbackNews = [
-        {
-            title: "Tuyển Pickleball Việt Nam chuẩn bị thi đấu các giải quốc tế 2026",
-            tag: "Giải Đấu",
-            desc: "Danh sách các vận động viên xuất sắc tham gia tranh tài tại các giải đấu khu vực.",
-            img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop",
-            url: "https://dantri.com.vn/the-thao.htm",
-            date: "Mới nhất"
-        },
-        {
-            title: "Cẩm nang kỹ thuật Pickleball: Kiểm soát vùng Kitchen hiệu quả",
-            tag: "Kinh Nghiệm",
-            desc: "Hướng dẫn chi tiết lối chơi Dink và phòng thủ phản công hiệu quả cho mọi cấp độ.",
-            img: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=800&auto=format&fit=crop",
-            url: "https://kamito.vn/blogs/news/cach-hoc-pickleball-tu-a-z-cho-nguoi-moi",
-            date: "Hướng dẫn"
-        },
-        {
-            title: "Phong trào Pickleball bùng nổ tại các câu lạc bộ trên toàn quốc",
-            tag: "Xu Hướng",
-            desc: "Cập nhật các sân chơi mới và kinh nghiệm chọn vợt thi đấu phù hợp nhất.",
-            img: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=800&auto=format&fit=crop",
-            url: "https://thethaovanhoa.vn/the-thao/pickleball.htm",
-            date: "Tin tức"
-        }
-    ];
-
-    async function fetchAutoPickleballNews() {
-        const grid = document.getElementById('newsGrid');
-        grid.innerHTML = '<div style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:1.5rem;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tự động quét tin tức Pickleball mới nhất...</div>';
-
-        const rssUrl = "https://news.google.com/rss/search?q=Pickleball+Vi%E1%BB%87t+Nam&hl=vi&gl=VN&ceid=VN:vi";
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-
-        try {
-            const res = await fetch(apiUrl);
-            const data = await res.json();
-
-            if (data.status === 'ok' && data.items && data.items.length > 0) {
-                grid.innerHTML = '';
-                data.items.slice(0, 4).forEach(item => {
-                    const imgUrl = item.thumbnail || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop';
-                    const title = item.title.replace(/- [^-]+$/, '');
-                    const pubDate = new Date(item.pubDate).toLocaleDateString('vi-VN');
-
-                    grid.innerHTML += `
-                        <a href="${item.link}" target="_blank" class="news-card" rel="noopener noreferrer">
-                            <img src="${imgUrl}" class="news-img" alt="${title}">
-                            <div class="news-body">
-                                <span class="news-tag">Báo Chí</span>
-                                <h3 class="news-article-title">${title}</h3>
-                                <p class="news-desc">Click vào đây để xem toàn văn bài viết trực tiếp từ nguồn tin gốc...</p>
-                                <div class="news-footer">
-                                    <span><i class="fa-regular fa-calendar"></i> ${pubDate}</span>
-                                    <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                });
-            } else {
-                renderFallbackNews();
-            }
-        } catch (err) {
-            renderFallbackNews();
-        }
-    }
-
-    function renderFallbackNews() {
-        const grid = document.getElementById('newsGrid');
-        grid.innerHTML = '';
-        fallbackNews.forEach(item => {
-            grid.innerHTML += `
-                <a href="${item.url}" target="_blank" class="news-card" rel="noopener noreferrer">
-                    <img src="${item.img}" class="news-img" alt="${item.title}">
-                    <div class="news-body">
-                        <span class="news-tag">${item.tag}</span>
-                        <h3 class="news-article-title">${item.title}</h3>
-                        <p class="news-desc">${item.desc}</p>
-                        <div class="news-footer">
-                            <span><i class="fa-regular fa-calendar"></i> ${item.date}</span>
-                            <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </div>
-                    </div>
-                </a>
-            `;
-        });
-    }
 
     // Hàm đồng bộ dữ liệu từ ô F1 trong Google Sheets
     function fetchSheetBalance() {
@@ -865,27 +647,29 @@ HTML
             const adminControlsHtml = isAdminActive ? `
                 <div class="card-actions">
                     <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
-                        <i class="fa-solid fa-flag-checkered"></i> Kết thúc
+                        <i class="fa-solid fa-flag-checkered"></i> Kết thúc & Lưu Elo
                     </button>
-                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận">
-                        <i class="fa-solid fa-trash"></i>
+                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này">
+                        <i class="fa-solid fa-trash-can"></i>
                     </button>
                 </div>
             ` : '';
 
+            const handicapHtml = m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : '';
+
             grid.innerHTML += `
                 <div class="match-card">
                     ${badgeHtml}
-                    <div class="match-time"><i class="fa-regular fa-calendar-check"></i> ${formattedTime}</div>
+                    <div class="match-time"><i class="fa-regular fa-clock"></i> ${formattedTime}</div>
                     <div class="match-versus">
-                        <div class="team-box">${m.team1}</div>
+                        <div class="team-box" style="color:var(--primary-hover);">${m.team1}</div>
                         <div class="vs-tag">VS</div>
-                        <div class="team-box">${m.team2}</div>
+                        <div class="team-box" style="color:var(--accent);">${m.team2}</div>
                     </div>
-                    ${m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> ${m.handicap}</div>` : ''}
+                    ${handicapHtml}
                     <div class="match-info">
-                        <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Sân CLB'}</span>
-                        <span><i class="fa-solid fa-layer-group"></i> ${m.category || 'Giao lưu'}</span>
+                        <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
+                        <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
                     </div>
                     ${adminControlsHtml}
                 </div>
@@ -893,35 +677,154 @@ HTML
         });
     }
 
+    setInterval(() => {
+        renderUpcomingMatches();
+    }, 10000);
+
+    function finishUpcomingMatch(index) {
+        if (!isAdminActive) return;
+        const match = db.upcomingMatches[index];
+        if (!match) return;
+
+        const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
+        const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
+
+        if (choice !== "1" && choice !== "2") {
+            return alert("Thao tác hủy hoặc lựa chọn không hợp lệ!");
+        }
+
+        const winnerName = choice === "1" ? match.team1 : match.team2;
+        const loserName = choice === "1" ? match.team2 : match.team1;
+
+        const rawNote = prompt("Nhập tỷ số hoặc ghi chú trận đấu (Ví dụ: Tỉ số 11-9, 11-8):", "");
+
+        let winnerObj = db[mode].find(i => i.name === winnerName);
+        let loserObj = db[mode].find(i => i.name === loserName);
+
+        if (!winnerObj) {
+            winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
+            db[mode].push(winnerObj);
+        }
+        if (!loserObj) {
+            loserObj = { name: loserName, points: 1200, win: 0, loss: 0 };
+            db[mode].push(loserObj);
+        }
+
+        const K = 32;
+        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
+        const pointChange = Math.round(K * (1 - expectedWinner));
+
+        winnerObj.points += pointChange;
+        loserObj.points = Math.max(0, loserObj.points - pointChange);
+
+        winnerObj.win = (winnerObj.win || 0) + 1;
+        loserObj.loss = (loserObj.loss || 0) + 1;
+
+        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
+
+        if (!db[mode + 'History']) db[mode + 'History'] = [];
+        db[mode + 'History'].push({
+            winner: winnerName,
+            loser: loserName,
+            note: noteText
+        });
+
+        db.upcomingMatches.splice(index, 1);
+        saveData();
+        alert(`Đã hoàn tất kết thúc trận đấu!\n${winnerName} (+${pointChange} Elo)`);
+    }
+
+    function updateUpcomingDropdowns() {
+        const type = document.getElementById('upcomingType').value;
+        const items = db[type] || [];
+        const select1 = document.getElementById('upcomingTeam1');
+        const select2 = document.getElementById('upcomingTeam2');
+
+        if (items.length === 0) {
+            select1.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
+            select2.innerHTML = '<option value="">-- Chưa có dữ liệu --</option>';
+            return;
+        }
+
+        const optionsHtml = items.map(i => `<option value="${i.name}">${i.name} (${i.points} Elo)</option>`).join('');
+        select1.innerHTML = optionsHtml;
+        select2.innerHTML = optionsHtml;
+
+        if (items.length > 1) {
+            select2.selectedIndex = 1;
+        }
+    }
+
+    function addUpcomingMatch() {
+        if (!isAdminActive) return;
+        const matchType = document.getElementById('upcomingType').value;
+        const team1 = document.getElementById('upcomingTeam1').value;
+        const team2 = document.getElementById('upcomingTeam2').value;
+        const time = document.getElementById('upcomingTime').value;
+        const court = document.getElementById('upcomingCourt').value.trim();
+        const categoryInput = document.getElementById('upcomingCategory').value.trim();
+        const handicap = document.getElementById('upcomingHandicap').value.trim();
+
+        if (!team1 || !team2) return alert("Vui lòng chọn đầy đủ 2 Đội / VĐV trong danh sách!");
+        if (team1 === team2) return alert("2 Bên thi đấu không thể trùng nhau!");
+        if (!time) return alert("Vui lòng chọn thời gian thi đấu!");
+
+        const defaultCategory = matchType === 'singles' ? 'Đánh Đơn' : 'Đánh Đôi';
+        const category = categoryInput ? `${defaultCategory} - ${categoryInput}` : defaultCategory;
+
+        if (!db.upcomingMatches) db.upcomingMatches = [];
+        db.upcomingMatches.push({ team1, team2, time, court, category, handicap });
+
+        document.getElementById('upcomingTime').value = '';
+        document.getElementById('upcomingCourt').value = '';
+        document.getElementById('upcomingCategory').value = '';
+        document.getElementById('upcomingHandicap').value = '';
+
+        saveData();
+    }
+
+    function deleteUpcomingMatch(index) {
+        if (!isAdminActive) return;
+        if (confirm("Xóa trận đấu này khỏi lịch thi đấu sắp tới?")) {
+            db.upcomingMatches.splice(index, 1);
+            saveData();
+        }
+    }
+
     function renderRankings(mode, tableBodyId, historyListId) {
         const list = db[mode] || [];
         const history = db[mode + 'History'] || [];
+
         list.sort((a,b) => b.points - a.points);
 
         const body = document.getElementById(tableBodyId);
-        body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu</td></tr>' : '';
+        body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu VĐV</td></tr>' : '';
         
         list.forEach((item, idx) => {
+            const nameColor = mode === 'doubles' ? 'color:var(--accent);' : 'font-weight:600;';
             body.innerHTML += `<tr>
-                <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx+1}</span></td>
-                <td><strong>${item.name}</strong></td>
+                <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx<3 ? '<i class="fa-solid fa-medal"></i>' : idx+1}</span></td>
+                <td style="${nameColor}">${item.name}</td>
                 <td>${item.win || 0}-${item.loss || 0}</td>
                 <td style="color:var(--primary-hover); font-weight:700; text-align: right;">${item.points} Elo</td>
             </tr>`;
         });
 
         const historyContainer = document.getElementById(historyListId);
-        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem;">Chưa có lịch sử</div>' : '';
+        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem; font-size:0.85rem;">Chưa có trận đấu nào</div>' : '';
+        
         for (let i = history.length - 1; i >= 0; i--) {
             const h = history[i];
-            const delBtn = isAdminActive ? `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistoryItem('${mode}', ${i})"><i class="fa-solid fa-xmark"></i></button>` : '';
+            const deleteBtnHtml = isAdminActive ? 
+                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${mode}', ${i})" title="Xóa lịch sử này"><i class="fa-solid fa-trash-can"></i></button>` : '';
+
             historyContainer.innerHTML += `
                 <div class="history-item">
                     <div class="history-content">
                         <strong>${h.winner}</strong> thắng <strong>${h.loser}</strong>
-                        ${h.note ? `<div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note}</div>` : ''}
+                        <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note || ''}</div>
                     </div>
-                    ${delBtn}
+                    ${deleteBtnHtml}
                 </div>
             `;
         }
@@ -932,6 +835,7 @@ HTML
         const winnerSelect = document.getElementById(mode + 'MatchWinner');
         const loserSelect = document.getElementById(mode + 'MatchLoser');
         if (!winnerSelect || !loserSelect) return;
+
         const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
         winnerSelect.innerHTML = options;
         loserSelect.innerHTML = options;
@@ -945,122 +849,79 @@ HTML
         targetSelect.innerHTML = list.map(item => `<option value="${item.name}">${item.name} (${item.points} Elo)</option>`).join('');
     }
 
-    function updateUpcomingDropdowns() {
-        const type = document.getElementById('upcomingType').value;
-        const list = db[type] || [];
-        const t1 = document.getElementById('upcomingTeam1');
-        const t2 = document.getElementById('upcomingTeam2');
-        const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
-        t1.innerHTML = options;
-        t2.innerHTML = options;
-        if (list.length > 1) t2.selectedIndex = 1;
-    }
-
     function addNewEntry(mode) {
+        if (!isAdminActive) return;
         const nameInput = document.getElementById(mode + 'AddName');
         const pointsInput = document.getElementById(mode + 'AddPoints');
         const name = nameInput.value.trim();
         const points = parseInt(pointsInput.value) || 1200;
 
         if (!name) return alert("Vui lòng nhập tên!");
-        if (db[mode].some(i => i.name.toLowerCase() === name.toLowerCase())) return alert("Tên đã tồn tại!");
+        if (db[mode].some(i => i.name === name)) return alert("Tên này đã tồn tại!");
 
         db[mode].push({ name, points, win: 0, loss: 0 });
-        saveData();
         nameInput.value = '';
-        alert("Thêm thành công!");
+        saveData();
     }
 
     function recordMatch(mode) {
+        if (!isAdminActive) return;
         const winner = document.getElementById(mode + 'MatchWinner').value;
         const loser = document.getElementById(mode + 'MatchLoser').value;
         const note = document.getElementById(mode + 'MatchNote').value.trim();
 
-        if (winner === loser) return alert("VĐV Thắng và Thua không được trùng nhau!");
+        if (winner === loser) return alert("VĐV thắng và thua không thể là cùng 1 người!");
 
         let winnerObj = db[mode].find(i => i.name === winner);
         let loserObj = db[mode].find(i => i.name === loser);
 
         const K = 32;
-        const E_winner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
-        const ptsChange = Math.round(K * (1 - E_winner));
+        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
+        const pointChange = Math.round(K * (1 - expectedWinner));
 
-        winnerObj.points += ptsChange;
-        loserObj.points = Math.max(0, loserObj.points - ptsChange);
+        winnerObj.points += pointChange;
+        loserObj.points = Math.max(0, loserObj.points - pointChange);
         winnerObj.win = (winnerObj.win || 0) + 1;
         loserObj.loss = (loserObj.loss || 0) + 1;
 
         if (!db[mode + 'History']) db[mode + 'History'] = [];
         db[mode + 'History'].push({
-            winner,
-            loser,
-            note: note ? `${note} (+${ptsChange} pts)` : `(+${ptsChange} pts)`
+            winner, loser, note: note ? `${note} (+${pointChange} pts)` : `(+${pointChange} pts)`
         });
 
-        saveData();
         document.getElementById(mode + 'MatchNote').value = '';
-        alert(`Đã lưu kết quả! ${winner} +${ptsChange} Elo, ${loser} -${ptsChange} Elo.`);
+        saveData();
     }
 
     function deleteEntry(mode) {
+        if (!isAdminActive) return;
         const target = document.getElementById(mode + 'ManageTarget').value;
-        if (!target) return;
-        if (confirm(`Bạn có chắc muốn xóa "${target}" khỏi danh sách?`)) {
+        if (confirm(`Bạn có chắc muốn xóa [${target}]?`)) {
             db[mode] = db[mode].filter(i => i.name !== target);
             saveData();
         }
     }
 
     function editPoints(mode) {
+        if (!isAdminActive) return;
         const target = document.getElementById(mode + 'ManageTarget').value;
-        if (!target) return;
         const obj = db[mode].find(i => i.name === target);
-        const newPts = prompt(`Nhập điểm Elo mới cho ${target}:`, obj.points);
-        if (newPts !== null && !isNaN(newPts) && newPts.trim() !== '') {
-            obj.points = parseInt(newPts);
+        if (!obj) return;
+
+        const newPoints = prompt(`Nhập điểm Elo mới cho [${target}]:`, obj.points);
+        if (newPoints !== null && !isNaN(newPoints)) {
+            obj.points = parseInt(newPoints);
             saveData();
         }
     }
 
-    function addUpcomingMatch() {
-        const team1 = document.getElementById('upcomingTeam1').value;
-        const team2 = document.getElementById('upcomingTeam2').value;
-        const handicap = document.getElementById('upcomingHandicap').value.trim();
-        const time = document.getElementById('upcomingTime').value;
-        const court = document.getElementById('upcomingCourt').value.trim();
-        const category = document.getElementById('upcomingCategory').value.trim();
-
-        if (team1 === team2) return alert("Hai đội thi đấu không được trùng nhau!");
-
-        if (!db.upcomingMatches) db.upcomingMatches = [];
-        db.upcomingMatches.push({ team1, team2, handicap, time, court, category });
-        saveData();
-        alert("Đã thêm trận đấu sắp diễn ra!");
-    }
-
-    function deleteUpcomingMatch(idx) {
-        if (confirm("Bạn có chắc muốn xóa trận đấu này khỏi lịch?")) {
-            db.upcomingMatches.splice(idx, 1);
+    function deleteHistory(mode, index) {
+        if (!isAdminActive) return;
+        if (confirm("Xóa lịch sử trận đấu này?")) {
+            db[mode + 'History'].splice(index, 1);
             saveData();
         }
     }
-
-    function finishUpcomingMatch(idx) {
-        if (confirm("Xác nhận hoàn tất trận đấu này và xóa khỏi lịch sắp đấu?")) {
-            db.upcomingMatches.splice(idx, 1);
-            saveData();
-        }
-    }
-
-    function deleteHistoryItem(mode, idx) {
-        if (confirm("Bạn có chắc muốn xóa dòng nhật ký này?")) {
-            db[mode + 'History'].splice(idx, 1);
-            saveData();
-        }
-    }
-
-    // Khởi tạo chạy tính năng cào tin tức tự động
-    fetchAutoPickleballNews();
 </script>
 </body>
 </html>
