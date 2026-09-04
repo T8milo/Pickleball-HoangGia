@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pickleball Hoàng Gia - Hệ Thống Xếp Hạng Elo & Quản Lý Giải Đấu</title>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -225,7 +227,7 @@
         /* GRID LAYOUTS */
         .top-widgets-grid {
             display: grid;
-            grid-template-columns: 360px 1fr;
+            grid-template-columns: 340px 1fr;
             gap: 1.5rem;
             margin-bottom: 2.5rem;
         }
@@ -244,7 +246,7 @@
         }
 
         /* FUND CARD STYLES */
-        .fund-card { display: flex; flex-direction: column; justify-content: space-between; }
+        .fund-card { display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
 
         .card-header-title {
             font-size: 1.1rem;
@@ -253,88 +255,27 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .card-header-title i { color: var(--gold); }
 
-        .vib-card-ui {
-            background: linear-gradient(135deg, #005baa 0%, #002b55 100%);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
-            margin-bottom: 1rem;
-        }
-
-        .vib-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .vib-logo {
-            height: 22px;
-            filter: brightness(0) invert(1);
-        }
-
-        .vib-tag {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.5px;
-        }
-
-        .vib-body {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 10px;
-        }
-
-        .account-num {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: 1.5px;
-            font-family: monospace;
-            margin-bottom: 2px;
-        }
-
-        .account-owner {
-            font-size: 0.75rem;
-            color: #cbd5e1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
         .qr-wrapper {
-            background: #ffffff;
-            padding: 6px;
-            border-radius: 10px;
+            background: #fff;
+            padding: 12px;
+            border-radius: 16px;
             display: inline-block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            flex-shrink: 0;
+            margin: 0 auto 1.25rem auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        .qr-code {
-            width: 85px;
-            height: 85px;
-            display: block;
-            border-radius: 4px;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-        }
+        .qr-code { width: 180px; height: 180px; display: block; border-radius: 8px; }
 
         .balance-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 14px 18px;
+            border-radius: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -343,7 +284,7 @@
         .balance-label { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
         .balance-amount { color: var(--gold); font-weight: 800; font-size: 1.25rem; }
 
-        /* MATCH CARDS */
+        /* MATCH CARDS (BROADCAST STYLE) */
         .upcoming-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -611,6 +552,7 @@
 </head>
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
     <div class="container nav-container">
         <div class="brand">
@@ -626,6 +568,7 @@
 
 <div class="container">
 
+    <!-- HERO BANNER -->
     <div class="hero-banner">
         <div class="hero-slides">
             <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1600&auto=format&fit=crop');"></div>
@@ -659,34 +602,23 @@
         </div>
     </div>
 
+    <!-- TOP WIDGETS SECTION (QUỸ & TRẬN ĐẤU SẮP DIỄN RA) -->
     <div class="top-widgets-grid">
+        <!-- QUỸ PICK CARD -->
         <div class="card fund-card">
             <div class="card-header-title">
                 <i class="fa-solid fa-wallet"></i> Quỹ Pick CLB
             </div>
-            
-            <div class="vib-card-ui">
-                <div class="vib-header">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Logo_VIB.svg" alt="VIB" class="vib-logo">
-                    <span class="vib-tag">CHUYỂN KHOẢN</span>
-                </div>
-                <div class="vib-body">
-                    <div>
-                        <div class="account-num">616268688</div>
-                        <div class="account-owner">QUY PICK CLB</div>
-                    </div>
-                    <div class="qr-wrapper">
-                        <img src="image.png" alt="Mã QR VIB" class="qr-code">
-                    </div>
-                </div>
+            <div class="qr-wrapper">
+                <img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code">
             </div>
-
             <div class="balance-box">
                 <span class="balance-label">Số dư quỹ hiện tại</span>
                 <span class="balance-amount" id="fundBalance">Đang tải...</span>
             </div>
         </div>
 
+        <!-- UPCOMING MATCHES CARD -->
         <div class="card upcoming-section">
             <div class="card-header-title" style="margin-bottom: 0.5rem;">
                 <i class="fa-solid fa-fire" style="color: var(--neon);"></i> Trận Đấu Sắp & Đang Diễn Ra
@@ -695,7 +627,9 @@
         </div>
     </div>
 
+    <!-- MAIN LEADERBOARD SECTION -->
     <div class="main-grid">
+        <!-- SINGLES COLUMN -->
         <div>
             <div class="game-title-header singles-title"><i class="fa-solid fa-user"></i> Hạng Mục ĐÁNH ĐƠN (1v1)</div>
             <div class="card" style="margin-bottom: 1.5rem;">
@@ -720,6 +654,7 @@
             </div>
         </div>
 
+        <!-- DOUBLES COLUMN -->
         <div>
             <div class="game-title-header doubles-title"><i class="fa-solid fa-users"></i> Hạng Mục ĐÁNH ĐÔI (2v2)</div>
             <div class="card" style="margin-bottom: 1.5rem;">
@@ -745,6 +680,7 @@
         </div>
     </div>
 
+    <!-- ADMIN CONTROL PANEL -->
     <div class="admin-section" id="adminSectionArea">
         <h2 style="font-size: 1.4rem; color: var(--neon); margin-bottom: 1.5rem; text-align: center;">
             <i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN
@@ -779,13 +715,22 @@
                 <div class="card-header-title" style="color: var(--primary);"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐƠN (1v1)</div>
                 <div class="admin-card-grid">
                     <div>
-                        <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesPlayerName" placeholder="Tên VĐV..."></div>
-                        <button class="btn" onclick="addSinglesPlayer()"><i class="fa-solid fa-user-plus"></i> Thêm VĐV Đơn</button>
+                        <div class="form-group"><label>Tên VĐV Mới</label><input type="text" id="singlesAddName" placeholder="Nhập tên VĐV..."></div>
+                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="singlesAddPoints" value="1200"></div>
+                        <button class="btn" onclick="addNewEntry('singles')"><i class="fa-solid fa-user-plus"></i> Thêm VĐV</button>
                     </div>
                     <div>
-                        <div class="form-group"><label>VĐV 1 (Thắng)</label><select id="singlesWinner"></select></div>
-                        <div class="form-group"><label>VĐV 2 (Thua)</label><select id="singlesLoser"></select></div>
-                        <button class="btn" style="background: var(--primary);" onclick="recordSinglesMatch()"><i class="fa-solid fa-check"></i> Cập Nhật Kết Quả Đơn</button>
+                        <div class="form-group"><label>VĐV Thắng</label><select id="singlesMatchWinner"></select></div>
+                        <div class="form-group"><label>VĐV Thua</label><select id="singlesMatchLoser"></select></div>
+                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="singlesMatchNote" placeholder="Ví dụ: Tỉ số 11-9, 11-7..."></div>
+                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('singles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
+                    </div>
+                </div>
+                <div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+                    <div class="form-group"><label>Sửa/Xóa VĐV Đơn</label><select id="singlesManageTarget"></select></div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-danger" onclick="deleteEntry('singles')"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn" style="background:#4b5563;" onclick="editPoints('singles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
                     </div>
                 </div>
             </div>
@@ -794,404 +739,401 @@
                 <div class="card-header-title" style="color: var(--doubles);"><i class="fa-solid fa-gear"></i> Quản lý ĐÁNH ĐÔI (2v2)</div>
                 <div class="admin-card-grid">
                     <div>
-                        <div class="form-group"><label>Tên Cặp Đôi Mới</label><input type="text" id="doublesTeamName" placeholder="Tên Cặp VĐV..."></div>
-                        <button class="btn" style="background: var(--doubles);" onclick="addDoublesTeam()"><i class="fa-solid fa-users"></i> Thêm Cặp Đôi</button>
+                        <div class="form-group"><label>Tên Cặp Đôi Mới</label><input type="text" id="doublesAddName" placeholder="Ví dụ: Tuấn & Hoàng..."></div>
+                        <div class="form-group"><label>Điểm Elo khởi đầu</label><input type="number" id="doublesAddPoints" value="1200"></div>
+                        <button class="btn" style="background:var(--doubles);" onclick="addNewEntry('doubles')"><i class="fa-solid fa-users-plus"></i> Thêm Cặp Đôi</button>
                     </div>
                     <div>
-                        <div class="form-group"><label>Đội Thắng</label><select id="doublesWinner"></select></div>
-                        <div class="form-group"><label>Đội Thua</label><select id="doublesLoser"></select></div>
-                        <button class="btn" style="background: var(--doubles);" onclick="recordDoublesMatch()"><i class="fa-solid fa-check"></i> Cập Nhật Kết Quả Đôi</button>
+                        <div class="form-group"><label>Đôi Thắng</label><select id="doublesMatchWinner"></select></div>
+                        <div class="form-group"><label>Đôi Thua</label><select id="doublesMatchLoser"></select></div>
+                        <div class="form-group"><label>Ghi chú trận đấu</label><input type="text" id="doublesMatchNote" placeholder="Ví dụ: Tỉ số 11-8, 11-5..."></div>
+                        <button class="btn" style="background:#2563eb;" onclick="recordMatch('doubles')"><i class="fa-solid fa-check"></i> Lưu kết quả</button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top: 1.5rem; border-color: rgba(245, 158, 11, 0.4);">
-            <div class="card-header-title" style="color: var(--gold);"><i class="fa-solid fa-coins"></i> Cập Nhật Cấu Hình Quỹ CLB</div>
-            <div style="display: flex; gap: 1rem; align-items: flex-end;">
-                <div class="form-group" style="flex: 1; margin: 0;">
-                    <label>Số Dư Quỹ Hiện Tại (VNĐ)</label>
-                    <input type="number" id="fundAmountInput" placeholder="Ví dụ: 1500000">
+                <div style="margin-top:15px; padding-top:15px; border-top:1px dashed var(--border);">
+                    <div class="form-group"><label>Sửa/Xóa Cặp Đôi</label><select id="doublesManageTarget"></select></div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-danger" onclick="deleteEntry('doubles')"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn" style="background:#4b5563;" onclick="editPoints('doubles')"><i class="fa-solid fa-pen-to-square"></i> Sửa Elo</button>
+                    </div>
                 </div>
-                <button class="btn" style="background: var(--gold); color: #000; width: auto;" onclick="updateFundBalance()"><i class="fa-solid fa-floppy-disk"></i> Lưu Số Dư</button>
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
-    // --- FIREBASE INITIALIZATION ---
-    const firebaseConfig = {
-        databaseURL: "https://YOUR_FIREBASE_DATABASE_URL.firebaseio.com" // Thay thế URL Firebase của bạn tại đây
-    };
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
+    // Hero Banner Slideshow Logic
+    let currentHeroSlide = 0;
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    const heroDots = document.querySelectorAll('.hero-dot');
+    const totalHeroSlides = heroSlides.length;
 
-    // App State
-    let isAdmin = false;
-    let currentSlide = 0;
-    let playersData = {};
-    let doublesData = {};
-
-    // --- HERO SLIDER ---
     function setHeroSlide(index) {
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.hero-dot');
-        slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-        currentSlide = index;
+        if (!heroSlides.length) return;
+        heroSlides[currentHeroSlide].classList.remove('active');
+        heroDots[currentHeroSlide].classList.remove('active');
+        
+        currentHeroSlide = index;
+        
+        heroSlides[currentHeroSlide].classList.add('active');
+        heroDots[currentHeroSlide].classList.add('active');
     }
 
-    setInterval(() => {
-        currentSlide = (currentSlide + 1) % 3;
-        setHeroSlide(currentSlide);
-    }, 5000);
+    function nextHeroSlide() {
+        if (!heroSlides.length) return;
+        let nextIndex = (currentHeroSlide + 1) % totalHeroSlides;
+        setHeroSlide(nextIndex);
+    }
 
-    // --- ADMIN TOGGLE ---
+    setInterval(nextHeroSlide, 5000);
+
+    // Fetch Google Sheets Fund Balance
+    function fetchSheetBalance() {
+        const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
+        const gid = "1114506581";
+        const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&gid=${gid}&range=F1`;
+
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                const json = JSON.parse(data.substring(47, data.length - 2));
+                let val = json.table.rows[0].c[0].v;
+                if (typeof val === 'number') {
+                    val = val.toLocaleString('vi-VN');
+                }
+                document.getElementById('fundBalance').innerText = val + 'đ';
+            })
+            .catch(err => {
+                console.error("Lỗi tải dữ liệu Google Sheets:", err);
+                document.getElementById('fundBalance').innerText = "0đ";
+            });
+    }
+
+    fetchSheetBalance();
+    setInterval(fetchSheetBalance, 30000);
+
+    // Firebase Initialization
+    const firebaseConfig = {
+        apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
+        authDomain: "pickleball-hoanggia.firebaseapp.com",
+        databaseURL: "https://pickleball-hoanggia-default-rtdb.firebaseio.com",
+        projectId: "pickleball-hoanggia",
+        storageBucket: "pickleball-hoanggia.firebasestorage.app",
+        messagingSenderId: "92435922703",
+        appId: "1:92435922703:web:b06c12f95bcf0fcc24c87a",
+        measurementId: "G-ZNZNP48B0H"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const dbRef = database.ref('pickleballProDB');
+
+    const ADMIN_PASSWORD = "123456";
+    let isAdminActive = false;
+
+    const defaultData = {
+        singles: [
+            { name: "Minh Tuấn", points: 1300, win: 12, loss: 3 },
+            { name: "Hoàng Nam", points: 1240, win: 8, loss: 4 },
+            { name: "Quốc Anh", points: 1180, win: 5, loss: 6 }
+        ],
+        singlesHistory: [
+            { winner: "Minh Tuấn", loser: "Hoàng Nam", note: "Chung kết Đơn Nam (Tỉ số: 11-8, 11-9) (+16 pts)" }
+        ],
+        doubles: [
+            { name: "Tuấn & Nam", points: 1280, win: 7, loss: 2 },
+            { name: "Đức & Anh", points: 1210, win: 4, loss: 4 }
+        ],
+        doublesHistory: [
+            { winner: "Tuấn & Nam", loser: "Đức & Anh", note: "Trận giao lưu Đôi (Tỉ số: 11-6) (+15 pts)" }
+        ],
+        upcomingMatches: [
+            { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-03T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
+        ]
+    };
+
+    let db = defaultData;
+
+    dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            db = {
+                singles: data.singles || [],
+                singlesHistory: data.singlesHistory || [],
+                doubles: data.doubles || [],
+                doublesHistory: data.doublesHistory || [],
+                upcomingMatches: data.upcomingMatches || []
+            };
+        } else {
+            saveData();
+        }
+        initApp();
+    });
+
     function toggleAdminMode() {
-        if (!isAdmin) {
-            const pass = prompt("Nhập mật khẩu Quản Trị Viên:");
-            if (pass === "admin123") { // Mật khẩu quản trị mặc định
-                isAdmin = true;
-                document.getElementById("adminSectionArea").style.display = "block";
-                document.getElementById("adminToggleBtn").classList.add("active");
-                document.querySelectorAll(".btn-delete-history").forEach(b => b.style.display = "inline-block");
-                alert("Đã mở chế độ Quản trị!");
-            } else if (pass !== null) {
-                alert("Mật khẩu không đúng!");
+        if (!isAdminActive) {
+            const pwd = prompt("Nhập mật khẩu Admin:");
+            if (pwd === ADMIN_PASSWORD) {
+                isAdminActive = true;
+                document.getElementById('adminToggleBtn').classList.add('active');
+                document.getElementById('adminSectionArea').style.display = 'block';
+                initApp();
+            } else if (pwd !== null) {
+                alert("Mật khẩu sai!");
             }
         } else {
-            isAdmin = false;
-            document.getElementById("adminSectionArea").style.display = "none";
-            document.getElementById("adminToggleBtn").classList.remove("active");
-            document.querySelectorAll(".btn-delete-history").forEach(b => b.style.display = "none");
+            isAdminActive = false;
+            document.getElementById('adminToggleBtn').classList.remove('active');
+            document.getElementById('adminSectionArea').style.display = 'none';
+            initApp();
         }
     }
 
-    // --- ELO CALCULATION SYSTEM ---
-    function calculateElo(ratingA, ratingB, kFactor = 32) {
-        const expectedA = 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
-        const expectedB = 1 / (1 + Math.pow(10, (ratingA - ratingB) / 400));
-        
-        const newA = Math.round(ratingA + kFactor * (1 - expectedA));
-        const newB = Math.round(ratingB + kFactor * (0 - expectedB));
-        
-        return {
-            newRatingA: newA,
-            newRatingB: newB,
-            changeA: newA - ratingA,
-            changeB: newB - ratingB
-        };
-    }
+    function saveData() { dbRef.set(db); }
 
-    // --- DATA REALTIME LISTENERS ---
-    
-    // 1. Quỹ CLB
-    db.ref('fundBalance').on('value', snapshot => {
-        const val = snapshot.val() || 0;
-        document.getElementById('fundBalance').innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
-    });
-
-    // 2. Singles Players
-    db.ref('singlesPlayers').on('value', snapshot => {
-        playersData = snapshot.val() || {};
-        renderSinglesLeaderboard();
-        updateDropdowns();
-    });
-
-    // 3. Doubles Teams
-    db.ref('doublesTeams').on('value', snapshot => {
-        doublesData = snapshot.val() || {};
-        renderDoublesLeaderboard();
-        updateDropdowns();
-    });
-
-    // 4. Match Histories
-    db.ref('singlesHistory').on('value', snapshot => renderHistory(snapshot.val(), 'singlesHistoryList', 'singlesHistory'));
-    db.ref('doublesHistory').on('value', snapshot => renderHistory(snapshot.val(), 'doublesHistoryList', 'doublesHistory'));
-
-    // 5. Upcoming Matches
-    db.ref('upcomingMatches').on('value', snapshot => renderUpcomingMatches(snapshot.val()));
-
-    // --- RENDER FUNCTIONS ---
-    function renderSinglesLeaderboard() {
-        const tbody = document.getElementById('singlesBody');
-        tbody.innerHTML = '';
-        const sorted = Object.entries(playersData)
-            .map(([id, p]) => ({ id, ...p }))
-            .sort((a, b) => b.elo - a.elo);
-
-        sorted.forEach((p, idx) => {
-            let rankBadge = idx + 1;
-            if (idx === 0) rankBadge = `<span class="rank-badge top-1">1</span>`;
-            else if (idx === 1) rankBadge = `<span class="rank-badge top-2">2</span>`;
-            else if (idx === 2) rankBadge = `<span class="rank-badge top-3">3</span>`;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${rankBadge}</td>
-                    <td style="font-weight: 700;">${p.name}</td>
-                    <td><span style="color:var(--primary)">${p.wins || 0}W</span> - <span style="color:var(--danger)">${p.losses || 0}L</span></td>
-                    <td class="elo-points">${p.elo}</td>
-                </tr>
-            `;
-        });
-    }
-
-    function renderDoublesLeaderboard() {
-        const tbody = document.getElementById('doublesBody');
-        tbody.innerHTML = '';
-        const sorted = Object.entries(doublesData)
-            .map(([id, t]) => ({ id, ...t }))
-            .sort((a, b) => b.elo - a.elo);
-
-        sorted.forEach((t, idx) => {
-            let rankBadge = idx + 1;
-            if (idx === 0) rankBadge = `<span class="rank-badge top-1">1</span>`;
-            else if (idx === 1) rankBadge = `<span class="rank-badge top-2">2</span>`;
-            else if (idx === 2) rankBadge = `<span class="rank-badge top-3">3</span>`;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${rankBadge}</td>
-                    <td style="font-weight: 700;">${t.name}</td>
-                    <td><span style="color:var(--primary)">${t.wins || 0}W</span> - <span style="color:var(--danger)">${t.losses || 0}L</span></td>
-                    <td class="elo-points">${t.elo}</td>
-                </tr>
-            `;
-        });
-    }
-
-    function renderHistory(data, elementId, path) {
-        const container = document.getElementById(elementId);
-        container.innerHTML = '';
-        if (!data) {
-            container.innerHTML = `<div style="color:var(--text-muted); font-size: 0.85rem; text-align:center; padding: 1rem;">Chưa có lịch sử trận đấu.</div>`;
-            return;
+    function initApp() {
+        renderUpcomingMatches();
+        renderRankings('singles', 'singlesBody', 'singlesHistoryList');
+        renderRankings('doubles', 'doublesBody', 'doublesHistoryList');
+        if (isAdminActive) {
+            loadDropdowns('singles');
+            loadDropdowns('doubles');
+            loadManageDropdown('singles');
+            loadManageDropdown('doubles');
+            updateUpcomingDropdowns();
         }
-
-        const entries = Object.entries(data).reverse();
-        entries.forEach(([id, item]) => {
-            const btnDelete = isAdmin ? `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${path}', '${id}')"><i class="fa-solid fa-trash"></i></button>` : '';
-            container.innerHTML += `
-                <div class="history-item">
-                    <div>
-                        <span style="color:var(--primary); font-weight:700;">${item.winner}</span> 
-                        <span style="color:var(--text-muted);">thắng</span> 
-                        <span style="color:var(--danger); font-weight:700;">${item.loser}</span>
-                        <div style="font-size:0.75rem; color:var(--text-muted);">${item.date || ''}</div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="color:var(--neon); font-weight:700;">+${item.eloChange} Elo</span>
-                        ${btnDelete}
-                    </div>
-                </div>
-            `;
-        });
     }
 
-    function renderUpcomingMatches(data) {
+    function renderUpcomingMatches() {
         const grid = document.getElementById('upcomingMatchesGrid');
-        grid.innerHTML = '';
-        if (!data) {
-            grid.innerHTML = `<div style="color:var(--text-muted); font-size:0.85rem; grid-column: 1/-1;">Chưa có trận đấu nào lên lịch.</div>`;
-            return;
-        }
+        const matches = db.upcomingMatches || [];
+        grid.innerHTML = matches.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có trận đấu nào được lên lịch</div>' : '';
 
-        Object.entries(data).forEach(([id, match]) => {
-            const timeFormatted = match.time ? new Date(match.time).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) : 'Chưa định giờ';
-            const finishBtn = isAdmin ? `<button class="btn-finish-match" onclick="deleteUpcomingMatch('${id}')"><i class="fa-solid fa-check"></i> Hoàn thành</button>` : '';
+        const now = new Date();
+
+        matches.forEach((m, idx) => {
+            let formattedTime = m.time;
+            let isLive = false;
+
+            if (m.time) {
+                const matchDate = new Date(m.time);
+                if (!isNaN(matchDate)) {
+                    const hours = String(matchDate.getHours()).padStart(2, '0');
+                    const minutes = String(matchDate.getMinutes()).padStart(2, '0');
+                    const day = String(matchDate.getDate()).padStart(2, '0');
+                    const month = String(matchDate.getMonth() + 1).padStart(2, '0');
+                    formattedTime = `${hours}:${minutes} - ${day}/${month}`;
+
+                    if (now >= matchDate) isLive = true;
+                }
+            }
+
+            const badgeHtml = isLive ? 
+                `<div class="match-badge badge-live"><i class="fa-solid fa-circle-dot"></i> LIVE</div>` : 
+                `<div class="match-badge badge-upcoming"><i class="fa-regular fa-clock"></i> SẮP ĐẤU</div>`;
+
+            const adminControlsHtml = isAdminActive ? `
+                <div style="display:flex; gap:8px; border-top:1px solid var(--border); padding-top:8px; margin-top:8px;">
+                    <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
+                        <i class="fa-solid fa-flag-checkered"></i> Lưu Elo
+                    </button>
+                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận"><i class="fa-solid fa-trash"></i></button>
+                </div>` : '';
 
             grid.innerHTML += `
                 <div class="match-card">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="match-badge badge-upcoming"><i class="fa-solid fa-clock"></i> Sắp diễn ra</span>
-                        <span style="font-size:0.75rem; color:var(--text-muted);">${match.category || 'Giải Đấu'}</span>
+                        ${badgeHtml}
+                        <span style="font-size:0.75rem; color:var(--text-muted);">${m.court || 'Sân trung tâm'}</span>
                     </div>
                     <div class="match-versus">
-                        <div class="team-box">${match.team1}</div>
+                        <div class="team-box">${m.team1}</div>
                         <div class="vs-tag">VS</div>
-                        <div class="team-box">${match.team2}</div>
+                        <div class="team-box">${m.team2}</div>
                     </div>
-                    ${match.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-handshake-simple"></i> Kèo: ${match.handicap}</div>` : ''}
+                    ${m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> ${m.handicap}</div>` : ''}
                     <div class="match-info">
-                        <div><i class="fa-solid fa-location-dot"></i> ${match.court || 'Sân CLB'}</div>
-                        <div><i class="fa-solid fa-calendar"></i> ${timeFormatted}</div>
+                        <span><i class="fa-regular fa-calendar"></i> ${formattedTime}</span>
+                        <span>${m.category || ''}</span>
                     </div>
-                    ${finishBtn}
-                </div>
-            `;
+                    ${adminControlsHtml}
+                </div>`;
         });
     }
 
-    // --- DROPDOWNS MANAGEMENT ---
-    function updateDropdowns() {
-        const sWinner = document.getElementById('singlesWinner');
-        const sLoser = document.getElementById('singlesLoser');
-        const dWinner = document.getElementById('doublesWinner');
-        const dLoser = document.getElementById('doublesLoser');
+    function renderRankings(type, tableId, historyId) {
+        const list = db[type] || [];
+        const history = db[type + 'History'] || [];
+        
+        list.sort((a, b) => b.points - a.points);
 
-        sWinner.innerHTML = ''; sLoser.innerHTML = '';
-        Object.entries(playersData).forEach(([id, p]) => {
-            sWinner.innerHTML += `<option value="${id}">${p.name} (${p.elo})</option>`;
-            sLoser.innerHTML += `<option value="${id}">${p.name} (${p.elo})</option>`;
+        const tbody = document.getElementById(tableId);
+        tbody.innerHTML = '';
+        list.forEach((item, index) => {
+            let rankClass = '';
+            if (index === 0) rankClass = 'top-1';
+            else if (index === 1) rankClass = 'top-2';
+            else if (index === 2) rankClass = 'top-3';
+
+            tbody.innerHTML += `
+                <tr>
+                    <td><span class="rank-badge ${rankClass}">${index + 1}</span></td>
+                    <td style="font-weight:700; color:#fff;">${item.name}</td>
+                    <td style="color:var(--text-muted); font-size:0.85rem;">${item.win || 0}W - ${item.loss || 0}L</td>
+                    <td class="elo-points">${item.points}</td>
+                </tr>`;
         });
 
-        dWinner.innerHTML = ''; dLoser.innerHTML = '';
-        Object.entries(doublesData).forEach(([id, t]) => {
-            dWinner.innerHTML += `<option value="${id}">${t.name} (${t.elo})</option>`;
-            dLoser.innerHTML += `<option value="${id}">${t.name} (${t.elo})</option>`;
+        const historyContainer = document.getElementById(historyId);
+        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); font-size:0.85rem;">Chưa có lịch sử</div>' : '';
+        
+        history.slice().reverse().forEach((h, idx) => {
+            const realIdx = history.length - 1 - idx;
+            const deleteBtn = isAdminActive ? `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteHistory('${type}', ${realIdx})"><i class="fa-solid fa-xmark"></i></button>` : '';
+            historyContainer.innerHTML += `
+                <div class="history-item">
+                    <div>
+                        <strong style="color:var(--primary);">${h.winner}</strong> thắng <strong>${h.loser}</strong>
+                        <div style="color:var(--text-muted); font-size:0.75rem; margin-top:2px;">${h.note || ''}</div>
+                    </div>
+                    ${deleteBtn}
+                </div>`;
         });
+    }
 
-        updateUpcomingDropdowns();
+    function loadDropdowns(type) {
+        const list = db[type] || [];
+        const wSelect = document.getElementById(type + 'MatchWinner');
+        const lSelect = document.getElementById(type + 'MatchLoser');
+        wSelect.innerHTML = ''; lSelect.innerHTML = '';
+        list.forEach(i => {
+            wSelect.innerHTML += `<option value="${i.name}">${i.name}</option>`;
+            lSelect.innerHTML += `<option value="${i.name}">${i.name}</option>`;
+        });
+    }
+
+    function loadManageDropdown(type) {
+        const list = db[type] || [];
+        const select = document.getElementById(type + 'ManageTarget');
+        select.innerHTML = '';
+        list.forEach(i => {
+            select.innerHTML += `<option value="${i.name}">${i.name} (${i.points} pts)</option>`;
+        });
     }
 
     function updateUpcomingDropdowns() {
         const type = document.getElementById('upcomingType').value;
+        const list = db[type] || [];
         const t1 = document.getElementById('upcomingTeam1');
         const t2 = document.getElementById('upcomingTeam2');
         t1.innerHTML = ''; t2.innerHTML = '';
-
-        const source = type === 'singles' ? playersData : doublesData;
-        Object.entries(source).forEach(([id, item]) => {
-            t1.innerHTML += `<option value="${item.name}">${item.name}</option>`;
-            t2.innerHTML += `<option value="${item.name}">${item.name}</option>`;
+        list.forEach(i => {
+            t1.innerHTML += `<option value="${i.name}">${i.name}</option>`;
+            t2.innerHTML += `<option value="${i.name}">${i.name}</option>`;
         });
     }
 
-    // --- ADMIN ACTION FUNCTIONS ---
-
-    // 1. Quỹ Balance
-    function updateFundBalance() {
-        const val = parseFloat(document.getElementById('fundAmountInput').value);
-        if (isNaN(val)) return alert('Vui lòng nhập số hợp lệ!');
-        db.ref('fundBalance').set(val).then(() => {
-            alert('Cập nhật số dư thành công!');
-            document.getElementById('fundAmountInput').value = '';
-        });
+    function addNewEntry(type) {
+        const name = document.getElementById(type + 'AddName').value.trim();
+        const pts = parseInt(document.getElementById(type + 'AddPoints').value) || 1200;
+        if (!name) return alert('Vui lòng nhập tên!');
+        db[type].push({ name, points: pts, win: 0, loss: 0 });
+        saveData();
+        document.getElementById(type + 'AddName').value = '';
     }
 
-    // 2. Singles Operations
-    function addSinglesPlayer() {
-        const name = document.getElementById('singlesPlayerName').value.trim();
-        if (!name) return alert('Vui lòng nhập tên VĐV!');
-        const id = db.ref('singlesPlayers').push().key;
-        db.ref('singlesPlayers/' + id).set({
-            name: name,
-            elo: 1000,
-            wins: 0,
-            losses: 0
-        }).then(() => {
-            document.getElementById('singlesPlayerName').value = '';
-            alert('Thêm VĐV thành công!');
-        });
-    }
+    function recordMatch(type) {
+        const winner = document.getElementById(type + 'MatchWinner').value;
+        const loser = document.getElementById(type + 'MatchLoser').value;
+        const note = document.getElementById(type + 'MatchNote').value;
+        if (winner === loser) return alert('Người thắng và thua không thể trùng nhau!');
 
-    function recordSinglesMatch() {
-        const wId = document.getElementById('singlesWinner').value;
-        const lId = document.getElementById('singlesLoser').value;
-        if (wId === lId) return alert('VĐV Thắng và Thua không được trùng nhau!');
+        const wObj = db[type].find(i => i.name === winner);
+        const lObj = db[type].find(i => i.name === loser);
 
-        const winner = playersData[wId];
-        const loser = playersData[lId];
+        if (wObj && lObj) {
+            wObj.points += 16;
+            wObj.win = (wObj.win || 0) + 1;
+            lObj.points = Math.max(0, lObj.points - 16);
+            lObj.loss = (lObj.loss || 0) + 1;
 
-        const eloRes = calculateElo(winner.elo, loser.elo);
-
-        db.ref('singlesPlayers/' + wId).update({
-            elo: eloRes.newRatingA,
-            wins: (winner.wins || 0) + 1
-        });
-
-        db.ref('singlesPlayers/' + lId).update({
-            elo: eloRes.newRatingB,
-            losses: (loser.losses || 0) + 1
-        });
-
-        db.ref('singlesHistory').push({
-            winner: winner.name,
-            loser: loser.name,
-            eloChange: eloRes.changeA,
-            date: new Date().toLocaleString('vi-VN')
-        }).then(() => alert('Đã cập nhật trận đấu đơn thành công!'));
-    }
-
-    // 3. Doubles Operations
-    function addDoublesTeam() {
-        const name = document.getElementById('doublesTeamName').value.trim();
-        if (!name) return alert('Vui lòng nhập tên cặp đôi!');
-        const id = db.ref('doublesTeams').push().key;
-        db.ref('doublesTeams/' + id).set({
-            name: name,
-            elo: 1000,
-            wins: 0,
-            losses: 0
-        }).then(() => {
-            document.getElementById('doublesTeamName').value = '';
-            alert('Thêm Cặp Đôi thành công!');
-        });
-    }
-
-    function recordDoublesMatch() {
-        const wId = document.getElementById('doublesWinner').value;
-        const lId = document.getElementById('doublesLoser').value;
-        if (wId === lId) return alert('Đội Thắng và Thua không được trùng nhau!');
-
-        const winner = doublesData[wId];
-        const loser = doublesData[lId];
-
-        const eloRes = calculateElo(winner.elo, loser.elo);
-
-        db.ref('doublesTeams/' + wId).update({
-            elo: eloRes.newRatingA,
-            wins: (winner.wins || 0) + 1
-        });
-
-        db.ref('doublesTeams/' + lId).update({
-            elo: eloRes.newRatingB,
-            losses: (loser.losses || 0) + 1
-        });
-
-        db.ref('doublesHistory').push({
-            winner: winner.name,
-            loser: loser.name,
-            eloChange: eloRes.changeA,
-            date: new Date().toLocaleString('vi-VN')
-        }).then(() => alert('Đã cập nhật trận đấu đôi thành công!'));
-    }
-
-    // 4. Upcoming Matches Operations
-    function addUpcomingMatch() {
-        const team1 = document.getElementById('upcomingTeam1').value;
-        const team2 = document.getElementById('upcomingTeam2').value;
-        if (team1 === team2) return alert('Hai đội tham gia không được giống nhau!');
-
-        const handicap = document.getElementById('upcomingHandicap').value.trim();
-        const time = document.getElementById('upcomingTime').value;
-        const court = document.getElementById('upcomingCourt').value.trim();
-        const category = document.getElementById('upcomingCategory').value.trim();
-
-        db.ref('upcomingMatches').push({
-            team1, team2, handicap, time, court, category
-        }).then(() => {
-            alert('Đã thêm trận đấu sắp tới!');
-            document.getElementById('upcomingHandicap').value = '';
-            document.getElementById('upcomingCourt').value = '';
-            document.getElementById('upcomingCategory').value = '';
-        });
-    }
-
-    function deleteUpcomingMatch(id) {
-        if (confirm('Xóa trận đấu này khỏi danh sách sắp tới?')) {
-            db.ref('upcomingMatches/' + id).remove();
+            db[type + 'History'].push({ winner, loser, note: `${note} (+16 pts)` });
+            saveData();
+            document.getElementById(type + 'MatchNote').value = '';
         }
     }
 
-    function deleteHistory(path, id) {
-        if (confirm('Bạn có chắc muốn xóa nhật ký trận đấu này?')) {
-            db.ref(`${path}/${id}`).remove();
+    function deleteEntry(type) {
+        const target = document.getElementById(type + 'ManageTarget').value;
+        if (confirm(`Bạn có chắc muốn xóa ${target}?`)) {
+            db[type] = db[type].filter(i => i.name !== target);
+            saveData();
+        }
+    }
+
+    function editPoints(type) {
+        const target = document.getElementById(type + 'ManageTarget').value;
+        const obj = db[type].find(i => i.name === target);
+        if (obj) {
+            const newPts = prompt(`Nhập điểm Elo mới cho ${target}:`, obj.points);
+            if (newPts !== null) {
+                obj.points = parseInt(newPts) || obj.points;
+                saveData();
+            }
+        }
+    }
+
+    function addUpcomingMatch() {
+        const team1 = document.getElementById('upcomingTeam1').value;
+        const team2 = document.getElementById('upcomingTeam2').value;
+        const handicap = document.getElementById('upcomingHandicap').value;
+        const time = document.getElementById('upcomingTime').value;
+        const court = document.getElementById('upcomingCourt').value;
+        const category = document.getElementById('upcomingCategory').value;
+
+        if (team1 === team2) return alert('2 đội thi đấu không được giống nhau!');
+
+        db.upcomingMatches.push({ team1, team2, handicap, time, court, category });
+        saveData();
+    }
+
+    function finishUpcomingMatch(index) {
+        const match = db.upcomingMatches[index];
+        const winnerName = prompt(`Chọn đội thắng (Gõ 1 cho "${match.team1}" hoặc 2 cho "${match.team2}"):`);
+        if (winnerName === '1' || winnerName === '2') {
+            const isTeam1Winner = winnerName === '1';
+            const winner = isTeam1Winner ? match.team1 : match.team2;
+            const loser = isTeam1Winner ? match.team2 : match.team1;
+            const type = match.category && match.category.includes('Đơn') ? 'singles' : 'doubles';
+
+            const wObj = db[type].find(i => i.name === winner);
+            const lObj = db[type].find(i => i.name === loser);
+
+            if (wObj && lObj) {
+                wObj.points += 16;
+                wObj.win = (wObj.win || 0) + 1;
+                lObj.points = Math.max(0, lObj.points - 16);
+                lObj.loss = (lObj.loss || 0) + 1;
+                db[type + 'History'].push({ winner, loser, note: `Trận lên lịch: ${match.category || ''} (+16 pts)` });
+            }
+
+            db.upcomingMatches.splice(index, 1);
+            saveData();
+        }
+    }
+
+    function deleteUpcomingMatch(index) {
+        if (confirm('Xóa trận đấu này khỏi lịch?')) {
+            db.upcomingMatches.splice(index, 1);
+            saveData();
+        }
+    }
+
+    function deleteHistory(type, index) {
+        if (confirm('Xóa lịch sử trận đấu này?')) {
+            db[type + 'History'].splice(index, 1);
+            saveData();
         }
     }
 </script>
