@@ -50,7 +50,6 @@ HTML
         .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem; }
         .match-card { background: #0f172a; border-radius: 10px; border: 1px solid #334155; padding: 1.2rem; position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 0.8rem; }
         
-        /* Trạng thái trận đấu */
         .match-badge { position: absolute; top: 12px; right: 12px; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
         .badge-upcoming { background: rgba(34, 197, 94, 0.15); color: var(--primary-hover); border: 1px solid rgba(34, 197, 94, 0.3); }
         .badge-live { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.5); animation: pulse-red 1.5s infinite; }
@@ -67,6 +66,10 @@ HTML
         .vs-tag { color: var(--danger); font-style: italic; font-size: 0.85rem; padding: 0 8px; }
         .handicap-tag { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px dashed var(--gold); border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; text-align: center; font-weight: 600; }
         .match-info { font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between; border-top: 1px dashed #334155; padding-top: 0.6rem; margin-top: 0.2rem; }
+
+        .card-actions { display: flex; gap: 8px; justify-content: center; align-items: center; border-top: 1px dashed #334155; padding-top: 8px; margin-top: 4px; }
+        .btn-finish-match { background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+        .btn-finish-match:hover { background: var(--primary-hover); }
 
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
         @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
@@ -360,7 +363,6 @@ HTML
         }
     }
 
-    // So sánh thời gian thực để cập nhật trạng thái
     function renderUpcomingMatches() {
         const grid = document.getElementById('upcomingMatchesGrid');
         const matches = db.upcomingMatches || [];
@@ -382,7 +384,6 @@ HTML
                     const year = matchDate.getFullYear();
                     formattedTime = `${hours}:${minutes} - ${day}/${month}/${year}`;
 
-                    // Nếu thời gian hiện tại >= thời gian thi đấu thì đổi sang "Đang diễn ra"
                     if (now >= matchDate) {
                         isLive = true;
                     }
@@ -393,8 +394,16 @@ HTML
                 `<div class="match-badge badge-live"><i class="fa-solid fa-circle-dot"></i> Đang diễn ra</div>` : 
                 `<div class="match-badge badge-upcoming"><i class="fa-regular fa-clock"></i> Sắp diễn ra</div>`;
 
-            const deleteBtnHtml = isAdminActive ? 
-                `<button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này"><i class="fa-solid fa-trash-can"></i></button>` : '';
+            const adminControlsHtml = isAdminActive ? `
+                <div class="card-actions">
+                    <button class="btn-finish-match" onclick="finishUpcomingMatch(${idx})">
+                        <i class="fa-solid fa-flag-checkered"></i> Kết thúc & Lưu Elo
+                    </button>
+                    <button class="btn-delete-history" style="display:inline-block;" onclick="deleteUpcomingMatch(${idx})" title="Xóa trận này">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            ` : '';
 
             const handicapHtml = m.handicap ? `<div class="handicap-tag"><i class="fa-solid fa-scale-balanced"></i> Kèo: ${m.handicap}</div>` : '';
 
@@ -412,16 +421,74 @@ HTML
                         <span><i class="fa-solid fa-location-dot"></i> ${m.court || 'Chưa xếp sân'}</span>
                         <span><i class="fa-solid fa-trophy"></i> ${m.category || 'Tự do'}</span>
                     </div>
-                    ${deleteBtnHtml}
+                    ${adminControlsHtml}
                 </div>
             `;
         });
     }
 
-    // Tự động kiểm tra thời gian 10 giây/lần để chuyển mốc trạng thái
     setInterval(() => {
         renderUpcomingMatches();
     }, 10000);
+
+    function finishUpcomingMatch(index) {
+        if (!isAdminActive) return;
+        const match = db.upcomingMatches[index];
+        if (!match) return;
+
+        // Xác định hạng mục (Đơn hay Đôi) dựa trên thuộc tính category
+        const mode = (match.category && match.category.includes('Đánh Đơn')) ? 'singles' : 'doubles';
+
+        const choice = prompt(`KẾT THÚC TRẬN ĐẤU:\nNhập "1" nếu [${match.team1}] THẮNG\nNhập "2" nếu [${match.team2}] THẮNG`, "1");
+
+        if (choice !== "1" && choice !== "2") {
+            return alert("Thao tác hủy hoặc lựa chọn không hợp lệ!");
+        }
+
+        const winnerName = choice === "1" ? match.team1 : match.team2;
+        const loserName = choice === "1" ? match.team2 : match.team1;
+
+        const rawNote = prompt("Nhập tỷ số hoặc ghi chú trận đấu (Ví dụ: Tỉ số 11-9, 11-8):", "");
+
+        let winnerObj = db[mode].find(i => i.name === winnerName);
+        let loserObj = db[mode].find(i => i.name === loserName);
+
+        // Trường hợp tên không khớp bảng Elo, tự động tạo mới VĐV
+        if (!winnerObj) {
+            winnerObj = { name: winnerName, points: 1200, win: 0, loss: 0 };
+            db[mode].push(winnerObj);
+        }
+        if (!loserObj) {
+            loserObj = { name: loserName, points: 1200, win: 0, loss: 0 };
+            db[mode].push(loserObj);
+        }
+
+        // Tính Elo
+        const K = 32;
+        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
+        const pointChange = Math.round(K * (1 - expectedWinner));
+
+        winnerObj.points += pointChange;
+        loserObj.points = Math.max(0, loserObj.points - pointChange);
+
+        winnerObj.win = (winnerObj.win || 0) + 1;
+        loserObj.loss = (loserObj.loss || 0) + 1;
+
+        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
+
+        if (!db[mode + 'History']) db[mode + 'History'] = [];
+        db[mode + 'History'].push({
+            winner: winnerName,
+            loser: loserName,
+            note: noteText
+        });
+
+        // Xóa trận đấu khỏi danh sách sắp diễn ra
+        db.upcomingMatches.splice(index, 1);
+
+        saveData();
+        alert(`Đã hoàn tất kết thúc trận đấu!\n${winnerName} (+${pointChange} Elo)`);
+    }
 
     function updateUpcomingDropdowns() {
         const type = document.getElementById('upcomingType').value;
@@ -591,38 +658,38 @@ HTML
         const winnerName = document.getElementById(`${mode}MatchWinner`).value;
         const loserName = document.getElementById(`${mode}MatchLoser`).value;
         const noteInput = document.getElementById(`${mode}MatchNote`);
-        const note = noteInput.value.trim();
+        const rawNote = noteInput.value.trim();
 
-        if (!winnerName || !loserName) return alert("Vui lòng thêm danh sách trước!");
-        if (winnerName === loserName) return alert("Bên thắng và thua không thể là cùng một đối tượng!");
+        if (!winnerName || !loserName) return alert("Vui lòng chọn đầy đủ người thắng và người thua!");
+        if (winnerName === loserName) return alert("Người thắng và người thua không thể trùng nhau!");
 
-        const list = db[mode];
-        const winner = list.find(i => i.name === winnerName);
-        const loser = list.find(i => i.name === loserName);
+        const winnerObj = db[mode].find(i => i.name === winnerName);
+        const loserObj = db[mode].find(i => i.name === loserName);
 
-        const Ra = winner.points;
-        const Rb = loser.points;
-        const Ea = 1 / (1 + Math.pow(10, (Rb - Ra) / 400)); 
+        if (!winnerObj || !loserObj) return alert("Dữ liệu VĐV không hợp lệ!");
 
-        const K = 32; 
-        let eloGain = Math.round(K * (1 - Ea));
-        if (eloGain < 2) eloGain = 2; 
+        const K = 32;
+        const expectedWinner = 1 / (1 + Math.pow(10, (loserObj.points - winnerObj.points) / 400));
+        const pointChange = Math.round(K * (1 - expectedWinner));
 
-        winner.points += eloGain;
-        loser.points = Math.max(0, loser.points - eloGain); 
+        winnerObj.points += pointChange;
+        loserObj.points = Math.max(0, loserObj.points - pointChange);
 
-        winner.win += 1;
-        loser.loss += 1;
+        winnerObj.win = (winnerObj.win || 0) + 1;
+        loserObj.loss = (loserObj.loss || 0) + 1;
 
-        db[mode + 'History'].push({ 
-            winner: winnerName, loser: loserName, 
-            note: `${note ? note + ' ' : ''}(+${eloGain}/-${eloGain} Elo)`
+        const noteText = rawNote ? `${rawNote} (+${pointChange} pts)` : `(+${pointChange} pts)`;
+
+        if (!db[mode + 'History']) db[mode + 'History'] = [];
+        db[mode + 'History'].push({
+            winner: winnerName,
+            loser: loserName,
+            note: noteText
         });
 
         noteInput.value = '';
         saveData();
     }
 </script>
-
 </body>
 </html>
