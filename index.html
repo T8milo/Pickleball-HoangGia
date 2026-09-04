@@ -4,62 +4,103 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pickleball HoangGia - Tin Tức Tự Động</title>
+    <title>Pickleball HoangGia - Quản Lý & Tin Tức Tự Động</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
+            --primary: #15803d;
             --primary-hover: #22c55e;
             --text: #f8fafc;
             --text-muted: #94a3b8;
+            --gold: #f59e0b;
+            --silver: #cbd5e1;
+            --bronze: #b45309;
+            --danger: #ef4444;
             --accent: #38bdf8;
+            --doubles-color: #a855f7;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text); padding: 2rem 1rem; }
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; }
+        body { background-color: var(--bg-color); color: var(--text); padding: 2rem 1rem; min-height: 100vh; }
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; }
+        
+        header { text-align: center; margin-bottom: 2rem; padding-right: 40px; }
+        header h1 { font-size: 2.5rem; color: var(--primary-hover); text-transform: uppercase; letter-spacing: 2px; }
+        header p { color: var(--text-muted); }
 
-        /* KHOANG TIN TỨC */
+        /* HERO BANNER STYLES */
+        .hero-banner {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-slides {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 6s ease-out;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1);
+        }
+
+        .hero-slide.active { opacity: 1; transform: scale(1.05); }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.85) 85%, #0f172a 100%);
+            display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem; z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(34, 197, 94, 0.2); color: var(--primary-hover);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; margin-bottom: 0.8rem;
+        }
+
+        .hero-title { font-size: 2.2rem; font-weight: 800; color: #ffffff; margin-bottom: 0.8rem; }
+        .hero-title span { color: var(--primary-hover); }
+        .hero-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+        .admin-toggle {
+            position: absolute; top: 10px; right: 10px; background: #334155; color: var(--text-muted);
+            border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;
+        }
+        .admin-toggle.active { background: var(--primary); color: white; }
+
+        .main-layout { display: flex; flex-direction: column; gap: 2rem; }
+
+        /* TIN TỨC AUTO STYLES */
         .news-section {
             background: var(--card-bg);
             border-radius: 12px;
             padding: 1.5rem;
             border: 1px solid #334155;
-            margin-top: 1.5rem;
         }
 
-        .news-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .news-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
+        .news-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .btn-refresh {
-            background: transparent;
-            border: 1px solid #475569;
-            color: var(--text-muted);
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: 0.2s;
+            background: transparent; border: 1px solid #475569; color: var(--text-muted);
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: 0.2s;
         }
-
-        .btn-refresh:hover {
-            color: white;
-            border-color: var(--accent);
-        }
+        .btn-refresh:hover { color: white; border-color: var(--accent); }
 
         .news-grid {
             display: grid;
@@ -67,141 +108,230 @@ HTML
             gap: 1.5rem;
         }
 
-        /* THẺ BÀI VIẾT AUTO-LINK */
         .news-card {
-            background: #0f172a;
-            border-radius: 10px;
-            border: 1px solid #334155;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            background: #0f172a; border-radius: 10px; border: 1px solid #334155;
+            overflow: hidden; display: flex; flex-direction: column;
             transition: transform 0.3s ease, border-color 0.3s ease;
-            text-decoration: none;
-            color: inherit;
+            text-decoration: none; color: inherit;
         }
+        .news-card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
-        .news-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-        }
-
-        .news-img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-        }
-
-        .news-body {
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
+        .news-img { width: 100%; height: 160px; object-fit: cover; }
+        .news-body { padding: 1rem; display: flex; flex-direction: column; flex-grow: 1; }
 
         .news-tag {
-            align-self: flex-start;
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent);
-            margin-bottom: 0.5rem;
+            align-self: flex-start; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px;
+            font-weight: bold; background: rgba(56, 189, 248, 0.15); color: var(--accent); margin-bottom: 0.5rem;
         }
 
-        .article-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-        }
-
-        .news-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
+        .news-title-text { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; line-height: 1.3; }
+        .news-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 1rem; flex-grow: 1; }
+        
         .news-footer {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px dashed #334155;
-            padding-top: 0.6rem;
+            font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between;
+            align-items: center; border-top: 1px dashed #334155; padding-top: 0.6rem;
         }
 
-        .loading-text {
-            color: var(--text-muted);
-            grid-column: 1/-1;
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.9rem;
-        }
+        /* FUND CARD & TABLES */
+        .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
+        .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
+        .qr-container { text-align: center; margin-bottom: 1rem; }
+        .qr-code { max-width: 240px; border-radius: 8px; border: 2px solid #334155; }
+        .balance-box { background-color: #0f172a; border: 1px solid #334155; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .balance-amount { color: #eab308; font-weight: bold; font-size: 1.3rem; }
+
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
+
+        .game-title-header { font-size: 1.4rem; color: #fff; font-weight: 700; text-transform: uppercase; border-bottom: 3px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        .singles-title { color: var(--primary-hover); }
+        .doubles-title { color: var(--doubles-color); }
+
+        .card { background: var(--card-bg); border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; margin-bottom: 1.5rem; }
+        .card-title { font-size: 1.1rem; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
+        .admin-section { display: none; margin-top: 2rem; border-top: 2px dashed #475569; padding-top: 2rem; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 1024px) { .admin-grid { grid-template-columns: 1fr; } }
+        .admin-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
+        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn:hover { background: var(--primary-hover); }
+
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 0.6rem 0.8rem; background: #0f172a; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #334155; font-size: 0.95rem; }
+
+        .rank-badge { font-weight: bold; width: 25px; text-align: center; display: inline-block; }
+        .top-1 { color: var(--gold); } .top-2 { color: var(--silver); } .top-3 { color: var(--bronze); }
+        
+        .history-list { max-height: 250px; overflow-y: auto; }
+        .history-item { font-size: 0.85rem; background: #0f172a; padding: 0.5rem 0.8rem; border-radius: 6px; margin-bottom: 0.5rem; border-left: 3px solid var(--primary); }
     </style>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
 <div class="container">
-    <div class="news-section">
-        <div class="news-header">
-            <div class="news-title">
-                <i class="fa-solid fa-newspaper"></i> TIN TỨC & KINH NGHIỆM PICKLEBALL (TỰ ĐỘNG)
-            </div>
-            <button class="btn-refresh" onclick="fetchAutoPickleballNews()">
-                <i class="fa-solid fa-rotate-right"></i> Cập nhật tin mới
-            </button>
+    <button class="admin-toggle" id="adminToggleBtn" onclick="toggleAdminMode()"><i class="fa-solid fa-key"></i></button>
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <div class="hero-slides">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1600&auto=format&fit=crop');"></div>
         </div>
-        
-        <div class="news-grid" id="newsGrid">
-            <div class="loading-text">
-                <i class="fa-solid fa-spinner fa-spin"></i> Đang tự động lấy tin tức Pickleball mới nhất...
+        <div class="hero-overlay">
+            <div class="hero-badge"><i class="fa-solid fa-fire"></i> Trang Tin Tức & Bảng Xếp Hạng</div>
+            <h2 class="hero-title">Đỉnh Cao Đam Mê <span>Pickleball Hoàng Gia</span></h2>
+            <p class="hero-desc">Theo dõi tin tức báo chí mới nhất về Pickleball Việt Nam & Bảng xếp hạng Elo nội bộ.</p>
+        </div>
+    </div>
+
+    <header>
+        <h1><i class="fa-solid fa-table-tennis-paddle-ball"></i> Pickleball HoangGia League</h1>
+        <p id="subHeader">Hệ thống xếp hạng Elo & Tin tức Pickleball tự động</p>
+    </header>
+
+    <div class="main-layout">
+        <!-- QUỸ PICK -->
+        <div class="fund-card">
+            <div class="fund-title"><i class="fa-solid fa-wallet"></i> Quỹ Pick</div>
+            <div class="qr-container"><img src="image.png" alt="Mã QR Chuyển Khoản" class="qr-code"></div>
+            <div class="balance-box">
+                <span>Số dư quỹ hiện tại</span>
+                <span class="balance-amount" id="fundBalance">Đang tải...</span>
+            </div>
+        </div>
+
+        <!-- MỤC TIN TỨC AUTO-LINK BÁO CHÍ -->
+        <div class="news-section">
+            <div class="news-header">
+                <div class="card-title" style="margin-bottom:0;"><i class="fa-solid fa-newspaper"></i> TIN TỨC PICKLEBALL MỚI NHẤT (TỰ ĐỘNG)</div>
+                <button class="btn-refresh" onclick="fetchAutoPickleballNews()"><i class="fa-solid fa-rotate-right"></i> Cập nhật tin</button>
+            </div>
+            <div class="news-grid" id="newsGrid">
+                <div style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:1.5rem;">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Đang tự động quét tin tức Pickleball...
+                </div>
+            </div>
+        </div>
+
+        <!-- BẢNG XẾP HẠNG ELO -->
+        <div class="main-grid">
+            <div>
+                <div class="game-title-header singles-title"><i class="fa-solid fa-user"></i> ĐÁNH ĐƠN (1v1)</div>
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng VĐV</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Hạng</th><th>VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
+                            <tbody id="singlesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đơn</div>
+                    <div class="history-list" id="singlesHistoryList"></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="game-title-header doubles-title"><i class="fa-solid fa-users"></i> ĐÁNH ĐÔI (2v2)</div>
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-trophy"></i> Bảng Xếp Hạng Cặp Đôi</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Hạng</th><th>Cặp VĐV</th><th>T-B</th><th style="text-align: right;">Elo</th></tr></thead>
+                            <tbody id="doublesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Nhật Ký Trận Đấu Đôi</div>
+                    <div class="history-list" id="doublesHistoryList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-section" id="adminSectionArea">
+        <h2 style="color: var(--accent); margin-bottom: 1rem; text-align: center;"><i class="fa-solid fa-sliders"></i> QUẢN TRỊ VIÊN</h2>
+        <div class="admin-grid">
+            <div class="card">
+                <div class="card-title singles-title">Quản lý ĐÁNH ĐƠN</div>
+                <div class="admin-card-grid">
+                    <div>
+                        <div class="form-group"><label>Tên VĐV</label><input type="text" id="singlesAddName"></div>
+                        <button class="btn" onclick="addNewEntry('singles')">Thêm VĐV</button>
+                    </div>
+                    <div>
+                        <div class="form-group"><label>Thắng</label><select id="singlesMatchWinner"></select></div>
+                        <div class="form-group"><label>Thua</label><select id="singlesMatchLoser"></select></div>
+                        <button class="btn" onclick="recordMatch('singles')">Lưu Kế Quả</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title doubles-title">Quản lý ĐÁNH ĐÔI</div>
+                <div class="admin-card-grid">
+                    <div>
+                        <div class="form-group"><label>Tên Đôi</label><input type="text" id="doublesAddName"></div>
+                        <button class="btn" onclick="addNewEntry('doubles')">Thêm Đôi</button>
+                    </div>
+                    <div>
+                        <div class="form-group"><label>Thắng</label><select id="doublesMatchWinner"></select></div>
+                        <div class="form-group"><label>Thua</label><select id="doublesMatchLoser"></select></div>
+                        <button class="btn" onclick="recordMatch('doubles')">Lưu Kết Quả</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Danh sách các bài viết dự phòng (Fallback Data) nếu nguồn mạng không phản hồi
-    const fallbackArticles = [
+    // 1. TỰ ĐỘNG CÀO TIN TỨC PICKLEBALL VÀ GẮN LINK SANG BÁO GỐC
+    const fallbackNews = [
         {
-            title: "Đội tuyển Việt Nam toàn thắng tại vòng bảng Pickleball World Cup 2026",
+            title: "Tuyển Pickleball Việt Nam tạo ấn tượng mạnh tại các giải đấu quốc tế",
             tag: "Giải Đấu",
-            desc: "Các tay vợt Việt Nam thi đấu xuất sắc giành chiến thắng áp đảo tại các nội dung đơn và đôi.",
+            desc: "Bấm vào đây để xem chi tiết tình hình thi đấu của các VĐV Việt Nam.",
             img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop",
-            url: "https://dantri.com.vn/the-thao/doi-tuyen-viet-nam-toan-thang-tai-vong-bang-pickleball-world-cup-2026-20260903190141946.htm",
-            date: "Hôm nay"
+            url: "https://dantri.com.vn/the-thao.htm",
+            date: "Mới nhất"
         },
         {
-            title: "Hướng dẫn kỹ thuật đánh Pickleball cơ bản: Dink, Volley & Serve",
+            title: "Cẩm nang hướng dẫn kỹ thuật Pickleball từ A-Z cho người mới chơi",
             tag: "Cách Chơi",
-            desc: "Các bước làm quen với bộ môn Pickleball cho người mới bắt đầu giúp kiểm soát bóng hiệu quả.",
+            desc: "Tổng hợp các kỹ năng giao bóng, trả bóng và kiểm soát vùng Kitchen.",
             img: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=800&auto=format&fit=crop",
             url: "https://kamito.vn/blogs/news/cach-hoc-pickleball-tu-a-z-cho-nguoi-moi",
             date: "Hướng dẫn"
         },
         {
-            title: "Cập nhật thông tin, giải đấu & kết quả Pickleball Việt Nam",
+            title: "Trang tin tức & diễn biến Pickleball tại Việt Nam",
             tag: "Xu Hướng",
-            desc: "Tổng hợp các diễn biến mới nhất về phong trào và các giải đấu Pickleball trên toàn quốc.",
+            desc: "Cập nhật các phong trào và sân chơi Pickleball phát triển nở rộ.",
             img: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=800&auto=format&fit=crop",
             url: "https://thethaovanhoa.vn/the-thao/pickleball.htm",
-            date: "Mới nhất"
+            date: "Tin tổng hợp"
         }
     ];
 
-    // Hàm tự động cào tin từ nguồn RSS Google News
     async function fetchAutoPickleballNews() {
         const grid = document.getElementById('newsGrid');
-        grid.innerHTML = '<div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu bài báo...</div>';
+        grid.innerHTML = '<div style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:1.5rem;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu từ Google News...</div>';
 
-        // RSS Feed từ Google News cho từ khóa Pickleball Việt Nam
-        const targetRssUrl = "https://news.google.com/rss/search?q=Pickleball+Vi%E1%BB%87t+Nam&hl=vi&gl=VN&ceid=VN:vi";
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(targetRssUrl)}`;
+        const rssUrl = "https://news.google.com/rss/search?q=Pickleball+Vi%E1%BB%87t+Nam&hl=vi&gl=VN&ceid=VN:vi";
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
         try {
             const res = await fetch(apiUrl);
@@ -209,22 +339,18 @@ HTML
 
             if (data.status === 'ok' && data.items && data.items.length > 0) {
                 grid.innerHTML = '';
-                // Lấy 6 bài viết mới nhất
-                const articles = data.items.slice(0, 6);
-
-                articles.forEach(item => {
-                    // Tự trích xuất hình ảnh hoặc chọn ảnh mặc định chất lượng cao
+                data.items.slice(0, 6).forEach(item => {
                     const imgUrl = item.thumbnail || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop';
-                    const cleanTitle = item.title.replace(/- [^-]+$/, ''); // Bỏ tên nguồn ở cuối tiêu đề
+                    const title = item.title.replace(/- [^-]+$/, '');
                     const pubDate = new Date(item.pubDate).toLocaleDateString('vi-VN');
 
                     grid.innerHTML += `
                         <a href="${item.link}" target="_blank" class="news-card" rel="noopener noreferrer">
-                            <img src="${imgUrl}" class="news-img" alt="${cleanTitle}">
+                            <img src="${imgUrl}" class="news-img" alt="${title}">
                             <div class="news-body">
-                                <span class="news-tag">Tin Tự Động</span>
-                                <h3 class="article-title">${cleanTitle}</h3>
-                                <p class="news-desc">Bấm để chuyển tới bài viết gốc trên trang tin tức...</p>
+                                <span class="news-tag">Báo Chí</span>
+                                <h3 class="news-title-text">${title}</h3>
+                                <p class="news-desc">Click để đọc trực tiếp bài viết này trên trang báo gốc...</p>
                                 <div class="news-footer">
                                     <span><i class="fa-regular fa-calendar"></i> ${pubDate}</span>
                                     <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
@@ -237,22 +363,20 @@ HTML
                 renderFallbackNews();
             }
         } catch (err) {
-            console.warn("Không thể tải RSS tự động, sử dụng dữ liệu tin chuẩn:", err);
             renderFallbackNews();
         }
     }
 
-    // Hiển thị tin tức mặc định nếu không có kết nối mạng tới API
     function renderFallbackNews() {
         const grid = document.getElementById('newsGrid');
         grid.innerHTML = '';
-        fallbackArticles.forEach(item => {
+        fallbackNews.forEach(item => {
             grid.innerHTML += `
                 <a href="${item.url}" target="_blank" class="news-card" rel="noopener noreferrer">
                     <img src="${item.img}" class="news-img" alt="${item.title}">
                     <div class="news-body">
                         <span class="news-tag">${item.tag}</span>
-                        <h3 class="article-title">${item.title}</h3>
+                        <h3 class="news-title-text">${item.title}</h3>
                         <p class="news-desc">${item.desc}</p>
                         <div class="news-footer">
                             <span><i class="fa-regular fa-calendar"></i> ${item.date}</span>
@@ -264,9 +388,129 @@ HTML
         });
     }
 
-    // Tự động chạy khi tải trang
+    // 2. FIREBASE & DỮ LIỆU ĐỔI BẢNG XẾP HẠNG
+    const firebaseConfig = {
+        apiKey: "AIzaSyBfvqDHx8TAASt2RPSfMNp-20oU_q8aMlc",
+        authDomain: "pickleball-hoanggia.firebaseapp.com",
+        databaseURL: "https://pickleball-hoanggia-default-rtdb.firebaseio.com",
+        projectId: "pickleball-hoanggia",
+        storageBucket: "pickleball-hoanggia.firebasestorage.app",
+        messagingSenderId: "92435922703",
+        appId: "1:92435922703:web:b06c12f95bcf0fcc24c87a"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const dbRef = firebase.database().ref('pickleballProDB');
+
+    let isAdminActive = false;
+    let db = { singles: [], singlesHistory: [], doubles: [], doublesHistory: [] };
+
+    dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            db = {
+                singles: data.singles || [],
+                singlesHistory: data.singlesHistory || [],
+                doubles: data.doubles || [],
+                doublesHistory: data.doublesHistory || []
+            };
+        }
+        initApp();
+    });
+
+    function initApp() {
+        renderRankings('singles', 'singlesBody', 'singlesHistoryList');
+        renderRankings('doubles', 'doublesBody', 'doublesHistoryList');
+        if (isAdminActive) {
+            loadDropdowns('singles');
+            loadDropdowns('doubles');
+        }
+    }
+
+    function renderRankings(mode, tableBodyId, historyListId) {
+        const list = db[mode] || [];
+        const history = db[mode + 'History'] || [];
+        list.sort((a,b) => b.points - a.points);
+
+        const body = document.getElementById(tableBodyId);
+        body.innerHTML = list.length === 0 ? '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">Chưa có dữ liệu</td></tr>' : '';
+        
+        list.forEach((item, idx) => {
+            body.innerHTML += `<tr>
+                <td><span class="rank-badge ${idx<3 ? 'top-'+(idx+1):''}">${idx+1}</span></td>
+                <td>${item.name}</td>
+                <td>${item.win || 0}-${item.loss || 0}</td>
+                <td style="color:var(--primary-hover); font-weight:700; text-align: right;">${item.points} Elo</td>
+            </tr>`;
+        });
+
+        const historyContainer = document.getElementById(historyListId);
+        historyContainer.innerHTML = history.length === 0 ? '<div style="color:var(--text-muted); text-align:center; padding:1rem;">Chưa có lịch sử</div>' : '';
+        for (let i = history.length - 1; i >= 0; i--) {
+            historyContainer.innerHTML += `<div class="history-item"><strong>${history[i].winner}</strong> thắng <strong>${history[i].loser}</strong></div>`;
+        }
+    }
+
+    function loadDropdowns(mode) {
+        const list = db[mode] || [];
+        const winnerSelect = document.getElementById(mode + 'MatchWinner');
+        const loserSelect = document.getElementById(mode + 'MatchLoser');
+        if (!winnerSelect || !loserSelect) return;
+        const options = list.map(item => `<option value="${item.name}">${item.name}</option>`).join('');
+        winnerSelect.innerHTML = options;
+        loserSelect.innerHTML = options;
+        if (list.length > 1) loserSelect.selectedIndex = 1;
+    }
+
+    function toggleAdminMode() {
+        if (!isAdminActive) {
+            if (prompt("Mật khẩu Admin:") === "123456") {
+                isAdminActive = true;
+                document.getElementById('adminSectionArea').style.display = 'block';
+                initApp();
+            }
+        } else {
+            isAdminActive = false;
+            document.getElementById('adminSectionArea').style.display = 'none';
+        }
+    }
+
+    function addNewEntry(mode) {
+        const name = document.getElementById(mode + 'AddName').value.trim();
+        if (!name) return alert("Nhập tên!");
+        db[mode].push({ name, points: 1200, win: 0, loss: 0 });
+        dbRef.set(db);
+    }
+
+    function recordMatch(mode) {
+        const winner = document.getElementById(mode + 'MatchWinner').value;
+        const loser = document.getElementById(mode + 'MatchLoser').value;
+        if (winner === loser) return alert("Trùng tên!");
+
+        let winnerObj = db[mode].find(i => i.name === winner);
+        let loserObj = db[mode].find(i => i.name === loser);
+
+        winnerObj.points += 16;
+        loserObj.points = Math.max(0, loserObj.points - 16);
+        winnerObj.win = (winnerObj.win || 0) + 1;
+        loserObj.loss = (loserObj.loss || 0) + 1;
+
+        if (!db[mode + 'History']) db[mode + 'History'] = [];
+        db[mode + 'History'].push({ winner, loser });
+        dbRef.set(db);
+    }
+
+    // Lấy số dư Google Sheets
+    fetch("https://docs.google.com/spreadsheets/d/1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S/gviz/tq?tqx=out:json&gid=1114506581&range=F1")
+        .then(res => res.text())
+        .then(data => {
+            const json = JSON.parse(data.substring(47, data.length - 2));
+            let val = json.table.rows[0].c[0].v;
+            document.getElementById('fundBalance').innerText = (typeof val === 'number' ? val.toLocaleString('vi-VN') : val) + 'đ';
+        }).catch(() => { document.getElementById('fundBalance').innerText = "0đ"; });
+
+    // Khởi tạo chạy tự động lấy tin tức
     fetchAutoPickleballNews();
 </script>
-
 </body>
 </html>
