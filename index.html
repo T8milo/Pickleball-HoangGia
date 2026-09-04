@@ -4,7 +4,7 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pickleball HoangGia - Quản Lý Xếp Hạng</title>
+    <title>Pickleball HoangGia - Quản Lý Xếp Hạng & Tin Tức</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -208,6 +208,105 @@ HTML
 
         .main-layout { display: flex; flex-direction: column; gap: 2rem; }
 
+        /* TIN TỨC / NEWS STYLES */
+        .news-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #334155;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .news-card {
+            background: #0f172a;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .news-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .news-body {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .news-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .news-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .news-footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed #334155;
+            padding-top: 0.6rem;
+        }
+
+        .btn-delete-news {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.8);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+            z-index: 5;
+        }
+
+        .btn-delete-news:hover { background: var(--danger); }
+
         .fund-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; max-width: 600px; margin: 0 auto; width: 100%; }
         .fund-title { color: #eab308; font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; text-align: center; }
         .qr-container { text-align: center; margin-bottom: 1rem; }
@@ -258,7 +357,7 @@ HTML
 
         .form-group { margin-bottom: 1rem; }
         .form-group label { display: block; margin-bottom: 0.4rem; color: var(--text-muted); font-size: 0.85rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
         .form-group select { cursor: pointer; }
 
         .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
@@ -308,13 +407,13 @@ HTML
                     <i class="fa-solid fa-fire"></i> Giải Đấu Thường Niên
                 </div>
                 <h2 class="hero-title">Đỉnh Cao Đam Mê <span>Pickleball Hoàng Gia</span></h2>
-                <p class="hero-desc">Hệ thống tính điểm Elo chuẩn quốc tế, cập nhật bảng xếp hạng Đơn/Đôi và nhật ký thi đấu liên tục theo thời gian thực.</p>
+                <p class="hero-desc">Hệ thống tính điểm Elo chuẩn quốc tế, cập nhật bảng xếp hạng Đơn/Đôi, kiến thức Pickleball và nhật ký thi đấu liên tục.</p>
                 <div class="hero-actions">
                     <button class="btn-hero btn-hero-primary" onclick="document.querySelector('.upcoming-section').scrollIntoView({behavior: 'smooth'});">
                         <i class="fa-solid fa-calendar-check"></i> Xem Trận Sắp Đấu
                     </button>
-                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.main-grid').scrollIntoView({behavior: 'smooth'});">
-                        <i class="fa-solid fa-ranking-star"></i> Bảng Xếp Hạng Elo
+                    <button class="btn-hero btn-hero-secondary" onclick="document.querySelector('.news-section').scrollIntoView({behavior: 'smooth'});">
+                        <i class="fa-solid fa-newspaper"></i> Tin Tức & Mẹo Hay
                     </button>
                 </div>
             </div>
@@ -341,6 +440,14 @@ HTML
                 <span>Số dư quỹ hiện tại</span>
                 <span class="balance-amount" id="fundBalance">Đang tải...</span>
             </div>
+        </div>
+
+        <!-- MỤC TIN TỨC PICKLEBALL -->
+        <div class="news-section">
+            <div class="card-title" style="font-size: 1.25rem; color: var(--accent); margin-bottom: 0;">
+                <i class="fa-solid fa-newspaper"></i> TIN TỨC & KINH NGHIỆM PICKLEBALL
+            </div>
+            <div class="news-grid" id="newsGrid"></div>
         </div>
 
         <div class="upcoming-section">
@@ -391,6 +498,31 @@ HTML
     <div class="admin-section" id="adminSectionArea">
         <h2 style="font-size: 1.4rem; color: var(--accent); margin-bottom: 1.5rem; text-align: center;"><i class="fa-solid fa-sliders"></i> BẢNG ĐIỀU KHIỂN QUẢN TRỊ VIÊN</h2>
         
+        <!-- THÊM TIN TỨC TRONG ADMIN -->
+        <div class="card" style="border-color: rgba(245, 158, 11, 0.4);">
+            <div class="card-title" style="color: var(--gold);"><i class="fa-solid fa-pen-to-square"></i> Đăng Tin Tức / Mẹo Hay Mới</div>
+            <div class="admin-card-grid">
+                <div>
+                    <div class="form-group"><label>Tiêu đề bài viết</label><input type="text" id="newsTitleInput" placeholder="Ví dụ: Cách chọn vợt Pickleball cho người mới..."></div>
+                    <div class="form-group">
+                        <label>Chủ đề / Phân loại</label>
+                        <select id="newsTagInput">
+                            <option value="Cách Chơi">Cách Chơi & Hướng Dẫn</option>
+                            <option value="Xu Hướng">Xu Hướng Pickleball</option>
+                            <option value="Giải Đấu">Tin Giải Đấu</option>
+                            <option value="Thiết Bị">Thiết Bị & Dụng Cụ</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Link hình ảnh (URL)</label><input type="text" id="newsImgInput" placeholder="https://images.unsplash.com/..."></div>
+                </div>
+                <div>
+                    <div class="form-group"><label>Tóm tắt ngắn</label><input type="text" id="newsDescInput" placeholder="Mô tả ngắn gọn hiển thị trên thẻ bài viết..."></div>
+                    <div class="form-group"><label>Link bài viết chi tiết (URL liên kết)</label><input type="text" id="newsUrlInput" placeholder="https://..."></div>
+                    <button class="btn" style="background:var(--gold); color: #0f172a; font-weight: bold; margin-top: 0.5rem;" onclick="addNewsArticle()"><i class="fa-solid fa-paper-plane"></i> Đăng Bài Viết</button>
+                </div>
+            </div>
+        </div>
+
         <div class="card" style="border-color: rgba(56, 189, 248, 0.4);">
             <div class="card-title" style="color: var(--accent);"><i class="fa-solid fa-calendar-plus"></i> Lên Lịch Trận Đấu Sắp Diễn Ra</div>
             <div class="admin-card-grid">
@@ -493,7 +625,7 @@ HTML
 
     setInterval(nextHeroSlide, 5000);
 
-    // Hàm đồng bộ dữ liệu từ ô F1 trong Google Sheets
+    // Hàm đồng bộ dữ liệu số dư từ ô F1 trong Google Sheets
     function fetchSheetBalance() {
         const sheetID = "1gOC2QwEjnmbdOdPUzTEkr_mR05XKQN9S";
         const gid = "1114506581";
@@ -554,6 +686,32 @@ HTML
         ],
         upcomingMatches: [
             { team1: "Tuấn & Nam", team2: "Đức & Anh", time: "2026-09-03T18:00", court: "Sân số 02", category: "Đánh Đôi", handicap: "Đồng banh" }
+        ],
+        newsList: [
+            {
+                title: "Kỹ Thuật Dink Chi Lực Trong Pickleball Mới Nhất",
+                tag: "Cách Chơi",
+                desc: "Hướng dẫn chi tiết cú Dink bỏ nhỏ kiểm soát khu vực bếp Kitchen và gây áp lực lên đối thủ.",
+                img: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=800&auto=format&fit=crop",
+                url: "https://google.com",
+                date: "04/09/2026"
+            },
+            {
+                title: "Cập Nhật Luật Thi Đấu Pickleball Chuẩn Quốc Tế 2026",
+                tag: "Giải Đấu",
+                desc: "Những thay đổi quan trọng về quy định giao bóng, tính điểm và lỗi vùng Kitchen bạn cần lưu ý.",
+                img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop",
+                url: "https://google.com",
+                date: "02/09/2026"
+            },
+            {
+                title: "Xu Hướng Phát Triển Pickleball Tại Việt Nam",
+                tag: "Xu Hướng",
+                desc: "Lý do Pickleball trở thành bộ môn thể thao bùng nổ thu hút hàng ngàn người tham gia tập luyện.",
+                img: "https://images.unsplash.com/photo-1511067007398-7e4b90cfa4bc?q=80&w=800&auto=format&fit=crop",
+                url: "https://google.com",
+                date: "01/09/2026"
+            }
         ]
     };
 
@@ -567,7 +725,8 @@ HTML
                 singlesHistory: data.singlesHistory || [],
                 doubles: data.doubles || [],
                 doublesHistory: data.doublesHistory || [],
-                upcomingMatches: data.upcomingMatches || []
+                upcomingMatches: data.upcomingMatches || [],
+                newsList: data.newsList || []
             };
         } else {
             saveData();
@@ -601,6 +760,7 @@ HTML
     }
 
     function initApp() {
+        renderNews();
         renderUpcomingMatches();
         renderRankings('singles', 'singlesBody', 'singlesHistoryList');
         renderRankings('doubles', 'doublesBody', 'doublesHistoryList');
@@ -610,6 +770,74 @@ HTML
             loadManageDropdown('singles');
             loadManageDropdown('doubles');
             updateUpcomingDropdowns();
+        }
+    }
+
+    // RENDER TIN TỨC
+    function renderNews() {
+        const grid = document.getElementById('newsGrid');
+        const news = db.newsList || [];
+        grid.innerHTML = news.length === 0 ? '<div style="color:var(--text-muted); grid-column: 1/-1; text-align:center; padding:1.5rem;">Chưa có bài viết tin tức nào</div>' : '';
+
+        news.forEach((item, idx) => {
+            const deleteBtnHtml = isAdminActive ? 
+                `<button class="btn-delete-news" style="display:block;" onclick="deleteNewsArticle(event, ${idx})"><i class="fa-solid fa-trash"></i></button>` : '';
+
+            grid.innerHTML += `
+                <a href="${item.url || '#'}" target="_blank" class="news-card">
+                    ${deleteBtnHtml}
+                    <img src="${item.img || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop'}" class="news-img" alt="${item.title}">
+                    <div class="news-body">
+                        <span class="news-tag">${item.tag || 'Thần Tốc'}</span>
+                        <h3 class="news-title">${item.title}</h3>
+                        <p class="news-desc">${item.desc}</p>
+                        <div class="news-footer">
+                            <span><i class="fa-regular fa-calendar"></i> ${item.date || 'Gần đây'}</span>
+                            <span style="color:var(--accent);">Đọc bài <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </a>
+            `;
+        });
+    }
+
+    function addNewsArticle() {
+        if (!isAdminActive) return;
+        const title = document.getElementById('newsTitleInput').value.trim();
+        const tag = document.getElementById('newsTagInput').value;
+        const img = document.getElementById('newsImgInput').value.trim();
+        const desc = document.getElementById('newsDescInput').value.trim();
+        const url = document.getElementById('newsUrlInput').value.trim();
+
+        if (!title || !desc) return alert("Vui lòng điền tiêu đề và mô tả tóm tắt!");
+
+        const today = new Date();
+        const dateStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+        if (!db.newsList) db.newsList = [];
+        db.newsList.unshift({
+            title, tag, desc,
+            img: img || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=800&auto=format&fit=crop',
+            url: url || '#',
+            date: dateStr
+        });
+
+        document.getElementById('newsTitleInput').value = '';
+        document.getElementById('newsImgInput').value = '';
+        document.getElementById('newsDescInput').value = '';
+        document.getElementById('newsUrlInput').value = '';
+
+        saveData();
+        alert("Đăng bài viết tin tức thành công!");
+    }
+
+    function deleteNewsArticle(event, index) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!isAdminActive) return;
+        if (confirm("Bạn có chắc chắn muốn xóa bài viết tin tức này?")) {
+            db.newsList.splice(index, 1);
+            saveData();
         }
     }
 
